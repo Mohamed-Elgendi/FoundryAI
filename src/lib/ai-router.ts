@@ -1,5 +1,6 @@
 import { groq } from '@ai-sdk/groq';
 import { generateText } from 'ai';
+import { apiKeys } from './config/api-keys';
 
 export type AIProvider = 'groq' | 'openrouter' | 'fallback';
 
@@ -91,7 +92,7 @@ async function tryProvider(provider: AIProvider, prompt: string): Promise<AIResp
 }
 
 async function tryGroq(prompt: string): Promise<{content: string | null; rateLimitError?: boolean; error?: string}> {
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = apiKeys.ai.groq;
   if (!apiKey) {
     console.warn('Groq API key not configured');
     return { content: null, error: 'Groq API key not configured' };
@@ -129,7 +130,7 @@ async function tryGroq(prompt: string): Promise<{content: string | null; rateLim
 }
 
 async function tryOpenRouter(prompt: string): Promise<{content: string | null; rateLimitError?: boolean; error?: string}> {
-  const apiKey = process.env.OPENROUTER_API_KEY;
+  const apiKey = apiKeys.ai.openrouter;
   if (!apiKey) {
     console.warn('OpenRouter API key not configured');
     return { content: null, error: 'OpenRouter API key not configured' };
@@ -141,7 +142,7 @@ async function tryOpenRouter(prompt: string): Promise<{content: string | null; r
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+        'HTTP-Referer': apiKeys.appUrl,
         'X-Title': 'FoundryAI',
       },
       body: JSON.stringify({
