@@ -128,12 +128,13 @@ export function ProviderSelector({
       </button>
 
       {/* Dropdown Menu - Portal to render outside container */}
-      {isOpen && createPortal(
+      {isOpen && typeof document !== 'undefined' && createPortal(
         <div 
-          className="fixed w-[360px] max-w-[95vw] max-h-[400px] bg-popover border rounded-xl shadow-2xl z-[9999] overflow-hidden flex flex-col"
+          className="fixed w-[360px] max-w-[95vw] max-h-[400px] bg-popover border rounded-xl shadow-2xl overflow-hidden flex flex-col"
           style={{
             left: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().left : 0,
             top: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().bottom + 8 : 0,
+            zIndex: 2147483647, // Max z-index
           }}
         >
           {/* Header with Search */}
