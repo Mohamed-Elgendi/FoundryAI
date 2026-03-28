@@ -137,11 +137,11 @@ export function ProviderSelector({
         )} />
       </button>
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu - Opens downward with fixed positioning */}
       {isOpen && (
-        <div className="absolute bottom-full left-0 mb-2 w-[360px] max-w-[95vw] bg-popover border rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in-0 zoom-in-95 duration-100">
+        <div className="absolute top-full left-0 mt-2 w-[360px] max-w-[95vw] max-h-[400px] bg-popover border rounded-xl shadow-2xl z-[100] overflow-hidden flex flex-col">
           {/* Header with Search */}
-          <div className="px-3 py-2 border-b bg-muted/50 space-y-2">
+          <div className="px-3 py-2 border-b bg-muted/50 space-y-2 flex-shrink-0">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Select AI Model ({PROVIDER_INFO.length} available)
             </p>
@@ -151,7 +151,7 @@ export function ProviderSelector({
               <input
                 ref={searchInputRef}
                 type="text"
-                placeholder="Search models (e.g., 'Claude', 'GPT', 'free')..."
+                placeholder="Search models..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-8 pr-3 py-1.5 text-sm rounded-md border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
@@ -167,8 +167,8 @@ export function ProviderSelector({
             </div>
           </div>
 
-          {/* Provider Groups */}
-          <div className="max-h-[500px] overflow-y-auto">
+          {/* Provider Groups - Scrollable area */}
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
             {/* Show selected provider at top when searching */}
             {showSelectedAtTop && (
               <div className="py-1 bg-primary/5 border-b">
@@ -309,8 +309,8 @@ export function ProviderSelector({
           </div>
 
           {/* Footer */}
-          <div className="px-3 py-2 border-t bg-muted/30 text-xs text-muted-foreground">
-            <p>All {PROVIDER_INFO.length} AI models available • Click to select</p>
+          <div className="px-3 py-2 border-t bg-muted/30 text-xs text-muted-foreground flex-shrink-0">
+            <p>All {PROVIDER_INFO.length} AI models available • Scroll to see more</p>
           </div>
         </div>
       )}
