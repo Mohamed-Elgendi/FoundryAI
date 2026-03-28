@@ -155,7 +155,6 @@ export function ProviderSelector({
                       onSelect(provider.id);
                       setIsOpen(false);
                     }}
-                    isAvailable={availableProviders.includes(provider.id)}
                   />
                 ))}
               </div>
@@ -177,7 +176,6 @@ export function ProviderSelector({
                       onSelect(provider.id);
                       setIsOpen(false);
                     }}
-                    isAvailable={availableProviders.includes(provider.id)}
                   />
                 ))}
               </div>
@@ -199,7 +197,6 @@ export function ProviderSelector({
                       onSelect(provider.id);
                       setIsOpen(false);
                     }}
-                    isAvailable={availableProviders.includes(provider.id)}
                   />
                 ))}
               </div>
@@ -221,7 +218,6 @@ export function ProviderSelector({
                       onSelect(provider.id);
                       setIsOpen(false);
                     }}
-                    isAvailable={availableProviders.includes(provider.id)}
                   />
                 ))}
               </div>
@@ -243,20 +239,17 @@ interface ProviderItemProps {
   provider: ProviderInfo;
   isSelected: boolean;
   onClick: () => void;
-  isAvailable: boolean;
 }
 
-function ProviderItem({ provider, isSelected, onClick, isAvailable }: ProviderItemProps) {
+function ProviderItem({ provider, isSelected, onClick }: ProviderItemProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      disabled={!isAvailable}
       className={cn(
         "w-full px-3 py-2 flex items-center gap-3 text-left transition-colors",
         "hover:bg-accent focus:bg-accent focus:outline-none",
-        isSelected && "bg-accent",
-        !isAvailable && "opacity-50 cursor-not-allowed"
+        isSelected && "bg-accent"
       )}
     >
       <div
@@ -285,12 +278,6 @@ function ProviderItem({ provider, isSelected, onClick, isAvailable }: ProviderIt
 
       {isSelected && (
         <Check className="w-4 h-4 text-primary flex-shrink-0" />
-      )}
-      
-      {!isAvailable && (
-        <span className="text-[10px] text-muted-foreground flex-shrink-0">
-          No key
-        </span>
       )}
     </button>
   );
