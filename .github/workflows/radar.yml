@@ -2,31 +2,24 @@ name: Run Opportunity Radar
 
 on:
   schedule:
-    - cron: '0 2 * * *'   # daily at 2 AM UTC
-  workflow_dispatch:      # allow manual trigger
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    - cron: '0 2 * * *'
+  workflow_dispatch:
 
 jobs:
   run-radar:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Install dependencies
-        working-directory: ./radar-service
-        run: npm install
-
-      - name: Run radar service
-        working-directory: ./radar-service
-        run: node src/index.js
+          node-version: 18
+      
+      - name: Install and Run
+        run: |
+          cd radar-service
+          npm install
+          node src/index.js
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
