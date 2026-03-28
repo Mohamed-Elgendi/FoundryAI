@@ -13,6 +13,7 @@ interface IdeaInputProps {
   selectedProvider: AIProvider;
   onProviderChange: (provider: AIProvider) => void;
   quotaExceeded?: boolean;
+  initialValue?: string;
 }
 
 export function IdeaInput({ 
@@ -21,8 +22,9 @@ export function IdeaInput({
   selectedProvider, 
   onProviderChange,
   quotaExceeded = false,
+  initialValue = '',
 }: IdeaInputProps) {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(initialValue);
   const [isFocused, setIsFocused] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const [copied, setCopied] = useState(false);

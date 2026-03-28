@@ -294,6 +294,7 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
         selectedProvider={selectedProvider}
         onProviderChange={setSelectedProvider}
         quotaExceeded={error?.quotaExceeded}
+        initialValue={userInput}
       />
       
       {/* Template Gallery */}
