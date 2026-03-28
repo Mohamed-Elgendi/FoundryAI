@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Bot, Zap, Sparkles, Check, AlertCircle } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { ChevronDown, Bot, Zap, Sparkles, Check, AlertCircle, Search } from 'lucide-react';
 import { AIProvider, ProviderInfo, PROVIDER_INFO, getDefaultProvider } from '@/lib/ai/ai-types';
 import { cn } from '@/lib/utils';
 
@@ -21,13 +21,23 @@ export function ProviderSelector({
   availableProviders = []
 }: ProviderSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Focus search when dropdown opens
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      setTimeout(() => searchInputRef.current?.focus(), 100);
+    }
+  }, [isOpen]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        setSearchQuery('');
       }
     };
     
@@ -42,13 +52,30 @@ export function ProviderSelector({
 
   const selectedInfo = PROVIDER_INFO.find(p => p.id === selectedProvider) || PROVIDER_INFO[0];
 
-  // Group providers by category
-  const groupedProviders = {
-    premium: PROVIDER_INFO.filter(p => p.category === 'premium'),
-    fast: PROVIDER_INFO.filter(p => p.category === 'fast'),
-    free: PROVIDER_INFO.filter(p => p.category === 'free'),
-    experimental: PROVIDER_INFO.filter(p => p.category === 'experimental'),
-  };
+  // Filter providers based on search
+  const filteredProviders = useMemo(() => {
+    if (!searchQuery.trim()) return PROVIDER_INFO;
+    const query = searchQuery.toLowerCase();
+    return PROVIDER_INFO.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      p.description.toLowerCase().includes(query) ||
+      p.category.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+
+  // Group filtered providers by category
+  const groupedProviders = useMemo(() => ({
+    premium: filteredProviders.filter(p => p.category === 'premium'),
+    fast: filteredProviders.filter(p => p.category === 'fast'),
+    free: filteredProviders.filter(p => p.category === 'free'),
+    experimental: filteredProviders.filter(p => p.category === 'experimental'),
+  }), [filteredProviders]);
+
+  // Check if we have any results
+  const hasResults = Object.values(groupedProviders).some(group => group.length > 0);
+
+  // Always include selected provider info even if not in filtered results
+  const showSelectedAtTop = searchQuery && selectedInfo && !filteredProviders.find(p => p.id === selectedProvider);
 
   const getCategoryIcon = (category: ProviderInfo['category']) => {
     switch (category) {
@@ -112,16 +139,54 @@ export function ProviderSelector({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute bottom-full left-0 mb-2 w-[320px] max-w-[90vw] bg-popover border rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in-0 zoom-in-95 duration-100">
-          {/* Header */}
-          <div className="px-3 py-2 border-b bg-muted/50">
+        <div className="absolute bottom-full left-0 mb-2 w-[360px] max-w-[95vw] bg-popover border rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in-0 zoom-in-95 duration-100">
+          {/* Header with Search */}
+          <div className="px-3 py-2 border-b bg-muted/50 space-y-2">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Select AI Model
+              Select AI Model ({PROVIDER_INFO.length} available)
             </p>
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search models (e.g., 'Claude', 'GPT', 'free')..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 text-sm rounded-md border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Provider Groups */}
-          <div className="max-h-[400px] overflow-y-auto">
+          <div className="max-h-[500px] overflow-y-auto">
+            {/* Show selected provider at top when searching */}
+            {showSelectedAtTop && (
+              <div className="py-1 bg-primary/5 border-b">
+                <div className="px-3 py-1 text-xs font-semibold text-primary uppercase tracking-wider">
+                  Currently Selected
+                </div>
+                <ProviderItem
+                  provider={selectedInfo}
+                  isSelected={true}
+                  onClick={() => {
+                    onSelect(selectedInfo.id);
+                    setIsOpen(false);
+                    setSearchQuery('');
+                  }}
+                />
+              </div>
+            )}
+
             {/* Show quota warning if applicable */}
             {quotaExceeded && (
               <div className="px-3 py-2 bg-red-50 border-b">
@@ -139,12 +204,27 @@ export function ProviderSelector({
               </div>
             )}
 
+            {/* No results message */}
+            {!hasResults && searchQuery && (
+              <div className="px-3 py-4 text-center">
+                <p className="text-sm text-muted-foreground">
+                  No models found for "{searchQuery}"
+                </p>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="mt-2 text-xs text-primary hover:underline"
+                >
+                  Clear search
+                </button>
+              </div>
+            )}
+
             {/* Premium Providers */}
             {groupedProviders.premium.length > 0 && (
               <div className="py-1">
-                <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider sticky top-0 bg-popover z-10">
                   <Sparkles className="w-3 h-3" />
-                  Premium
+                  Premium ({groupedProviders.premium.length})
                 </div>
                 {groupedProviders.premium.map((provider) => (
                   <ProviderItem
@@ -154,6 +234,7 @@ export function ProviderSelector({
                     onClick={() => {
                       onSelect(provider.id);
                       setIsOpen(false);
+                      setSearchQuery('');
                     }}
                   />
                 ))}
@@ -163,9 +244,9 @@ export function ProviderSelector({
             {/* Fast Providers */}
             {groupedProviders.fast.length > 0 && (
               <div className="py-1 border-t">
-                <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider sticky top-0 bg-popover z-10">
                   <Zap className="w-3 h-3" />
-                  Fast
+                  Fast ({groupedProviders.fast.length})
                 </div>
                 {groupedProviders.fast.map((provider) => (
                   <ProviderItem
@@ -175,6 +256,7 @@ export function ProviderSelector({
                     onClick={() => {
                       onSelect(provider.id);
                       setIsOpen(false);
+                      setSearchQuery('');
                     }}
                   />
                 ))}
@@ -184,9 +266,9 @@ export function ProviderSelector({
             {/* Free Providers */}
             {groupedProviders.free.length > 0 && (
               <div className="py-1 border-t">
-                <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider sticky top-0 bg-popover z-10">
                   <Bot className="w-3 h-3" />
-                  Free Tier
+                  Free Tier ({groupedProviders.free.length})
                 </div>
                 {groupedProviders.free.map((provider) => (
                   <ProviderItem
@@ -196,6 +278,7 @@ export function ProviderSelector({
                     onClick={() => {
                       onSelect(provider.id);
                       setIsOpen(false);
+                      setSearchQuery('');
                     }}
                   />
                 ))}
@@ -205,9 +288,9 @@ export function ProviderSelector({
             {/* Experimental Providers */}
             {groupedProviders.experimental.length > 0 && (
               <div className="py-1 border-t">
-                <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider sticky top-0 bg-popover z-10">
                   <Bot className="w-3 h-3" />
-                  Experimental
+                  Experimental ({groupedProviders.experimental.length})
                 </div>
                 {groupedProviders.experimental.map((provider) => (
                   <ProviderItem
@@ -217,6 +300,7 @@ export function ProviderSelector({
                     onClick={() => {
                       onSelect(provider.id);
                       setIsOpen(false);
+                      setSearchQuery('');
                     }}
                   />
                 ))}
@@ -226,7 +310,7 @@ export function ProviderSelector({
 
           {/* Footer */}
           <div className="px-3 py-2 border-t bg-muted/30 text-xs text-muted-foreground">
-            <p>Select a model to generate your business plan</p>
+            <p>All {PROVIDER_INFO.length} AI models available • Click to select</p>
           </div>
         </div>
       )}
