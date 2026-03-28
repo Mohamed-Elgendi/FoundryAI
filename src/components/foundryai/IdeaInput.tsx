@@ -13,7 +13,6 @@ interface IdeaInputProps {
   selectedProvider: AIProvider;
   onProviderChange: (provider: AIProvider) => void;
   quotaExceeded?: boolean;
-  availableProviders?: AIProvider[];
 }
 
 export function IdeaInput({ 
@@ -22,7 +21,6 @@ export function IdeaInput({
   selectedProvider, 
   onProviderChange,
   quotaExceeded = false,
-  availableProviders = []
 }: IdeaInputProps) {
   const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -170,7 +168,6 @@ const colorMap: Record<string, string> = {
                 onSelect={onProviderChange}
                 disabled={isLoading}
                 quotaExceeded={quotaExceeded}
-                availableProviders={availableProviders}
               />
               
               <div className="hidden sm:flex items-center gap-1 text-xs text-slate-400">
