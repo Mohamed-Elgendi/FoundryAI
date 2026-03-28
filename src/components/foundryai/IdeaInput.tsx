@@ -56,8 +56,11 @@ export function IdeaInput({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted', { input: input.trim(), isValid, isLoading, selectedProvider });
     if (input.trim() && !isLoading) {
       onGenerate(input.trim(), selectedProvider);
+    } else {
+      console.log('Submit blocked:', { hasInput: !!input.trim(), isLoading });
     }
   };
 
@@ -119,7 +122,7 @@ const colorMap: Record<string, string> = {
           />
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 relative">
           {/* Label */}
           <div className="flex items-center justify-between">
             <label className="text-sm font-semibold text-foreground flex items-center gap-2">
@@ -149,9 +152,9 @@ const colorMap: Record<string, string> = {
               disabled={isLoading}
             />
             
-            {/* Animated Border Effect */}
+            {/* Animated Border Effect - ensure pointer events don't block */}
             <div className={`
-              absolute inset-0 rounded-lg pointer-events-none transition-opacity duration-300
+              absolute inset-0 rounded-lg pointer-events-none transition-opacity duration-300 z-0
               ${isFocused ? 'opacity-100' : 'opacity-0'}
             `}>
               <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 blur-sm" />
@@ -179,11 +182,17 @@ const colorMap: Record<string, string> = {
             <Button
               type="submit"
               disabled={!isValid || isLoading}
+              onClick={(e) => {
+                console.log('Button clicked directly');
+                if (isValid && !isLoading) {
+                  handleSubmit(e);
+                }
+              }}
               className={`
-                h-11 px-6 font-semibold transition-all duration-300
+                h-11 px-6 font-semibold transition-all duration-300 relative z-10
                 ${isValid && !isLoading
-                  ? 'bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5'
-                  : 'bg-muted text-muted-foreground'
+                  ? 'bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 cursor-pointer'
+                  : 'bg-muted text-muted-foreground cursor-not-allowed'
                 }
               `}
             >

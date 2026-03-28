@@ -113,18 +113,22 @@ export function FoundryAI() {
   };
 
   const handleGenerate = async (input: string, provider: AIProvider) => {
+    console.log('handleGenerate called', { input, provider });
     setIsLoading(true);
     setError(null);
     setUserInput(input);
 
     try {
+      console.log('Making API request...');
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userInput: input, provider }),
       });
+      console.log('API response received', { status: response.status });
 
       const data = await response.json();
+      console.log('API data parsed', { success: response.ok, hasOutput: !!data.output });
 
       if (!response.ok) {
         const errorData = data;
