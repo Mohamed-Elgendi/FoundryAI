@@ -126,9 +126,15 @@ export function ProviderSelector({
         )} />
       </button>
 
-      {/* Dropdown Menu - Opens downward with fixed positioning */}
+      {/* Dropdown Menu - Fixed position to appear outside container */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-[360px] max-w-[95vw] max-h-[400px] bg-popover border rounded-xl shadow-2xl z-[100] overflow-hidden flex flex-col">
+        <div 
+          className="fixed w-[360px] max-w-[95vw] max-h-[400px] bg-popover border rounded-xl shadow-2xl z-[9999] overflow-hidden flex flex-col"
+          style={{
+            left: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().left : 0,
+            top: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().bottom + 8 : 0,
+          }}
+        >
           {/* Header with Search */}
           <div className="px-3 py-2 border-b bg-muted/50 space-y-2 flex-shrink-0">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
