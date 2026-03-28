@@ -707,49 +707,55 @@ async function tryAzure(
   return data.choices?.[0]?.message?.content || '';
 }
 
-// Fallback response
+// Fallback response - generates dynamic content based on user input
 function getFallbackResponse(prompt: string): string {
+  // Extract the user input from the prompt (it's between triple quotes)
+  const userInputMatch = prompt.match(/"""([^"]+)""/);
+  const userInput = userInputMatch ? userInputMatch[1] : 'business idea';
+  
+  // Extract key terms from user input
+  const keyTerms = userInput.toLowerCase().split(' ').slice(0, 3).join(' ');
+  
   return JSON.stringify({
-    toolIdea: 'AI-Powered Business Plan Generator',
-    targetUser: 'Non-technical entrepreneurs',
-    problemStatement: 'Difficulty converting ideas into actionable plans',
+    toolIdea: `${keyTerms.charAt(0).toUpperCase() + keyTerms.slice(1)} Platform`,
+    targetUser: 'Target users interested in this solution',
+    problemStatement: `Users struggle with ${userInput.toLowerCase().slice(0, 50)}... Current solutions are inadequate or too expensive.`,
     marketResearch: {
-      tam: '$500B global software market in 2024',
-      sam: '$50B SMB software tools market',
-      som: '$5M initial target niche',
-      marketGrowthRate: '18% YoY growth',
-      keyTrends: ['AI-powered automation', 'No-code movement', 'Solo entrepreneurship rise'],
+      tam: '$10B+ global market opportunity',
+      sam: '$500M addressable market segment',
+      som: '$5M initial target market',
+      marketGrowthRate: '15-20% YoY growth',
+      keyTrends: ['Digital transformation', 'AI automation', 'Remote work adoption'],
       competitorAnalysis: [
-        { name: 'Traditional Consultants', strengths: 'Personalized service', weaknesses: 'Expensive and slow', marketShare: '40%', pricing: '$5,000-50,000/project' },
-        { name: 'Template Platforms', strengths: 'Low cost', weaknesses: 'Generic, not actionable', marketShare: '35%', pricing: '$29-99/month' },
-        { name: 'AI Tools', strengths: 'Fast generation', weaknesses: 'Lacks business context', marketShare: '15%', pricing: '$20-100/month' }
+        { name: 'Market Leader', strengths: 'Brand recognition', weaknesses: 'High pricing', marketShare: '30%', pricing: '$50-200/month' },
+        { name: 'Alternative Solution', strengths: 'Feature-rich', weaknesses: 'Complex UI', marketShare: '20%', pricing: '$30-100/month' }
       ],
-      targetDemographics: '25-40 year old aspiring entrepreneurs, $40K-100K income, tech-savvy, time-constrained',
-      userPainPoints: ['Don\'t know where to start', 'Can\'t afford expensive consultants', 'Overwhelmed by technical complexity', 'Need validated ideas quickly'],
-      marketGaps: ['Affordable AI-powered business planning', 'Actionable step-by-step guidance', 'Integration with modern tech stack']
+      targetDemographics: '25-45 year old professionals seeking solutions',
+      userPainPoints: ['Current tools too expensive', 'Solutions too complex', 'Lack of specialized features'],
+      marketGaps: ['Affordable alternatives', 'Simplified UX', 'Targeted functionality']
     },
     mvpFeatures: [
-      'Input processing with natural language understanding',
-      'Structured output generation with market research',
-      'Interactive refinement system',
-      'Feedback collection and improvement'
+      'Core functionality for primary use case',
+      'User authentication and profiles',
+      'Dashboard and analytics',
+      'Basic integrations'
     ],
     techStack: [
-      { category: 'Frontend', tool: 'Next.js 15', purpose: 'React framework with App Router', isFree: true },
-      { category: 'Styling', tool: 'Tailwind CSS + shadcn/ui', purpose: 'Modern UI components', isFree: true },
+      { category: 'Frontend', tool: 'Next.js 15', purpose: 'React framework', isFree: true },
+      { category: 'Styling', tool: 'Tailwind CSS', purpose: 'Modern UI', isFree: true },
       { category: 'Database', tool: 'Supabase', purpose: 'PostgreSQL + Auth', isFree: true },
-      { category: 'AI', tool: 'Claude/Groq/Gemini', purpose: 'Multi-provider AI', isFree: true },
-      { category: 'Hosting', tool: 'Vercel', purpose: 'Edge deployment', isFree: true }
+      { category: 'AI', tool: 'OpenAI/Groq', purpose: 'AI features', isFree: true },
+      { category: 'Hosting', tool: 'Vercel', purpose: 'Deployment', isFree: true }
     ],
     buildPlan: [
-      { step: 1, title: 'Project Setup', description: 'Initialize Next.js with TypeScript, Tailwind, and shadcn/ui', estimatedTime: '30 minutes' },
-      { step: 2, title: 'AI Integration', description: 'Set up multi-provider AI router with Claude primary', estimatedTime: '2 hours' },
-      { step: 3, title: 'UI Components', description: 'Create input form, output display, and provider selector', estimatedTime: '3 hours' }
+      { step: 1, title: 'MVP Setup', description: 'Core functionality and basic UI', estimatedTime: '1 week' },
+      { step: 2, title: 'User Features', description: 'Auth, profiles, dashboard', estimatedTime: '2 weeks' },
+      { step: 3, title: 'Launch Prep', description: 'Testing, deployment, marketing', estimatedTime: '1 week' }
     ],
     monetizationStrategy: {
       model: 'Freemium SaaS',
-      pricing: 'Free: 3 generations/day | Pro: $9/month unlimited',
-      firstUserTactics: ['Launch on Product Hunt', 'Post on Indie Hackers', 'Create Twitter threads', 'SEO-optimized blog content'],
+      pricing: 'Free tier with limits, Pro at $9-19/month',
+      firstUserTactics: ['Launch on Product Hunt', 'Social media marketing', 'Content strategy', 'Community outreach'],
       revenueEstimate: '$500-2000 MRR within 6 months'
     }
   });
