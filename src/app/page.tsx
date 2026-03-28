@@ -12,7 +12,18 @@ export default function Home() {
   const [prefilledIdea, setPrefilledIdea] = useState<string | undefined>(undefined);
 
   const handleOpportunitySelect = (opportunity: Opportunity) => {
-    const ideaText = `${opportunity.title}: ${opportunity.problem}. The angle is ${opportunity.angle}. Target market: ${opportunity.market} / ${opportunity.niche}.`;
+    console.log('Opportunity selected:', opportunity);
+    
+    // Safety checks for missing data
+    const title = opportunity?.title || 'Business Idea';
+    const problem = opportunity?.problem || 'Solving a common problem';
+    const angle = opportunity?.angle || 'Innovative approach';
+    const market = opportunity?.market || 'General market';
+    const niche = opportunity?.niche || 'Specific niche';
+    
+    const ideaText = `${title}: ${problem}. The angle is ${angle}. Target market: ${market} / ${niche}.`;
+    console.log('Generated idea text:', ideaText);
+    
     setPrefilledIdea(ideaText);
     setActiveTab('build');
   };
