@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Bot, Zap, Sparkles, Check, AlertCircle } from 'lucide-react';
-import { AIProvider, ProviderInfo, PROVIDER_INFO, getDefaultProvider } from '@/lib/ai/ai-router';
+import { AIProvider, ProviderInfo, PROVIDER_INFO, getDefaultProvider } from '@/lib/ai/ai-types';
 import { cn } from '@/lib/utils';
 
 interface ProviderSelectorProps {

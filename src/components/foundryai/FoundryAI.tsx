@@ -9,7 +9,7 @@ import { RefinementLoadingState } from './RefinementLoadingState';
 import { TemplateGallery } from './TemplateGallery';
 import { Confetti } from '@/components/ui/confetti';
 import { AlertCircle, History } from 'lucide-react';
-import { AIProvider, getDefaultProvider, getProviderStatus } from '@/lib/ai/ai-router';
+import { AIProvider, getDefaultProvider } from '@/lib/ai/ai-types';
 
 interface SavedPlan {
   id: string;
@@ -43,8 +43,10 @@ export function FoundryAI() {
       try {
         const response = await fetch('/api/providers');
         if (response.ok) {
-          const data = await response.json();
-          const available = data.data.providers
+          const result = await response.json();
+          const data = result.data || result;
+          const providers = data.providers || [];
+          const available = providers
             .filter((p: { available: boolean }) => p.available)
             .map((p: { provider: AIProvider }) => p.provider);
           setAvailableProviders(available);

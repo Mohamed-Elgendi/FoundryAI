@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Wand2, Sparkles, ArrowRight, Lightbulb, Code, Rocket, Zap, Command } from 'lucide-react';
-import { AIProvider } from '@/lib/ai/ai-router';
+import { AIProvider } from '@/lib/ai/ai-types';
 import { ProviderSelector } from './ProviderSelector';
 
 interface IdeaInputProps {
