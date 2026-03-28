@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronDown, Bot, Zap, Sparkles, Check, AlertCircle, Search } from 'lucide-react';
 import { AIProvider, ProviderInfo, PROVIDER_INFO, getDefaultProvider } from '@/lib/ai/ai-types';
 import { cn } from '@/lib/utils';
@@ -126,8 +127,8 @@ export function ProviderSelector({
         )} />
       </button>
 
-      {/* Dropdown Menu - Fixed position to appear outside container */}
-      {isOpen && (
+      {/* Dropdown Menu - Portal to render outside container */}
+      {isOpen && createPortal(
         <div 
           className="fixed w-[360px] max-w-[95vw] max-h-[400px] bg-popover border rounded-xl shadow-2xl z-[9999] overflow-hidden flex flex-col"
           style={{
@@ -338,7 +339,8 @@ export function ProviderSelector({
           <div className="px-3 py-2 border-t bg-muted/30 text-xs text-muted-foreground flex-shrink-0">
             <p>All {PROVIDER_INFO.length} AI models available • Scroll to see more</p>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
