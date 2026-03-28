@@ -65,27 +65,27 @@ export function IdeaInput({
   };
 
   const examples = [
-  {
-    icon: Lightbulb,
-    text: "I want to build a tool that helps freelancers track their income and expenses",
-    color: "amber",
-  },
-  {
-    icon: Code,
-    text: "An app that reminds people to drink water based on their activity level",
-    color: "blue",
-  },
-  {
-    icon: Rocket,
-    text: "A simple SaaS that generates AI prompts for marketers",
-    color: "violet",
-  },
-  {
-    icon: Zap,
-    text: "A website where developers can share their side project journeys",
-    color: "emerald",
-  },
-];
+    {
+      icon: Lightbulb,
+      text: "A productivity app that helps remote workers manage their energy levels throughout the day",
+      color: "amber",
+    },
+    {
+      icon: Code,
+      text: "A subscription service delivering curated wellness products for busy professionals",
+      color: "blue",
+    },
+    {
+      icon: Rocket,
+      text: "An AI assistant that automates customer support for small e-commerce businesses",
+      color: "violet",
+    },
+    {
+      icon: Zap,
+      text: "A marketplace connecting freelance designers with early-stage startups",
+      color: "emerald",
+    },
+  ];
 
 const colorMap: Record<string, string> = {
   amber: 'from-amber-500/10 to-orange-500/10 text-amber-600 border-amber-200 hover:border-amber-300',
@@ -108,10 +108,10 @@ const colorMap: Record<string, string> = {
         className={`
           relative rounded-2xl border-2 transition-all duration-300
           ${isFocused 
-            ? 'border-primary/50 shadow-xl shadow-primary/10' 
-            : 'border-border/50 shadow-lg'
+            ? 'border-violet-400 shadow-xl shadow-violet-100' 
+            : 'border-slate-200 shadow-lg'
           }
-          bg-white/80 backdrop-blur-xl
+          bg-white overflow-visible
         `}
       >
         {/* Progress Bar */}
@@ -125,12 +125,12 @@ const colorMap: Record<string, string> = {
         <form onSubmit={handleSubmit} className="p-6 space-y-4 relative">
           {/* Label */}
           <div className="flex items-center justify-between">
-            <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-primary" />
-              Describe Your Idea
+            <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-violet-500" />
+              Describe Your Business Idea
             </label>
-            <span className={`text-xs ${charCount > 10 ? 'text-primary' : 'text-muted-foreground'}`}>
-              {charCount} chars {charCount < 10 && '(min 10)'}
+            <span className={`text-xs ${charCount > 10 ? 'text-violet-600' : 'text-slate-400'}`}>
+              {charCount} characters {charCount < 10 && '(min 10)'}
             </span>
           </div>
 
@@ -142,28 +142,28 @@ const colorMap: Record<string, string> = {
               onChange={(e) => setInput(e.target.value)}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              placeholder="Describe your idea in detail... What problem does it solve? Who is it for? What makes it unique?"
+              placeholder="Describe the problem you're solving, who it's for, and what makes your solution unique. Be specific about your target customers and their pain points."
               className="
-                min-h-[160px] text-base resize-none 
+                min-h-[140px] text-base resize-none 
                 border-0 bg-transparent 
                 focus-visible:ring-0 focus-visible:ring-offset-0
-                placeholder:text-muted-foreground/60
+                placeholder:text-slate-400
               "
               disabled={isLoading}
             />
             
-            {/* Animated Border Effect - ensure pointer events don't block */}
+            {/* Focus Effect */}
             <div className={`
               absolute inset-0 rounded-lg pointer-events-none transition-opacity duration-300 z-0
               ${isFocused ? 'opacity-100' : 'opacity-0'}
             `}>
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 blur-sm" />
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-violet-100 via-violet-50 to-violet-100 blur-sm" />
             </div>
           </div>
 
           {/* Action Bar */}
           <div className="flex items-center justify-between pt-2">
-            {/* Provider Selector - Under Input Box */}
+            {/* Model Selector */}
             <div className="flex items-center gap-3">
               <ProviderSelector
                 selectedProvider={selectedProvider}
@@ -173,9 +173,8 @@ const colorMap: Record<string, string> = {
                 availableProviders={availableProviders}
               />
               
-              <div className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
-                <Command className="w-3 h-3" />
-                <kbd className="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">↵</kbd>
+              <div className="hidden sm:flex items-center gap-1 text-xs text-slate-400">
+                <span>AI Model</span>
               </div>
             </div>
             
@@ -185,12 +184,12 @@ const colorMap: Record<string, string> = {
               className={`
                 h-11 px-6 font-semibold rounded-lg transition-all duration-300
                 ${isValid && !isLoading
-                  ? 'bg-primary text-white hover:bg-primary/90 shadow-lg'
-                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg hover:shadow-violet-200'
+                  : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                 }
               `}
             >
-              {isLoading ? 'Generating...' : 'Generate Plan'}
+              {isLoading ? 'Creating Blueprint...' : 'Generate Business Plan'}
             </button>
           </div>
         </form>
@@ -198,9 +197,9 @@ const colorMap: Record<string, string> = {
 
       {/* Example Cards */}
       <div className="space-y-3">
-        <p className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-          <Lightbulb className="w-4 h-4" />
-          Need inspiration? Try these:
+        <p className="text-sm font-medium text-slate-600 flex items-center gap-2">
+          <Lightbulb className="w-4 h-4 text-violet-500" />
+          Not sure where to start? Try these proven concepts:
         </p>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -219,7 +218,7 @@ const colorMap: Record<string, string> = {
                 `}
               >
                 <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-white/80 shadow-sm">
+                  <div className="p-2 rounded-lg bg-white/90 shadow-sm">
                     <Icon className="w-4 h-4" />
                   </div>
                   <p className="text-sm font-medium leading-relaxed line-clamp-2">
@@ -239,19 +238,19 @@ const colorMap: Record<string, string> = {
         </div>
       </div>
 
-      {/* Tips */}
-      <div className="flex items-center gap-4 text-xs text-muted-foreground justify-center">
+      {/* Tips - Marketing Focused */}
+      <div className="flex items-center gap-4 text-xs text-slate-500 justify-center">
         <span className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Be specific about the problem
+          <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+          Define the problem clearly
         </span>
         <span className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Mention target users
+          <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+          Identify your ideal customer
         </span>
         <span className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-          Include unique features
+          <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+          Highlight your unique advantage
         </span>
       </div>
     </div>

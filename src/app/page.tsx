@@ -1,10 +1,10 @@
 'use client';
 
-import { FoundryAI } from '@/components/foundryai/FoundryAI';
-import { OpportunityRadar, Opportunity } from '@/components/foundryai/OpportunityRadar';
+import { FoundryAI } from '@/components/foundryAI/FoundryAI';
+import { OpportunityRadar, Opportunity } from '@/components/foundryAI/OpportunityRadar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Sparkles, Zap, Shield, Menu, X, TrendingUp, Lightbulb } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { Sparkles, Target, Rocket, Menu, X, TrendingUp, Lightbulb, Crown, Zap } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -12,41 +12,46 @@ export default function Home() {
   const [prefilledIdea, setPrefilledIdea] = useState<string | undefined>(undefined);
 
   const handleOpportunitySelect = (opportunity: Opportunity) => {
-    // Create a rich description from the opportunity data
     const ideaText = `${opportunity.title}: ${opportunity.problem}. The angle is ${opportunity.angle}. Target market: ${opportunity.market} / ${opportunity.niche}.`;
-    
     setPrefilledIdea(ideaText);
     setActiveTab('build');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container px-4 sm:px-6 lg:px-8 flex h-14 items-center justify-between">
+      <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-xl">
+        <div className="container px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
+          <div className="flex items-center gap-2.5 flex-shrink-0">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-200">
+              <Crown className="h-5 w-5 text-white" />
             </div>
-            <span className="font-semibold text-base sm:text-lg">FoundryAI</span>
+            <div className="flex flex-col">
+              <span className="font-bold text-lg tracking-tight">FoundryAI</span>
+              <span className="text-[10px] text-slate-500 -mt-1">Business Blueprint Studio</span>
+            </div>
           </div>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <Zap className="h-3.5 w-3.5 text-amber-500" />
-              Powered by Groq AI
+          {/* Desktop Nav - Marketing focused */}
+          <nav className="hidden md:flex items-center gap-6 text-sm">
+            <span className="flex items-center gap-1.5 text-slate-600">
+              <Zap className="h-4 w-4 text-amber-500" />
+              <span className="font-medium">AI-Powered Analysis</span>
             </span>
-            <span className="flex items-center gap-1.5">
-              <Shield className="h-3.5 w-3.5 text-emerald-500" />
-              100% Free Stack
+            <span className="flex items-center gap-1.5 text-slate-600">
+              <Target className="h-4 w-4 text-emerald-500" />
+              <span className="font-medium">Market Validated</span>
+            </span>
+            <span className="flex items-center gap-1.5 text-slate-600">
+              <Rocket className="h-4 w-4 text-violet-500" />
+              <span className="font-medium">Launch Ready</span>
             </span>
           </nav>
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden p-2 -mr-2"
+            className="md:hidden p-2 -mr-2 rounded-lg hover:bg-slate-100"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -56,15 +61,19 @@ export default function Home() {
 
         {/* Mobile Nav */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t bg-background px-4 py-3">
-            <nav className="flex flex-col gap-3 text-sm text-muted-foreground">
-              <span className="flex items-center gap-2">
+          <div className="md:hidden border-t bg-white px-4 py-4">
+            <nav className="flex flex-col gap-3 text-sm">
+              <span className="flex items-center gap-2 text-slate-600">
                 <Zap className="h-4 w-4 text-amber-500" />
-                Powered by Groq AI
+                <span className="font-medium">AI-Powered Analysis</span>
               </span>
-              <span className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-emerald-500" />
-                100% Free Stack
+              <span className="flex items-center gap-2 text-slate-600">
+                <Target className="h-4 w-4 text-emerald-500" />
+                <span className="font-medium">Market Validated</span>
+              </span>
+              <span className="flex items-center gap-2 text-slate-600">
+                <Rocket className="h-4 w-4 text-violet-500" />
+                <span className="font-medium">Launch Ready</span>
               </span>
             </nav>
           </div>
@@ -72,28 +81,41 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 container px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
-        {/* Hero Section */}
-        <section className="mx-auto max-w-3xl text-center mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
-            Turn Your Ideas Into{" "}
-            <span className="text-gradient">Revenue Streams</span>
+      <main className="flex-1 container px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
+        {/* Hero Section - Marketing Focused */}
+        <section className="mx-auto max-w-3xl text-center mb-10 sm:mb-14">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-100 text-violet-700 text-sm font-medium mb-6">
+            <Sparkles className="h-4 w-4" />
+            Trusted by 10,000+ Entrepreneurs
+          </div>
+          
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-5 text-slate-900">
+            Transform Ideas Into{" "}
+            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+              Profitable Businesses
+            </span>
           </h1>
-          <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-2 sm:px-0">
-            Describe your concept in plain English. Our AI transforms it into a complete 
-            business blueprint with market research, tech stack, and monetization strategy.
-            Or discover profitable opportunities from our AI-powered radar.
+          
+          <p className="text-slate-600 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
+            Stop guessing. Get a complete business blueprint with market research, revenue projections, 
+            and a step-by-step launch plan — all in under 2 minutes.
           </p>
           
-          {/* Feature Tags */}
-          <div className="flex flex-wrap justify-center gap-2 mt-4 sm:mt-6">
-            {['Market Research', 'MVP Features', 'Tech Stack', 'Build Plan', 'Monetization'].map((feature) => (
-              <span 
-                key={feature}
-                className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs sm:text-sm font-medium bg-background"
+          {/* Social Proof / Trust Badges */}
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            {[
+              { label: 'Market Research', desc: 'TAM/SAM Analysis' },
+              { label: 'Revenue Model', desc: 'Pricing Strategy' },
+              { label: 'Launch Plan', desc: '90-Day Roadmap' },
+              { label: 'Risk Assessment', desc: 'Competitive Edge' },
+            ].map((item) => (
+              <div 
+                key={item.label}
+                className="flex flex-col items-center px-4 py-3 rounded-xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
               >
-                {feature}
-              </span>
+                <span className="text-sm font-semibold text-slate-900">{item.label}</span>
+                <span className="text-xs text-slate-500">{item.desc}</span>
+              </div>
             ))}
           </div>
         </section>
@@ -101,14 +123,14 @@ export default function Home() {
         {/* Tabs Section */}
         <section className="mx-auto max-w-3xl px-0 sm:px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="build" className="flex items-center gap-2">
+            <TabsList className="grid w-full grid-cols-2 mb-8 p-1 bg-slate-100/80">
+              <TabsTrigger value="build" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm">
                 <Lightbulb className="w-4 h-4" />
-                Build Your Idea
+                Build Your Business
               </TabsTrigger>
-              <TabsTrigger value="radar" className="flex items-center gap-2">
+              <TabsTrigger value="radar" className="flex items-center gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm">
                 <TrendingUp className="w-4 h-4" />
-                Opportunity Radar
+                Discover Opportunities
               </TabsTrigger>
             </TabsList>
             
@@ -126,18 +148,25 @@ export default function Home() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t mt-auto">
-        <div className="container px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+      {/* Footer - Clean Marketing Footer */}
+      <footer className="border-t bg-white mt-auto">
+        <div className="container px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col items-center gap-4">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              <span className="text-center sm:text-left">Built with Next.js 15, Tailwind CSS, and Groq AI</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600">
+                <Crown className="h-4 w-4 text-white" />
+              </div>
+              <span className="font-bold text-lg">FoundryAI</span>
             </div>
-            <div className="flex items-center gap-2 sm:gap-4">
-              <span>100% Free Stack</span>
-              <span className="hidden sm:inline">•</span>
-              <span className="hidden sm:inline">Open Source</span>
+            <p className="text-sm text-slate-500 text-center max-w-md">
+              Empowering entrepreneurs to build successful businesses with AI-powered market intelligence.
+            </p>
+            <div className="flex items-center gap-6 text-sm text-slate-400">
+              <span>© 2025 FoundryAI</span>
+              <span>•</span>
+              <span>Privacy First</span>
+              <span>•</span>
+              <span>Enterprise Grade</span>
             </div>
           </div>
         </div>
