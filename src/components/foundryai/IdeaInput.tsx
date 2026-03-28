@@ -30,6 +30,13 @@ export function IdeaInput({
   const [copied, setCopied] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Update input when initialValue changes (e.g., from Opportunity Radar)
+  useEffect(() => {
+    if (initialValue && initialValue.trim()) {
+      setInput(initialValue);
+    }
+  }, [initialValue]);
+
   useEffect(() => {
     setCharCount(input.length);
   }, [input]);
