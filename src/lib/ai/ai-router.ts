@@ -240,20 +240,18 @@ export async function processWithAI(request: AIRequest): Promise<AIResponse> {
       temperature
     });
     
-    // If successful, return immediately
-    if (preferredResult.content) {
+    // If preferred provider quota exceeded, we'll try fallbacks automatically
+    if (preferredResult.quotaExceeded) {
+      console.log(`[AI Router] ${preferredProvider} quota exceeded, trying fallbacks...`);
+      // Continue to fallback loop - don't return here
+    } else if (!preferredResult.content && preferredResult.error) {
+      // For other errors, also try fallbacks
+      console.log(`[AI Router] ${preferredProvider} failed: ${preferredResult.error}, trying fallbacks...`);
+    } else {
+      // If successful, return immediately
       return {
         ...preferredResult,
         latencyMs: Date.now() - startTime
-      };
-    }
-    
-    // If quota exceeded, we'll show that to user
-    if (preferredResult.quotaExceeded) {
-      return {
-        ...preferredResult,
-        latencyMs: Date.now() - startTime,
-        suggestedAction: 'Claude quota exceeded. Please select another provider from the dropdown.'
       };
     }
   }
