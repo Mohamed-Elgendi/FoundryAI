@@ -49,6 +49,12 @@ export function ProviderSelector({
     experimental: filteredProviders.filter(p => p.category === 'experimental'),
   }), [filteredProviders]);
 
+  // Check if we have any results
+  const hasResults = Object.values(groupedProviders).some(group => group.length > 0);
+
+  // Always include selected provider info even if not in filtered results
+  const showSelectedAtTop = searchQuery && selectedInfo && !filteredProviders.find(p => p.id === selectedProvider);
+
   // Flatten all visible providers for keyboard navigation
   const allVisibleProviders = useMemo(() => {
     const providers: ProviderInfo[] = [];
@@ -59,111 +65,6 @@ export function ProviderSelector({
     providers.push(...groupedProviders.experimental);
     return providers;
   }, [groupedProviders, selectedInfo, showSelectedAtTop]);
-
-  // Reset focused index when search changes
-  useEffect(() => {
-    setFocusedIndex(-1);
-    itemRefs.current = [];
-  }, [searchQuery]);
-
-  // Focus search when dropdown opens
-  useEffect(() => {
-    if (isOpen && searchInputRef.current) {
-      setTimeout(() => searchInputRef.current?.focus(), 100);
-    }
-  }, [isOpen]);
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
-
-      switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          setFocusedIndex(prev => {
-            const next = prev < allVisibleProviders.length - 1 ? prev + 1 : prev;
-            // Scroll into view
-            setTimeout(() => {
-              itemRefs.current[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-            }, 0);
-            return next;
-          });
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          if (focusedIndex > 0) {
-            setFocusedIndex(prev => {
-              const next = prev - 1;
-              setTimeout(() => {
-                itemRefs.current[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-              }, 0);
-              return next;
-            });
-          } else if (focusedIndex === 0) {
-            // Focus search input when going up from first item
-            searchInputRef.current?.focus();
-            setFocusedIndex(-1);
-          }
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (focusedIndex >= 0 && allVisibleProviders[focusedIndex]) {
-            const provider = allVisibleProviders[focusedIndex];
-            onSelect(provider.id);
-            setIsOpen(false);
-            setSearchQuery('');
-            setFocusedIndex(-1);
-          }
-          break;
-        case 'Escape':
-          e.preventDefault();
-          setIsOpen(false);
-          setSearchQuery('');
-          setFocusedIndex(-1);
-          break;
-        case 'Tab':
-          // Allow tab to navigate naturally but close dropdown
-          setIsOpen(false);
-          setSearchQuery('');
-          setFocusedIndex(-1);
-          break;
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, focusedIndex, allVisibleProviders, onSelect]);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setSearchQuery('');
-        setFocusedIndex(-1);
-      }
-    };
-    
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
-  // Check if we have any results
-  const hasResults = Object.values(groupedProviders).some(group => group.length > 0);
-
-  // Always include selected provider info even if not in filtered results
-  const showSelectedAtTop = searchQuery && selectedInfo && !filteredProviders.find(p => p.id === selectedProvider);
 
   const getCategoryIcon = (category: ProviderInfo['category']) => {
     switch (category) {
