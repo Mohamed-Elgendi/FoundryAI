@@ -33,7 +33,14 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.5);
   
-  /* Animation */
+  /* Brand Colors - must be defined for Tailwind */
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -74,6 +81,8 @@
   --brand-500: #3b82f6;
   --brand-600: #2563eb;
   --brand-700: #1d4ed8;
+  --brand-800: #1e40af;
+  --brand-900: #1e3a8a;
 }
 
 .dark {

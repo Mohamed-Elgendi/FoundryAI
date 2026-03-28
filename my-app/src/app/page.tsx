@@ -1,3 +1,5 @@
+'use client';
+
 import { FoundryAI } from '@/components/foundryai/FoundryAI';
 import { Sparkles, Zap, Shield, Menu, X } from 'lucide-react';
 import { useState } from 'react';
