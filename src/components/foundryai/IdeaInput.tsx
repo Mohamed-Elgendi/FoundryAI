@@ -118,10 +118,11 @@ const colorMap: Record<string, string> = {
         className={`
           relative rounded-2xl border-2 transition-all duration-300
           ${isFocused 
-            ? 'border-violet-400 shadow-xl shadow-violet-100' 
-            : 'border-slate-200 shadow-lg'
+            ? 'border-violet-400 shadow-[0_0_30px_rgba(139,92,246,0.3)]' 
+            : 'border-white/20 shadow-lg'
           }
-          bg-white overflow-visible
+          bg-white/70 backdrop-blur-xl
+          overflow-visible
         `}
       >
         {/* Progress Bar */}
@@ -145,7 +146,7 @@ const colorMap: Record<string, string> = {
           </div>
 
           {/* Textarea */}
-          <div className="relative bg-white rounded-lg">
+          <div className="relative bg-white/50 backdrop-blur-sm rounded-lg">
             <Textarea
               ref={textareaRef}
               value={input}
@@ -155,11 +156,11 @@ const colorMap: Record<string, string> = {
               placeholder="Describe the problem you're solving, who it's for, and what makes your solution unique..."
               className="
                 min-h-[140px] text-base resize-none 
-                border border-slate-200 rounded-lg
-                bg-white text-slate-800
-                focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:border-violet-400
+                border border-white/30 rounded-lg
+                bg-transparent text-slate-800
+                focus-visible:ring-2 focus-visible:ring-violet-300/50 focus-visible:border-violet-400/50
                 focus-visible:ring-offset-0
-                placeholder:text-slate-400
+                placeholder:text-slate-500
                 p-3 pr-12
               "
               disabled={isLoading}
