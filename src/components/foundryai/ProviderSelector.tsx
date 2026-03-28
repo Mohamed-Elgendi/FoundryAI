@@ -55,17 +55,20 @@ export function ProviderSelector({
 
       {isOpen && (
         <div 
-          className="absolute z-[100] left-0 top-full mt-2 w-64 border border-white/40 rounded-xl shadow-2xl max-h-72 overflow-y-auto"
+          className="absolute z-[9999] left-0 top-full mt-2 w-64 rounded-2xl max-h-80 overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%)',
-            boxShadow: '0 8px 32px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+            background: 'rgba(255, 255, 255, 0.65)',
+            backdropFilter: 'blur(16px) saturate(200%)',
+            WebkitBackdropFilter: 'blur(16px) saturate(200%)',
+            border: '1px solid rgba(255, 255, 255, 0.5)',
+            boxShadow: '0 25px 50px -12px rgba(139, 92, 246, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.3) inset',
           }}
         >
-          {/* Glow overlay */}
+          {/* Top glow line */}
           <div 
-            className="absolute inset-0 rounded-xl pointer-events-none"
+            className="absolute top-0 left-4 right-4 h-px"
             style={{
-              background: 'radial-gradient(ellipse at top, rgba(139, 92, 246, 0.08) 0%, transparent 70%)',
+              background: 'linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent)',
             }}
           />
           <div className="p-2">
