@@ -1,11 +1,23 @@
 'use client';
 
 import { FoundryAI } from '@/components/foundryai/FoundryAI';
-import { Sparkles, Zap, Shield, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { OpportunityRadar, Opportunity } from '@/components/foundryai/OpportunityRadar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Sparkles, Zap, Shield, Menu, X, TrendingUp, Lightbulb } from 'lucide-react';
+import { useState, useRef } from 'react';
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('build');
+  const [prefilledIdea, setPrefilledIdea] = useState<string | undefined>(undefined);
+
+  const handleOpportunitySelect = (opportunity: Opportunity) => {
+    // Create a rich description from the opportunity data
+    const ideaText = `${opportunity.title}: ${opportunity.problem}. The angle is ${opportunity.angle}. Target market: ${opportunity.market} / ${opportunity.niche}.`;
+    
+    setPrefilledIdea(ideaText);
+    setActiveTab('build');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-subtle flex flex-col">
@@ -70,6 +82,7 @@ export default function Home() {
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-2 sm:px-0">
             Describe your concept in plain English. Our AI transforms it into a complete 
             business blueprint with market research, tech stack, and monetization strategy.
+            Or discover profitable opportunities from our AI-powered radar.
           </p>
           
           {/* Feature Tags */}
@@ -85,9 +98,31 @@ export default function Home() {
           </div>
         </section>
 
-        {/* App Section */}
+        {/* Tabs Section */}
         <section className="mx-auto max-w-3xl px-0 sm:px-4">
-          <FoundryAI />
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="build" className="flex items-center gap-2">
+                <Lightbulb className="w-4 h-4" />
+                Build Your Idea
+              </TabsTrigger>
+              <TabsTrigger value="radar" className="flex items-center gap-2">
+                <TrendingUp className="w-4 h-4" />
+                Opportunity Radar
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="build" className="mt-0">
+              <FoundryAI initialIdea={prefilledIdea} />
+            </TabsContent>
+            
+            <TabsContent value="radar" className="mt-0">
+              <OpportunityRadar 
+                onSelect={handleOpportunitySelect} 
+                limit={5}
+              />
+            </TabsContent>
+          </Tabs>
         </section>
       </main>
 

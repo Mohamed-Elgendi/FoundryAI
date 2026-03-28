@@ -19,7 +19,11 @@ interface SavedPlan {
   createdAt: string;
 }
 
-export function FoundryAI() {
+interface FoundryAIProps {
+  initialIdea?: string;
+}
+
+export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefining, setIsRefining] = useState(false);
   const [output, setOutput] = useState<FoundryAIOutput | null>(null);
@@ -37,7 +41,12 @@ export function FoundryAI() {
     originalInput: '',
   });
 
-  // Load available providers on mount
+  // Handle prefilled idea from Opportunity Radar
+  useEffect(() => {
+    if (initialIdea && initialIdea.trim()) {
+      setUserInput(initialIdea);
+    }
+  }, [initialIdea]);
   useEffect(() => {
     const loadProviderStatus = async () => {
       try {
