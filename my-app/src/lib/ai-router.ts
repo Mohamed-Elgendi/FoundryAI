@@ -142,7 +142,7 @@ async function tryOpenRouter(prompt: string): Promise<{content: string | null; r
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-        'X-Title': 'VibeBuilder AI',
+        'X-Title': 'FoundryAI',
       },
       body: JSON.stringify({
         model: 'anthropic/claude-3.5-sonnet',

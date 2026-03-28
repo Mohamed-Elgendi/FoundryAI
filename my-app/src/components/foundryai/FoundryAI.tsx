@@ -55,7 +55,7 @@ export function FoundryAI() {
 
   // Auto-save draft
   useEffect(() => {
-    const savedDraft = localStorage.getItem('vibebuilder-draft');
+    const savedDraft = localStorage.getItem('foundryai-draft');
     if (savedDraft) {
       try {
         const draft = JSON.parse(savedDraft);
@@ -68,7 +68,7 @@ export function FoundryAI() {
     }
   }, []);
 
-  const saveToHistory = (input: string, newOutput: VibeBuilderOutput, state: RefinementState) => {
+  const saveToHistory = (input: string, newOutput: FoundryAIOutput, state: RefinementState) => {
     const plan: SavedPlan = {
       id: Date.now().toString(),
       userInput: input,
@@ -134,7 +134,7 @@ export function FoundryAI() {
       });
       
       // Clear draft
-      localStorage.removeItem('vibebuilder-draft');
+      localStorage.removeItem('foundryai-draft');
     } catch (err) {
       if (!error) {
         setError({ message: err instanceof Error ? err.message : 'An error occurred' });
@@ -194,7 +194,7 @@ export function FoundryAI() {
         throw new Error(errorData.error);
       }
 
-      const refinedOutput: VibeBuilderOutput = {
+      const refinedOutput: FoundryAIOutput = {
         ...data.output,
         refinementMetadata: {
           iterationCount: nextIteration,

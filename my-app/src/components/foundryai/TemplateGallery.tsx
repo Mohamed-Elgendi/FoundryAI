@@ -225,7 +225,7 @@ export function TemplateGallery({ onSelect, isLoading }: TemplateGalleryProps) {
                 <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${template.color} rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity`} />
                 
                 <div className="flex items-start gap-3">
-                  <div className={`p-2 rounded-lg bg-gradient-to-br ${template.color} bg-opacity-10`}>
+                  <div className={`p-2 rounded-lg bg-gradient-to-br ${template.color} bg-white/10`}>
                     <Icon className="w-4 h-4 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">

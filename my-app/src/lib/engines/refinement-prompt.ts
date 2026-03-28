@@ -251,7 +251,7 @@ The output must be a complete FoundryAIOutput with ALL fields significantly expa
  * Parse refinement response using shared JSON parser
  */
 export function parseRefinementResponse(response: string): FoundryAIOutput | null {
-  const result = parseJSON<VibeBuilderOutput>(response, validateRefinedOutput);
+  const result = parseJSON<FoundryAIOutput>(response, validateRefinedOutput);
   
   if (!result.success) {
     console.error('[Refinement] Parse failed:', result.error);

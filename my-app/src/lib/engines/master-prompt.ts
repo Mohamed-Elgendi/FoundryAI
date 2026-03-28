@@ -273,7 +273,7 @@ function validateAndCleanOutput(parsed: unknown): FoundryAIOutput | null {
     return null;
   }
   
-  const output = parsed as Partial<VibeBuilderOutput>;
+  const output = parsed as Partial<FoundryAIOutput>;
   
   console.log('Validating output:', {
     toolIdea: output.toolIdea,
