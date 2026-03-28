@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { createPortal } from 'react-dom';
 import { ChevronDown, Bot, Zap, Sparkles, Check, AlertCircle, Search } from 'lucide-react';
 import { AIProvider, ProviderInfo, PROVIDER_INFO, getDefaultProvider } from '@/lib/ai/ai-types';
 import { cn } from '@/lib/utils';
@@ -127,24 +126,26 @@ export function ProviderSelector({
         )} />
       </button>
 
-      {/* Dropdown Menu - Portal to render outside container */}
-      {isOpen && typeof document !== 'undefined' && createPortal(
-        <div 
-          className="fixed w-[360px] max-w-[95vw] max-h-[400px] bg-popover border rounded-xl shadow-2xl overflow-hidden flex flex-col"
-          style={{
-            left: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().left : 0,
-            top: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().bottom + 8 : 0,
-            zIndex: 2147483647, // Max z-index
-          }}
-        >
-          {/* Header with Search */}
-          <div className="px-3 py-2 border-b bg-muted/50 space-y-2 flex-shrink-0">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Select AI Model ({PROVIDER_INFO.length} available)
-            </p>
-            {/* Search Input */}
+      {/* Dropdown Menu - Simple absolute positioning */}
+      {isOpen && (
+        <div className="absolute z-50 left-0 top-full mt-2 w-72 bg-white border rounded-lg shadow-xl max-h-80 overflow-auto">
+          {/* Search */}
+          <div className="p-2 border-b sticky top-0 bg-white">
             <div className="relative">
-              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 pr-2 py-1.5 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+          </div>
+
+          {/* Provider List */}
+          <div className="py-1">
               <input
                 ref={searchInputRef}
                 type="text"
