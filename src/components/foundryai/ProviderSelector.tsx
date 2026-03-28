@@ -54,23 +54,9 @@ export function ProviderSelector({
       </button>
 
       {isOpen && (
-        <div 
-          className="absolute z-[9999] left-0 top-full mt-2 w-64 rounded-2xl max-h-80 overflow-hidden"
-          style={{
-            background: 'rgba(255, 255, 255, 0.65)',
-            backdropFilter: 'blur(16px) saturate(200%)',
-            WebkitBackdropFilter: 'blur(16px) saturate(200%)',
-            border: '1px solid rgba(255, 255, 255, 0.5)',
-            boxShadow: '0 25px 50px -12px rgba(139, 92, 246, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.3) inset',
-          }}
-        >
-          {/* Top glow line */}
-          <div 
-            className="absolute top-0 left-4 right-4 h-px"
-            style={{
-              background: 'linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent)',
-            }}
-          />
+        <div className="absolute z-[100] left-0 top-full mt-2 w-64 rounded-xl overflow-hidden bg-gradient-to-br from-violet-50 via-white to-violet-50 border border-violet-200 shadow-[0_8px_32px_rgba(139,92,246,0.2)]">
+          {/* Glow header */}
+          <div className="h-1 w-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-violet-400" />
           <div className="p-2">
             {PROVIDER_INFO.map((provider) => (
               <button
@@ -81,20 +67,22 @@ export function ProviderSelector({
                   setIsOpen(false);
                 }}
                 className={cn(
-                  "w-full px-3 py-2 flex items-center gap-3 text-left rounded-lg transition-colors",
-                  "hover:bg-slate-50",
-                  selectedProvider === provider.id && "bg-violet-50"
+                  "w-full px-3 py-2.5 flex items-center gap-3 text-left rounded-lg transition-all",
+                  "hover:bg-violet-100/60 hover:scale-[1.02]",
+                  selectedProvider === provider.id && "bg-violet-100 shadow-sm"
                 )}
               >
-                <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: provider.color }} />
+                <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 shadow-sm" style={{ backgroundColor: provider.color }} />
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className={cn("text-sm font-medium", selectedProvider === provider.id ? "text-violet-700" : "text-slate-700")}>
-                      {provider.name}
-                    </span>
-                  </div>
+                  <span className={cn("text-sm font-medium", selectedProvider === provider.id ? "text-violet-700" : "text-slate-700")}>
+                    {provider.name}
+                  </span>
                 </div>
-                {selectedProvider === provider.id && <Check className="w-4 h-4 text-violet-600 flex-shrink-0" />}
+                {selectedProvider === provider.id && (
+                  <div className="flex items-center justify-center w-5 h-5 rounded-full bg-violet-500">
+                    <Check className="w-3 h-3 text-white" />
+                  </div>
+                )}
               </button>
             ))}
           </div>
