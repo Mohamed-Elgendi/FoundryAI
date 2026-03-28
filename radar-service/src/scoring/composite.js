@@ -6,57 +6,66 @@
  * @returns {number} Score between 0-100
  */
 export function calculateScore(post, classification) {
-  let score = 50; // Base score
+  let score = 30; // Lower base score for more variation
 
-  // Engagement score (0-30 points)
+  // Engagement score (0-25 points) - logarithmic scale for better distribution
   const upvotes = post.upvotes || 0;
   const comments = post.numComments || 0;
   
-  if (upvotes > 1000) score += 30;
-  else if (upvotes > 500) score += 25;
-  else if (upvotes > 100) score += 20;
-  else if (upvotes > 50) score += 15;
-  else if (upvotes > 10) score += 10;
-  else score += 5;
+  // Use logarithmic scale so high vote counts don't dominate
+  if (upvotes > 0) {
+    score += Math.min(25, Math.floor(Math.log10(upvotes) * 8));
+  }
 
-  // Comment engagement (0-15 points)
-  if (comments > 100) score += 15;
-  else if (comments > 50) score += 12;
-  else if (comments > 20) score += 8;
-  else if (comments > 5) score += 5;
-  else score += 2;
+  // Comment engagement (0-15 points) - also logarithmic
+  if (comments > 0) {
+    score += Math.min(15, Math.floor(Math.log10(comments) * 7));
+  }
 
-  // Subreddit quality multiplier
-  const qualityMultipliers = {
-    'SaaS': 1.2,
-    'startups': 1.15,
-    'indiehackers': 1.15,
-    'sideproject': 1.1,
-    'Entrepreneur': 1.05
+  // Subreddit quality bonus (0-10 points)
+  const qualityBonuses = {
+    'SaaS': 10,
+    'startups': 8,
+    'indiehackers': 8,
+    'sideproject': 6,
+    'Entrepreneur': 5,
+    'marketing': 5,
+    'SmallBusiness': 4
   };
   
-  const multiplier = qualityMultipliers[post.subreddit] || 1.0;
-  score = Math.floor(score * multiplier);
+  score += qualityBonuses[post.subreddit] || 2;
 
   // Problem clarity bonus (0-10 points)
-  if (classification.problem && classification.problem.length > 100) {
+  if (classification.problem && classification.problem.length > 200) {
     score += 10;
+  } else if (classification.problem && classification.problem.length > 100) {
+    score += 7;
   } else if (classification.problem && classification.problem.length > 50) {
-    score += 5;
+    score += 4;
+  } else {
+    score += 1;
   }
 
-  // Market attractiveness (0-10 points)
-  const attractiveMarkets = ['AI Tools', 'Fintech', 'SaaS', 'HealthTech'];
-  if (attractiveMarkets.includes(classification.market)) {
-    score += 10;
-  }
+  // Market attractiveness (0-8 points)
+  const marketScores = {
+    'AI Tools': 8,
+    'Fintech': 8,
+    'SaaS': 7,
+    'HealthTech': 7,
+    'DevTools': 6,
+    'E-commerce': 6,
+    'EdTech': 5,
+    'Marketplace': 5
+  };
+  score += marketScores[classification.market] || 3;
 
-  // Horizon adjustment - short-term is easier to validate
+  // Horizon adjustment (±5 points)
   if (classification.horizon === 'short') score += 5;
-  else if (classification.horizon === 'long') score -= 5;
+  else if (classification.horizon === 'mid') score += 2;
+  else if (classification.horizon === 'long') score -= 3;
 
-  // Cap at 100
-  return Math.min(100, Math.max(0, score));
+  // Round to nearest integer and cap
+  return Math.min(100, Math.max(0, Math.round(score)));
 }
 
 /**
