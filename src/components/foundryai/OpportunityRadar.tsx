@@ -155,9 +155,9 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
             <TrendingUp className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="font-semibold text-lg">Opportunity Radar</h2>
-            <p className="text-sm text-muted-foreground">
-              AI-discovered business ideas ranked by potential
+            <h2 className="font-semibold text-lg text-slate-900">Trending Opportunities</h2>
+            <p className="text-sm text-slate-500">
+              AI-curated business ideas ranked by market potential
             </p>
           </div>
         </div>
@@ -272,13 +272,13 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
       </div>
 
       {/* Footer Info */}
-      <p className="text-xs text-muted-foreground text-center">
-        Opportunities are discovered and scored by AI analyzing Reddit discussions.
+      <p className="text-xs text-slate-400 text-center">
+        Opportunities are continuously analyzed and ranked by market potential and viability.
         {' '}<button 
           onClick={fetchOpportunities}
-          className="underline hover:text-foreground"
+          className="underline hover:text-slate-600"
         >
-          Refresh
+          Refresh Data
         </button>
       </p>
     </div>
