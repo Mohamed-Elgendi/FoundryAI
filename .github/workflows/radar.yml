@@ -18,13 +18,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-          cache: 'npm'
-          cache-dependency-path: radar-service/package-lock.json
+          node-version: 20
 
       - name: Install dependencies
         working-directory: ./radar-service
-        run: npm ci
+        run: npm install
 
       - name: Run radar service
         working-directory: ./radar-service
