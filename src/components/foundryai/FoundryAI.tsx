@@ -46,25 +46,6 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
       setUserInput(initialIdea);
     }
   }, [initialIdea]);
-  useEffect(() => {
-    const loadProviderStatus = async () => {
-      try {
-        const response = await fetch('/api/providers');
-        if (response.ok) {
-          const result = await response.json();
-          const data = result.data || result;
-          const providers = data.providers || [];
-          const available = providers
-            .filter((p: { available: boolean }) => p.available)
-            .map((p: { provider: AIProvider }) => p.provider);
-          setAvailableProviders(available);
-        }
-      } catch (err) {
-        console.error('Failed to load provider status:', err);
-      }
-    };
-    loadProviderStatus();
-  }, []);
 
   // Load saved plans on mount
   useEffect(() => {
