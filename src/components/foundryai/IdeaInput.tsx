@@ -111,7 +111,7 @@ const colorMap: Record<string, string> = {
             ? 'border-primary/50 shadow-xl shadow-primary/10' 
             : 'border-border/50 shadow-lg'
           }
-          bg-white/80 backdrop-blur-xl overflow-hidden
+          bg-white/80 backdrop-blur-xl
         `}
       >
         {/* Progress Bar */}
