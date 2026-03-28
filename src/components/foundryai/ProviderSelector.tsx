@@ -54,7 +54,14 @@ export function ProviderSelector({
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 left-0 top-full mt-2 w-64 bg-white border border-slate-200 rounded-xl shadow-xl max-h-72 overflow-y-auto">
+        <div 
+          className="absolute z-50 left-0 top-full mt-2 w-64 border border-white/30 rounded-xl shadow-2xl max-h-72 overflow-y-auto"
+          style={{
+            background: 'rgba(255, 255, 255, 0.75)',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          }}
+        >
           <div className="p-2">
             {PROVIDER_INFO.map((provider) => (
               <button

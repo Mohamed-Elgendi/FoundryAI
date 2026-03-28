@@ -113,21 +113,16 @@ const colorMap: Record<string, string> = {
 
   return (
     <div className="space-y-6 scale-in">
-      {/* Main Input Card - Glassmorphism */}
+      {/* Main Input Card */}
       <div 
         className={`
-          relative rounded-2xl border transition-all duration-300
+          relative rounded-2xl border-2 transition-all duration-300
           ${isFocused 
-            ? 'border-violet-400/50 shadow-[0_8px_32px_rgba(139,92,246,0.25)]' 
-            : 'border-white/30 shadow-lg'
+            ? 'border-violet-400 shadow-xl shadow-violet-100' 
+            : 'border-slate-200 shadow-lg'
           }
-          bg-white/60
-          overflow-visible
+          bg-white overflow-visible
         `}
-        style={{
-          backdropFilter: 'blur(20px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-        }}
       >
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-muted">
@@ -149,15 +144,8 @@ const colorMap: Record<string, string> = {
             </span>
           </div>
 
-          {/* Textarea - Glassmorphism Inner */}
-          <div 
-            className="relative rounded-lg overflow-hidden"
-            style={{
-              background: 'rgba(255, 255, 255, 0.4)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-            }}
-          >
+          {/* Textarea */}
+          <div className="relative bg-white rounded-lg">
             <Textarea
               ref={textareaRef}
               value={input}
@@ -167,11 +155,11 @@ const colorMap: Record<string, string> = {
               placeholder="Describe the problem you're solving, who it's for, and what makes your solution unique..."
               className="
                 min-h-[140px] text-base resize-none 
-                border-0 rounded-lg
-                bg-transparent text-slate-800
-                focus-visible:ring-2 focus-visible:ring-violet-400/30
+                border border-slate-200 rounded-lg
+                bg-white text-slate-800
+                focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:border-violet-400
                 focus-visible:ring-offset-0
-                placeholder:text-slate-500
+                placeholder:text-slate-400
                 p-3 pr-12
               "
               disabled={isLoading}
