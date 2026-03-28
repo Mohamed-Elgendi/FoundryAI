@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Wand2, Sparkles, ArrowRight, Lightbulb, Code, Rocket, Zap, Command } from 'lucide-react';
+import { Wand2, Sparkles, ArrowRight, Lightbulb, Code, Rocket, Zap, Command, Copy, Check } from 'lucide-react';
 import { AIProvider } from '@/lib/ai/ai-types';
 import { ProviderSelector } from './ProviderSelector';
 
@@ -25,6 +25,7 @@ export function IdeaInput({
   const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [copied, setCopied] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -97,6 +98,17 @@ const colorMap: Record<string, string> = {
     textareaRef.current?.focus();
   };
 
+  const handleCopy = async () => {
+    if (!input) return;
+    try {
+      await navigator.clipboard.writeText(input);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
   const progress = Math.min((charCount / 100) * 100, 100);
 
   return (
@@ -148,10 +160,27 @@ const colorMap: Record<string, string> = {
                 focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:border-violet-400
                 focus-visible:ring-offset-0
                 placeholder:text-slate-400
-                p-3
+                p-3 pr-12
               "
               disabled={isLoading}
             />
+            
+            {/* Copy Button */}
+            {input && (
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="absolute right-3 top-3 p-2 rounded-lg text-slate-400 hover:text-violet-600 hover:bg-violet-50 transition-all"
+                title={copied ? 'Copied!' : 'Copy text'}
+              >
+                {copied ? (
+                  <Check className="w-4 h-4 text-green-500" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
+              </button>
+            )}
+          </div>
 
           {/* Action Bar */}
           <div className="flex items-center justify-between pt-2">
