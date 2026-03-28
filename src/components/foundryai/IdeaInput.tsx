@@ -179,36 +179,19 @@ const colorMap: Record<string, string> = {
               </div>
             </div>
             
-            <Button
+            <button
               type="submit"
               disabled={!isValid || isLoading}
-              onClick={(e) => {
-                console.log('Button clicked directly');
-                if (isValid && !isLoading) {
-                  handleSubmit(e);
-                }
-              }}
               className={`
-                h-11 px-6 font-semibold transition-all duration-300 relative z-10
+                h-11 px-6 font-semibold rounded-lg transition-all duration-300
                 ${isValid && !isLoading
-                  ? 'bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 cursor-pointer'
-                  : 'bg-muted text-muted-foreground cursor-not-allowed'
+                  ? 'bg-primary text-white hover:bg-primary/90 shadow-lg'
+                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                 }
               `}
             >
-              {isLoading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Wand2 className="w-4 h-4 mr-2" />
-                  Generate Plan
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-                </>
-              )}
-            </Button>
+              {isLoading ? 'Generating...' : 'Generate Plan'}
+            </button>
           </div>
         </form>
       </div>
