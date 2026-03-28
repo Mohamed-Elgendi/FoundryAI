@@ -1,7 +1,7 @@
 'use client';
 
-import { FoundryAI } from '@/components/foundryAI/FoundryAI';
-import { OpportunityRadar, Opportunity } from '@/components/foundryAI/OpportunityRadar';
+import { FoundryAI } from '@/components/foundryai/FoundryAI';
+import { OpportunityRadar, Opportunity } from '@/components/foundryai/OpportunityRadar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sparkles, Target, Rocket, Menu, X, TrendingUp, Lightbulb, Crown, Zap } from 'lucide-react';
 import { useState } from 'react';
