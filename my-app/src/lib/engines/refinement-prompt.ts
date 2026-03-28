@@ -1,9 +1,9 @@
-import { VibeBuilderOutput } from '@/types';
+import { FoundryAIOutput } from '@/types';
 import { parseJSON } from '@/lib/utils/json-parser';
 
 export interface RefinementContext {
   originalInput: string;
-  currentOutput: VibeBuilderOutput;
+  currentOutput: FoundryAIOutput;
   iterationCount: number;
   previousRefinements: string[];
   focusAreas?: string[];
@@ -22,7 +22,7 @@ export function buildRefinementPrompt(context: RefinementContext): string {
   
   const currentFocus = iterationDescriptions[Math.min(iterationCount - 1, 4)];
   
-  return `You are VibeBuilder AI's Refinement Engine - an elite product architect that transforms good plans into exceptional, publication-quality blueprints.
+  return `You are FoundryAI's Refinement Engine - an elite product architect that transforms good plans into exceptional, publication-quality blueprints.
 
 ## REFINEMENT MISSION
 This is REFINEMENT ITERATION #${iterationCount}. ${currentFocus}
@@ -218,7 +218,7 @@ Expand to include:
 ## OUTPUT FORMAT
 Return ONLY a valid JSON object. Escape all quotes properly. No markdown, no code blocks, no explanations outside JSON.
 
-The output must be a complete VibeBuilderOutput with ALL fields significantly expanded and enhanced from the input, INCLUDING the new marketResearch section.
+The output must be a complete FoundryAIOutput with ALL fields significantly expanded and enhanced from the input, INCLUDING the new marketResearch section.
 
 {
   "toolIdea": "Enhanced with full brand concept",
@@ -250,7 +250,7 @@ The output must be a complete VibeBuilderOutput with ALL fields significantly ex
 /**
  * Parse refinement response using shared JSON parser
  */
-export function parseRefinementResponse(response: string): VibeBuilderOutput | null {
+export function parseRefinementResponse(response: string): FoundryAIOutput | null {
   const result = parseJSON<VibeBuilderOutput>(response, validateRefinedOutput);
   
   if (!result.success) {
@@ -262,13 +262,13 @@ export function parseRefinementResponse(response: string): VibeBuilderOutput | n
   return result.data || null;
 }
 
-function validateRefinedOutput(parsed: unknown): VibeBuilderOutput | null {
+function validateRefinedOutput(parsed: unknown): FoundryAIOutput | null {
   if (!parsed || typeof parsed !== 'object') {
     console.error('Parsed output is not an object');
     return null;
   }
   
-  const output = parsed as Partial<VibeBuilderOutput>;
+  const output = parsed as Partial<FoundryAIOutput>;
   
   // Log what we received
   console.log('Validating refinement output:', {

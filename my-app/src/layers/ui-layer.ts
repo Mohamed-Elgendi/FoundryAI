@@ -206,7 +206,7 @@ export type Theme = 'light' | 'dark' | 'system';
 
 export const themeConfig = {
   defaultTheme: 'light' as Theme,
-  storageKey: 'vibebuilder-theme',
+  storageKey: 'foundryai-theme',
   themes: ['light', 'dark', 'system'] as Theme[],
 };
 

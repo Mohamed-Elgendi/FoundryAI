@@ -1,4 +1,4 @@
-import { VibeBuilder } from '@/components/vibebuilder/VibeBuilder';
+import { FoundryAI } from '@/components/vibebuilder/VibeBuilder';
 import { Sparkles, Zap, Shield, Link2, ExternalLink } from 'lucide-react';
 
 export default function Home() {
@@ -23,8 +23,8 @@ export default function Home() {
               <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-lg tracking-tight">VibeBuilder AI</span>
-              <span className="text-xs text-muted-foreground">Ideas to Income</span>
+              <span className="font-bold text-lg tracking-tight">FoundryAI</span>
+              <span className="text-xs text-muted-foreground">Forge Your Venture</span>
             </div>
           </div>
           
@@ -113,7 +113,7 @@ export default function Home() {
       {/* Main App Section */}
       <section className="relative z-10 flex-1 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="max-w-4xl mx-auto">
-          <VibeBuilder />
+          <FoundryAI />
         </div>
       </section>
 

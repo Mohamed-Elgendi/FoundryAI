@@ -1,4 +1,4 @@
-export interface VibeBuilderOutput {
+export interface FoundryAIOutput {
   toolIdea: string;
   targetUser: string;
   problemStatement: string;
@@ -66,7 +66,7 @@ export interface MonetizationStrategy {
 export interface FeedbackData {
   id?: string;
   userInput: string;
-  output: VibeBuilderOutput;
+  output: FoundryAIOutput;
   isHelpful: boolean;
   timestamp: string;
   userAgent?: string;

@@ -1,10 +1,10 @@
-# VibeBuilder AI
+# FoundryAI
 
-**Transform unstructured ideas into buildable, monetizable digital products.**
+**Where million-dollar ideas are forged.**
 
-VibeBuilder AI is a self-improving AI execution engine that converts vague human thoughts into complete build plans with tech stack recommendations, step-by-step instructions, and monetization strategies.
+FoundryAI is a crash-proof startup ideation platform that transforms raw concepts into actionable business plans. Built with a 6-layer resilient architecture and multi-provider AI fallback system.
 
-![VibeBuilder AI](https://img.shields.io/badge/VibeBuilder-AI-violet)
+![FoundryAI](https://img.shields.io/badge/FoundryAI-forge-blue)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 ![Groq](https://img.shields.io/badge/Groq-AI-green)
@@ -51,7 +51,7 @@ VibeBuilder AI is a self-improving AI execution engine that converts vague human
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/vibebuilder-ai.git
+   git clone https://github.com/Mohamed-Elgendi/FoundryAI.git
    cd vibebuilder-ai/my-app
    ```
 
@@ -116,7 +116,7 @@ CREATE POLICY "Allow anonymous selects" ON public.feedback
 
 ## 🔁 Self-Improvement System
 
-VibeBuilder AI continuously improves through:
+FoundryAI continuously improves through:
 
 1. **User Feedback Collection**: 👍/👎 on each output
 2. **Pattern Recognition**: Analyzes successful outputs

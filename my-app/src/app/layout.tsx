@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VibeBuilder AI - Turn Ideas Into Income",
-  description: "Transform unstructured ideas into buildable, monetizable digital products with AI-powered execution planning.",
+  title: "FoundryAI - Forge Your Next Venture",
+  description: "Where million-dollar ideas are forged. Transform raw concepts into actionable business plans with AI-powered execution planning.",
 };
 
 export default function RootLayout({

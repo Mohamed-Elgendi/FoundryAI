@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { VibeBuilderOutput, RefinementState } from '@/types';
+import { FoundryAIOutput, RefinementState } from '@/types';
 import { 
   Target, Users, Wrench, Layers, Hammer, DollarSign, 
   ThumbsUp, ThumbsDown, CheckCircle, Clock, Check,
@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 interface OutputDisplayProps {
-  output: VibeBuilderOutput;
+  output: FoundryAIOutput;
   onFeedback: (isHelpful: boolean) => void;
   onRefine: () => void;
   refinementState: RefinementState;

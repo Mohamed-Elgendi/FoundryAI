@@ -183,9 +183,9 @@ export function validateJsonStructure<T>(
 }
 
 /**
- * Type guard for VibeBuilderOutput
+ * Type guard for FoundryAIOutput
  */
-export function isValidVibeBuilderOutput(data: unknown): boolean {
+export function isValidFoundryAIOutput(data: unknown): boolean {
   if (!data || typeof data !== 'object') return false;
   
   const d = data as Record<string, unknown>;

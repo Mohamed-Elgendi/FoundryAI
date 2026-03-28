@@ -30,7 +30,7 @@ export function LoadingState() {
               Building Your Plan
             </h3>
             <p className="text-muted-foreground">
-              VibeBuilder AI is transforming your idea into an actionable blueprint...
+              FoundryAI is transforming your idea into an actionable blueprint...
             </p>
           </div>
 

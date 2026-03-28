@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { VibeBuilderOutput, RefinementState } from '@/types';
+import { FoundryAIOutput, RefinementState } from '@/types';
 import { IdeaInput } from './IdeaInput';
 import { OutputDisplay } from './OutputDisplay';
 import { LoadingState } from './LoadingState';
@@ -13,15 +13,15 @@ import { AlertCircle, History } from 'lucide-react';
 interface SavedPlan {
   id: string;
   userInput: string;
-  output: VibeBuilderOutput;
+  output: FoundryAIOutput;
   refinementState: RefinementState;
   createdAt: string;
 }
 
-export function VibeBuilder() {
+export function FoundryAI() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefining, setIsRefining] = useState(false);
-  const [output, setOutput] = useState<VibeBuilderOutput | null>(null);
+  const [output, setOutput] = useState<FoundryAIOutput | null>(null);
   const [userInput, setUserInput] = useState('');
   const [error, setError] = useState<{message: string; isRateLimit?: boolean; suggestedAction?: string} | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -36,7 +36,7 @@ export function VibeBuilder() {
 
   // Load saved plans on mount
   useEffect(() => {
-    const saved = localStorage.getItem('vibebuilder-plans');
+    const saved = localStorage.getItem('foundryai-plans');
     if (saved) {
       try {
         setSavedPlans(JSON.parse(saved));
@@ -49,7 +49,7 @@ export function VibeBuilder() {
   // Save plans whenever they change
   useEffect(() => {
     if (savedPlans.length > 0) {
-      localStorage.setItem('vibebuilder-plans', JSON.stringify(savedPlans));
+      localStorage.setItem('foundryai-plans', JSON.stringify(savedPlans));
     }
   }, [savedPlans]);
 

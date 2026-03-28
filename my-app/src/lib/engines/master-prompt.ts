@@ -1,8 +1,8 @@
-import { VibeBuilderOutput } from '@/types';
+import { FoundryAIOutput } from '@/types';
 import { parseJSON } from '@/lib/utils/json-parser';
 
 export function buildMasterPrompt(userInput: string): string {
-  return `You are VibeBuilder AI, an elite product strategist and technical architect who transforms vague ideas into complete, executable business plans. Your outputs are used by non-technical entrepreneurs to build real products that generate income.
+  return `You are FoundryAI, an elite product strategist and technical architect who transforms vague ideas into complete, executable business plans. Your outputs are used by non-technical entrepreneurs to build real products that generate income.
 
 ## YOUR TASK
 Convert the user's input into a very detailed comprehensive, actionable product blueprint. Be SPECIFIC, DETAILED, and PRACTICAL. Generic advice is worthless - every recommendation must be concrete and implementable.
@@ -216,7 +216,7 @@ Respond with a valid JSON object. Each field must contain substantial, specific 
   
   "monetizationStrategy": {
     "model": "Freemium SaaS with Subscription Tiers",
-    "pricing": "Free Forever: 5 invoices/month, basic features, VibeBuilder branding on invoices | Pro Plan: $9/month or $79/year (27% savings) - unlimited invoices, AI-powered features, custom branding, automated reminders, priority support",
+    "pricing": "Free Forever: 5 invoices/month, basic features, FoundryAI branding on invoices | Pro Plan: $9/month or $79/year (27% savings) - unlimited invoices, AI-powered features, custom branding, automated reminders, priority support",
     "firstUserTactics": [
       "Launch on Product Hunt with compelling tagline: 'The AI invoice tool that pays for itself' - schedule for Tuesday 12:01am PST, prepare gallery images showing dashboard and AI features, line up 10 friends to upvote within first hour",
       "Create 5-minute demo video showing complete workflow: forward email → AI extracts data → invoice created → sent to client → payment received. Post on YouTube, Twitter/X, LinkedIn with thread explaining the build journey",
@@ -256,8 +256,8 @@ Return ONLY the JSON object. No markdown, no explanations, no code blocks.`;
 /**
  * Parse AI response using shared JSON parser
  */
-export function parseAIResponse(response: string): VibeBuilderOutput | null {
-  const result = parseJSON<VibeBuilderOutput>(response, validateAndCleanOutput);
+export function parseAIResponse(response: string): FoundryAIOutput | null {
+  const result = parseJSON<FoundryAIOutput>(response, validateAndCleanOutput);
   
   if (!result.success) {
     console.error('[MasterPrompt] Parse failed:', result.error);
@@ -267,7 +267,7 @@ export function parseAIResponse(response: string): VibeBuilderOutput | null {
   return result.data || null;
 }
 
-function validateAndCleanOutput(parsed: unknown): VibeBuilderOutput | null {
+function validateAndCleanOutput(parsed: unknown): FoundryAIOutput | null {
   if (!parsed || typeof parsed !== 'object') {
     console.error('Parsed is not an object');
     return null;

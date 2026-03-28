@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { FeedbackData, StoredPattern, VibeBuilderOutput } from '@/types';
+import { FeedbackData, StoredPattern, FoundryAIOutput } from '@/types';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -50,7 +50,7 @@ export async function getSuccessfulPatterns(limit: number = 50): Promise<StoredP
       return [];
     }
 
-    return data?.map((item: { user_input: string; output_json: VibeBuilderOutput }) => ({
+    return data?.map((item: { user_input: string; output_json: FoundryAIOutput }) => ({
       inputPattern: extractPattern(item.user_input),
       outputStructure: JSON.stringify(item.output_json),
       successRate: 1,
