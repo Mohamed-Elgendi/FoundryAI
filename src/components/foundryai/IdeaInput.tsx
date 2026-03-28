@@ -3,14 +3,27 @@
 import { useState, useRef, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Wand2, Sparkles, ArrowRight, Lightbulb, Code, Rocket, Zap, Command, CornerDownLeft } from 'lucide-react';
+import { Wand2, Sparkles, ArrowRight, Lightbulb, Code, Rocket, Zap, Command } from 'lucide-react';
+import { AIProvider } from '@/lib/ai/ai-router';
+import { ProviderSelector } from './ProviderSelector';
 
 interface IdeaInputProps {
-  onGenerate: (input: string) => void;
+  onGenerate: (input: string, provider: AIProvider) => void;
   isLoading: boolean;
+  selectedProvider: AIProvider;
+  onProviderChange: (provider: AIProvider) => void;
+  quotaExceeded?: boolean;
+  availableProviders?: AIProvider[];
 }
 
-export function IdeaInput({ onGenerate, isLoading }: IdeaInputProps) {
+export function IdeaInput({ 
+  onGenerate, 
+  isLoading, 
+  selectedProvider, 
+  onProviderChange,
+  quotaExceeded = false,
+  availableProviders = []
+}: IdeaInputProps) {
   const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [charCount, setCharCount] = useState(0);
@@ -28,7 +41,7 @@ export function IdeaInput({ onGenerate, isLoading }: IdeaInputProps) {
       // Cmd/Ctrl + Enter to generate
       if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && isValid && !isLoading) {
         e.preventDefault();
-        onGenerate(input.trim());
+        onGenerate(input.trim(), selectedProvider);
       }
       // Escape to clear
       if (e.key === 'Escape' && input) {
@@ -39,12 +52,12 @@ export function IdeaInput({ onGenerate, isLoading }: IdeaInputProps) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [input, isValid, isLoading, onGenerate]);
+  }, [input, isValid, isLoading, onGenerate, selectedProvider]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !isLoading) {
-      onGenerate(input.trim());
+      onGenerate(input.trim(), selectedProvider);
     }
   };
 
@@ -147,16 +160,20 @@ const colorMap: Record<string, string> = {
 
           {/* Action Bar */}
           <div className="flex items-center justify-between pt-2">
-            <div className="text-xs text-muted-foreground flex items-center gap-3">
-              <span className="flex items-center gap-1">
+            {/* Provider Selector - Under Input Box */}
+            <div className="flex items-center gap-3">
+              <ProviderSelector
+                selectedProvider={selectedProvider}
+                onSelect={onProviderChange}
+                disabled={isLoading}
+                quotaExceeded={quotaExceeded}
+                availableProviders={availableProviders}
+              />
+              
+              <div className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
                 <Command className="w-3 h-3" />
                 <kbd className="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">↵</kbd>
-                <span>to generate</span>
-              </span>
-              <span className="hidden sm:flex items-center gap-1">
-                <kbd className="px-1.5 py-0.5 rounded bg-muted font-mono text-[10px]">Esc</kbd>
-                <span>to clear</span>
-              </span>
+              </div>
             </div>
             
             <Button

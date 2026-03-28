@@ -86,10 +86,11 @@ export const errors = {
   notFound: (resource: string) =>
     errorResponse(`${resource} not found`, 404, { code: 'NOT_FOUND' }),
   
-  aiError: (message: string, suggestedAction?: string) =>
+  aiError: (message: string, suggestedAction?: string, extra?: { rateLimitError?: boolean; quotaExceeded?: boolean }) =>
     errorResponse(message, 502, {
       code: 'AI_SERVICE_ERROR',
       suggestedAction: suggestedAction || 'Please try again or use a different AI provider',
+      ...extra,
     }),
   
   internal: (message: string = 'Internal server error', details?: string) =>

@@ -1,576 +1,945 @@
 /**
- * Enhanced AI Router with Multi-Provider Auto-Rotation
- * Supports multiple free-tier AI providers with automatic failover and rotation
+ * Enhanced AI Router with Multi-Provider Support
+ * Claude AI as primary, with smart fallback to other providers
+ * Real quota detection and user-controlled provider selection
  */
 
 import { generateText } from 'ai';
 import { groq } from '@ai-sdk/groq';
 import { google } from '@ai-sdk/google';
 import { mistral } from '@ai-sdk/mistral';
-import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import { createOpenAICompatible, openai } from '@ai-sdk/openai-compatible';
+import { anthropic } from '@ai-sdk/anthropic';
 
+// All available AI providers
 export type AIProvider = 
-  | 'groq' 
-  | 'gemini' 
-  | 'mistral' 
-  | 'together' 
-  | 'cohere' 
-  | 'openrouter' 
+  | 'claude-3-5-sonnet'    // Anthropic - Primary
+  | 'claude-3-5-haiku'     // Anthropic - Fast
+  | 'claude-3-opus'        // Anthropic - Powerful
+  | 'gpt-4o'               // OpenAI
+  | 'gpt-4o-mini'          // OpenAI - Fast/Cheap
+  | 'groq-llama-3-3'       // Groq - Ultra fast
+  | 'groq-mixtral'         // Groq - Mixtral
+  | 'gemini-2-flash'       // Google
+  | 'gemini-1-5-pro'       // Google - Pro
+  | 'mistral-small'        // Mistral
+  | 'mistral-medium'       // Mistral - Better
+  | 'deepseek-chat'        // DeepSeek
+  | 'deepseek-coder'       // DeepSeek - Code
+  | 'perplexity-sonar'     // Perplexity - Online
+  | 'together-llama'       // Together AI
+  | 'cohere-command'       // Cohere
+  | 'openrouter-claude'    // OpenRouter - Claude access
+  | 'openrouter-gpt'       // OpenRouter - GPT access
+  | 'openrouter-llama'     // OpenRouter - Llama
+  | 'fireworks-llama'      // Fireworks AI
+  | 'replicate-llama'      // Replicate
+  | 'azure-openai'         // Azure OpenAI
   | 'fallback';
 
+// Provider metadata for UI
+export interface ProviderInfo {
+  id: AIProvider;
+  name: string;
+  description: string;
+  category: 'premium' | 'fast' | 'free' | 'experimental';
+  color: string;
+  recommended?: boolean;
+}
+
+// Provider information for dropdown
+export const PROVIDER_INFO: ProviderInfo[] = [
+  // Claude - Primary (Premium)
+  { 
+    id: 'claude-3-5-sonnet', 
+    name: 'Claude 3.5 Sonnet', 
+    description: 'Anthropic - Best for complex business plans',
+    category: 'premium',
+    color: '#E57035',
+    recommended: true
+  },
+  { 
+    id: 'claude-3-opus', 
+    name: 'Claude 3 Opus', 
+    description: 'Anthropic - Most powerful (slower)',
+    category: 'premium',
+    color: '#E57035'
+  },
+  { 
+    id: 'claude-3-5-haiku', 
+    name: 'Claude 3.5 Haiku', 
+    description: 'Anthropic - Fast & efficient',
+    category: 'fast',
+    color: '#E57035'
+  },
+  
+  // OpenAI
+  { 
+    id: 'gpt-4o', 
+    name: 'GPT-4o', 
+    description: 'OpenAI - Great all-rounder',
+    category: 'premium',
+    color: '#10A37F'
+  },
+  { 
+    id: 'gpt-4o-mini', 
+    name: 'GPT-4o Mini', 
+    description: 'OpenAI - Fast & affordable',
+    category: 'fast',
+    color: '#10A37F'
+  },
+  
+  // Google
+  { 
+    id: 'gemini-2-flash', 
+    name: 'Gemini 2.0 Flash', 
+    description: 'Google - 1500 req/day free',
+    category: 'free',
+    color: '#4285F4'
+  },
+  { 
+    id: 'gemini-1-5-pro', 
+    name: 'Gemini 1.5 Pro', 
+    description: 'Google - Better quality',
+    category: 'premium',
+    color: '#4285F4'
+  },
+  
+  // Groq - Ultra Fast
+  { 
+    id: 'groq-llama-3-3', 
+    name: 'Groq Llama 3.3', 
+    description: 'Groq - 100K tokens/day free, instant',
+    category: 'free',
+    color: '#F55036',
+    recommended: true
+  },
+  { 
+    id: 'groq-mixtral', 
+    name: 'Groq Mixtral', 
+    description: 'Groq - Mixtral 8x7B, fast',
+    category: 'free',
+    color: '#F55036'
+  },
+  
+  // Mistral
+  { 
+    id: 'mistral-small', 
+    name: 'Mistral Small', 
+    description: 'Mistral AI - Free tier',
+    category: 'free',
+    color: '#543DE1'
+  },
+  { 
+    id: 'mistral-medium', 
+    name: 'Mistral Medium', 
+    description: 'Mistral AI - Better quality',
+    category: 'premium',
+    color: '#543DE1'
+  },
+  
+  // DeepSeek
+  { 
+    id: 'deepseek-chat', 
+    name: 'DeepSeek Chat', 
+    description: 'DeepSeek - Great reasoning',
+    category: 'free',
+    color: '#4D6BFF'
+  },
+  { 
+    id: 'deepseek-coder', 
+    name: 'DeepSeek Coder', 
+    description: 'DeepSeek - Code specialist',
+    category: 'free',
+    color: '#4D6BFF'
+  },
+  
+  // Perplexity - Online
+  { 
+    id: 'perplexity-sonar', 
+    name: 'Perplexity Sonar', 
+    description: 'Perplexity - Real-time web search',
+    category: 'premium',
+    color: '#14B8A6'
+  },
+  
+  // Together AI
+  { 
+    id: 'together-llama', 
+    name: 'Together Llama 3.3', 
+    description: 'Together AI - $5 free credit',
+    category: 'free',
+    color: '#1F2937'
+  },
+  
+  // Cohere
+  { 
+    id: 'cohere-command', 
+    name: 'Cohere Command R+', 
+    description: 'Cohere - Free tier available',
+    category: 'free',
+    color: '#D4A574'
+  },
+  
+  // OpenRouter - Multi-access
+  { 
+    id: 'openrouter-claude', 
+    name: 'OpenRouter → Claude', 
+    description: 'Access Claude via OpenRouter',
+    category: 'experimental',
+    color: '#6B7280'
+  },
+  { 
+    id: 'openrouter-gpt', 
+    name: 'OpenRouter → GPT-4o', 
+    description: 'Access GPT-4o via OpenRouter',
+    category: 'experimental',
+    color: '#6B7280'
+  },
+  { 
+    id: 'openrouter-llama', 
+    name: 'OpenRouter → Llama', 
+    description: 'Access Llama via OpenRouter',
+    category: 'experimental',
+    color: '#6B7280'
+  },
+  
+  // Fireworks
+  { 
+    id: 'fireworks-llama', 
+    name: 'Fireworks Llama 3', 
+    description: 'Fireworks AI - Fast inference',
+    category: 'free',
+    color: '#EC4899'
+  },
+  
+  // Replicate
+  { 
+    id: 'replicate-llama', 
+    name: 'Replicate Llama', 
+    description: 'Replicate - Pay per use',
+    category: 'experimental',
+    color: '#F97316'
+  },
+  
+  // Azure
+  { 
+    id: 'azure-openai', 
+    name: 'Azure OpenAI', 
+    description: 'Azure - Enterprise GPT',
+    category: 'premium',
+    color: '#0078D4'
+  },
+];
+
+// Get default provider (Claude 3.5 Sonnet)
+export function getDefaultProvider(): AIProvider {
+  return 'claude-3-5-sonnet';
+}
+
+// Get providers by category
+export function getProvidersByCategory(category: ProviderInfo['category']): ProviderInfo[] {
+  return PROVIDER_INFO.filter(p => p.category === category);
+}
+
+// Get all available providers that are configured
+export function getAvailableProviders(): ProviderInfo[] {
+  return PROVIDER_INFO.filter(p => isProviderConfigured(p.id));
+}
+
+// Check if provider is configured (has API key)
+function isProviderConfigured(provider: AIProvider): boolean {
+  const config = getProviderConfig(provider);
+  if (!config) return provider === 'fallback';
+  return !!process.env[config.apiKeyEnv];
+}
+
+// Provider configuration
+interface ProviderConfig {
+  apiKeyEnv: string;
+  model: string;
+  baseURL?: string;
+  provider: string;
+  maxTokens: number;
+}
+
+// Get configuration for each provider
+function getProviderConfig(provider: AIProvider): ProviderConfig | null {
+  const configs: Record<AIProvider, ProviderConfig | null> = {
+    'claude-3-5-sonnet': {
+      apiKeyEnv: 'ANTHROPIC_API_KEY',
+      model: 'claude-3-5-sonnet-20241022',
+      provider: 'anthropic',
+      maxTokens: 8192
+    },
+    'claude-3-5-haiku': {
+      apiKeyEnv: 'ANTHROPIC_API_KEY',
+      model: 'claude-3-5-haiku-20241022',
+      provider: 'anthropic',
+      maxTokens: 4096
+    },
+    'claude-3-opus': {
+      apiKeyEnv: 'ANTHROPIC_API_KEY',
+      model: 'claude-3-opus-20240229',
+      provider: 'anthropic',
+      maxTokens: 4096
+    },
+    'gpt-4o': {
+      apiKeyEnv: 'OPENAI_API_KEY',
+      model: 'gpt-4o',
+      provider: 'openai',
+      maxTokens: 4096
+    },
+    'gpt-4o-mini': {
+      apiKeyEnv: 'OPENAI_API_KEY',
+      model: 'gpt-4o-mini',
+      provider: 'openai',
+      maxTokens: 4096
+    },
+    'groq-llama-3-3': {
+      apiKeyEnv: 'GROQ_API_KEY',
+      model: 'llama-3.3-70b-versatile',
+      provider: 'groq',
+      maxTokens: 4096
+    },
+    'groq-mixtral': {
+      apiKeyEnv: 'GROQ_API_KEY',
+      model: 'mixtral-8x7b-32768',
+      provider: 'groq',
+      maxTokens: 4096
+    },
+    'gemini-2-flash': {
+      apiKeyEnv: 'GEMINI_API_KEY',
+      model: 'gemini-2.0-flash-exp',
+      provider: 'google',
+      maxTokens: 8192
+    },
+    'gemini-1-5-pro': {
+      apiKeyEnv: 'GEMINI_API_KEY',
+      model: 'gemini-1.5-pro',
+      provider: 'google',
+      maxTokens: 8192
+    },
+    'mistral-small': {
+      apiKeyEnv: 'MISTRAL_API_KEY',
+      model: 'mistral-small-latest',
+      provider: 'mistral',
+      maxTokens: 4096
+    },
+    'mistral-medium': {
+      apiKeyEnv: 'MISTRAL_API_KEY',
+      model: 'mistral-medium-latest',
+      provider: 'mistral',
+      maxTokens: 4096
+    },
+    'deepseek-chat': {
+      apiKeyEnv: 'DEEPSEEK_API_KEY',
+      model: 'deepseek-chat',
+      provider: 'deepseek',
+      baseURL: 'https://api.deepseek.com/v1',
+      maxTokens: 4096
+    },
+    'deepseek-coder': {
+      apiKeyEnv: 'DEEPSEEK_API_KEY',
+      model: 'deepseek-coder',
+      provider: 'deepseek',
+      baseURL: 'https://api.deepseek.com/v1',
+      maxTokens: 4096
+    },
+    'perplexity-sonar': {
+      apiKeyEnv: 'PERPLEXITY_API_KEY',
+      model: 'llama-3.1-sonar-large-128k-online',
+      provider: 'perplexity',
+      baseURL: 'https://api.perplexity.ai',
+      maxTokens: 4096
+    },
+    'together-llama': {
+      apiKeyEnv: 'TOGETHER_API_KEY',
+      model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo',
+      provider: 'together',
+      baseURL: 'https://api.together.xyz/v1',
+      maxTokens: 4096
+    },
+    'cohere-command': {
+      apiKeyEnv: 'COHERE_API_KEY',
+      model: 'command-r-plus',
+      provider: 'cohere',
+      maxTokens: 4096
+    },
+    'openrouter-claude': {
+      apiKeyEnv: 'OPENROUTER_API_KEY',
+      model: 'anthropic/claude-3.5-sonnet',
+      provider: 'openrouter',
+      baseURL: 'https://openrouter.ai/api/v1',
+      maxTokens: 4096
+    },
+    'openrouter-gpt': {
+      apiKeyEnv: 'OPENROUTER_API_KEY',
+      model: 'openai/gpt-4o',
+      provider: 'openrouter',
+      baseURL: 'https://openrouter.ai/api/v1',
+      maxTokens: 4096
+    },
+    'openrouter-llama': {
+      apiKeyEnv: 'OPENROUTER_API_KEY',
+      model: 'meta-llama/llama-3.3-70b-instruct',
+      provider: 'openrouter',
+      baseURL: 'https://openrouter.ai/api/v1',
+      maxTokens: 4096
+    },
+    'fireworks-llama': {
+      apiKeyEnv: 'FIREWORKS_API_KEY',
+      model: 'accounts/fireworks/models/llama-v3p3-70b-instruct',
+      provider: 'fireworks',
+      baseURL: 'https://api.fireworks.ai/inference/v1',
+      maxTokens: 4096
+    },
+    'replicate-llama': {
+      apiKeyEnv: 'REPLICATE_API_TOKEN',
+      model: 'meta/meta-llama-3.1-70b-instruct',
+      provider: 'replicate',
+      maxTokens: 4096
+    },
+    'azure-openai': {
+      apiKeyEnv: 'AZURE_OPENAI_API_KEY',
+      model: process.env.AZURE_OPENAI_DEPLOYMENT || 'gpt-4o',
+      provider: 'azure',
+      baseURL: process.env.AZURE_OPENAI_ENDPOINT,
+      maxTokens: 4096
+    },
+    'fallback': null
+  };
+  
+  return configs[provider] || null;
+}
+
+// Get fallback providers in priority order
+export function getFallbackProviders(preferred?: AIProvider): AIProvider[] {
+  const priority: AIProvider[] = [
+    'claude-3-5-haiku',      // Fast Claude
+    'gpt-4o',                // OpenAI
+    'groq-llama-3-3',        // Ultra fast
+    'gemini-2-flash',        // Google free tier
+    'deepseek-chat',         // DeepSeek
+    'mistral-small',         // Mistral
+    'together-llama',        // Together
+    'cohere-command',        // Cohere
+    'openrouter-claude',     // OpenRouter backup
+    'fallback'               // Local fallback
+  ];
+  
+  if (preferred && preferred !== 'claude-3-5-sonnet' && preferred !== 'claude-3-opus') {
+    // If user selected non-Claude, use that first then others
+    return [preferred, ...priority.filter(p => p !== preferred)];
+  }
+  
+  return priority;
+}
+
+// AI Request interface
 export interface AIRequest {
   prompt: string;
   preferredProvider?: AIProvider;
+  fallbackProviders?: AIProvider[];
   maxOutputTokens?: number;
   temperature?: number;
+  signal?: AbortSignal;
 }
 
+// AI Response interface
 export interface AIResponse {
   content: string;
   provider: AIProvider;
   error?: string;
   rateLimitError?: boolean;
+  quotaExceeded?: boolean;
   suggestedAction?: string;
+  fallbackUsed?: boolean;
   latencyMs?: number;
 }
 
-export interface ProviderConfig {
-  name: AIProvider;
-  enabled: boolean;
-  priority: number;
-  apiKeyEnv: string;
-  model: string;
-  description: string;
-  freeTier: {
-    requests?: number;
-    tokens?: number;
-    per: 'day' | 'month';
-  };
-}
-
-// Comprehensive provider configurations with free tier info
-const PROVIDER_CONFIGS: ProviderConfig[] = [
-  { 
-    name: 'groq', 
-    enabled: true, 
-    priority: 1,
-    apiKeyEnv: 'GROQ_API_KEY',
-    model: 'llama-3.3-70b-versatile',
-    description: 'Groq - 100K tokens/day free',
-    freeTier: { tokens: 100000, per: 'day' }
-  },
-  { 
-    name: 'gemini', 
-    enabled: true, 
-    priority: 2,
-    apiKeyEnv: 'GEMINI_API_KEY',
-    model: 'gemini-2.0-flash-exp',
-    description: 'Google Gemini - 1500 requests/day free',
-    freeTier: { requests: 1500, per: 'day' }
-  },
-  { 
-    name: 'mistral', 
-    enabled: true, 
-    priority: 3,
-    apiKeyEnv: 'MISTRAL_API_KEY',
-    model: 'mistral-small-latest',
-    description: 'Mistral AI - Free tier available',
-    freeTier: { per: 'day' }
-  },
-  { 
-    name: 'together', 
-    enabled: true, 
-    priority: 4,
-    apiKeyEnv: 'TOGETHER_API_KEY',
-    model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo',
-    description: 'Together AI - $5 free credit (~100K tokens)',
-    freeTier: { tokens: 100000, per: 'month' }
-  },
-  { 
-    name: 'cohere', 
-    enabled: true, 
-    priority: 5,
-    apiKeyEnv: 'COHERE_API_KEY',
-    model: 'command-r-plus',
-    description: 'Cohere - Free tier available',
-    freeTier: { per: 'day' }
-  },
-  { 
-    name: 'openrouter', 
-    enabled: true, 
-    priority: 6,
-    apiKeyEnv: 'OPENROUTER_API_KEY',
-    model: 'meta-llama/llama-3.3-70b-instruct',
-    description: 'OpenRouter - Free tier with rate limits',
-    freeTier: { per: 'day' }
-  },
-  { 
-    name: 'fallback', 
-    enabled: true, 
-    priority: 99,
-    apiKeyEnv: '',
-    model: '',
-    description: 'Local fallback (no API needed)',
-    freeTier: { per: 'day' }
-  }
-];
-
-// Track failed providers for the current request to avoid retrying
-const failedProviders = new Set<AIProvider>();
-
-/**
- * Main AI processing function with automatic provider rotation
- */
+// Main AI processing function
 export async function processWithAI(request: AIRequest): Promise<AIResponse> {
-  const { prompt, preferredProvider } = request;
+  const { 
+    prompt, 
+    preferredProvider = getDefaultProvider(),
+    fallbackProviders,
+    maxOutputTokens = 4096,
+    temperature = 0.7,
+    signal
+  } = request;
+  
   const startTime = Date.now();
+  const providersToTry = fallbackProviders || getFallbackProviders(preferredProvider);
   
-  // Clear failed providers for new request
-  failedProviders.clear();
-  
-  // Get all enabled providers sorted by priority
-  const providers = getEnabledProviders(preferredProvider);
-  
-  let lastError: AIResponse | null = null;
-  
-  for (const provider of providers) {
-    // Skip if already failed this request
-    if (failedProviders.has(provider)) continue;
+  // Try preferred provider first
+  if (preferredProvider !== 'fallback') {
+    const preferredResult = await tryProvider(preferredProvider, prompt, {
+      maxOutputTokens,
+      temperature
+    });
     
-    const config = PROVIDER_CONFIGS.find(p => p.name === provider);
-    if (!config) continue;
-    
-    // Check if API key exists
-    const apiKey = process.env[config.apiKeyEnv];
-    if (!apiKey && provider !== 'fallback') {
-      console.log(`[AI Router] Skipping ${provider}: ${config.apiKeyEnv} not configured`);
-      continue;
+    // If successful, return immediately
+    if (preferredResult.content) {
+      return {
+        ...preferredResult,
+        latencyMs: Date.now() - startTime
+      };
     }
     
+    // If quota exceeded, we'll show that to user
+    if (preferredResult.quotaExceeded) {
+      return {
+        ...preferredResult,
+        latencyMs: Date.now() - startTime,
+        suggestedAction: 'Claude quota exceeded. Please select another provider from the dropdown.'
+      };
+    }
+  }
+  
+  // Try fallback providers
+  let lastError: AIResponse | null = null;
+  
+  for (const provider of providersToTry) {
+    if (signal?.aborted) {
+      throw new Error('Request aborted');
+    }
+    
+    // Skip if same as preferred (already tried)
+    if (provider === preferredProvider) continue;
+    
     try {
-      console.log(`[AI Router] Trying provider: ${provider} (${config.description})`);
-      const result = await executeProvider(provider, prompt, request, config);
+      const result = await tryProvider(provider, prompt, {
+        maxOutputTokens,
+        temperature
+      });
       
       if (result.content) {
-        const latencyMs = Date.now() - startTime;
-        console.log(`[AI Router] Success with ${provider} in ${latencyMs}ms`);
-        return { ...result, latencyMs };
+        return {
+          ...result,
+          fallbackUsed: true,
+          latencyMs: Date.now() - startTime
+        };
       }
       
-      // Mark provider as failed for this request if it hit rate limit or auth error
-      if (result.rateLimitError || result.error?.includes('not configured')) {
-        failedProviders.add(provider);
-      }
-      
-      // Store error but continue to next provider
-      if (!lastError || result.rateLimitError) {
+      if (!lastError || result.quotaExceeded) {
         lastError = result;
       }
     } catch (error: any) {
-      console.warn(`[AI Router] Provider ${provider} failed:`, error.message);
-      failedProviders.add(provider);
+      console.warn(`Provider ${provider} failed:`, error.message);
       continue;
     }
   }
   
-  // All providers failed - return last error or generic failure
+  // All providers failed
   return lastError || {
     content: '',
     provider: 'fallback',
-    error: 'All AI providers failed. Please check your API keys and rate limits.',
-    suggestedAction: 'Add more free API keys to .env.local (GEMINI_API_KEY, MISTRAL_API_KEY, TOGETHER_API_KEY, COHERE_API_KEY)'
+    error: 'All AI providers failed. Please check your API keys or try again later.',
+    suggestedAction: 'Add more API keys or select a different provider',
+    latencyMs: Date.now() - startTime
   };
 }
 
-/**
- * Get enabled providers sorted by priority, optionally starting with preferred
- */
-function getEnabledProviders(preferred?: AIProvider): AIProvider[] {
-  const enabled = PROVIDER_CONFIGS
-    .filter(p => p.enabled)
-    .sort((a, b) => a.priority - b.priority)
-    .map(p => p.name);
-  
-  if (preferred && enabled.includes(preferred)) {
-    // Move preferred to front
-    return [preferred, ...enabled.filter(p => p !== preferred)];
-  }
-  
-  return enabled;
-}
-
-/**
- * Build provider execution chain based on preference (legacy function)
- */
-function buildProviderChain(preferred: AIProvider): AIProvider[] {
-  return getEnabledProviders(preferred);
-}
-
-/**
- * Execute specific provider
- */
-async function executeProvider(
+// Try a specific provider
+async function tryProvider(
   provider: AIProvider, 
   prompt: string,
-  request: AIRequest,
-  config: ProviderConfig
+  options: { maxOutputTokens: number; temperature: number }
 ): Promise<AIResponse> {
-  switch (provider) {
-    case 'groq':
-      return tryGroq(prompt, request);
-    case 'gemini':
-      return tryGemini(prompt, request);
-    case 'mistral':
-      return tryMistral(prompt, request);
-    case 'together':
-      return tryTogether(prompt, request);
-    case 'cohere':
-      return tryCohere(prompt, request);
-    case 'openrouter':
-      return tryOpenRouter(prompt, request);
-    case 'fallback':
-      return { 
-        content: getFallbackResponse(prompt), 
-        provider: 'fallback' 
-      };
-    default:
-      return {
-        content: '',
-        provider: 'fallback',
-        error: `Unknown provider: ${provider}`
-      };
+  const config = getProviderConfig(provider);
+  
+  if (!config) {
+    return {
+      content: getFallbackResponse(prompt),
+      provider: 'fallback'
+    };
   }
-}
-
-/**
- * Try Groq API
- */
-async function tryGroq(prompt: string, request: AIRequest): Promise<AIResponse> {
-  const apiKey = process.env.GROQ_API_KEY;
+  
+  const apiKey = process.env[config.apiKeyEnv];
   
   if (!apiKey) {
     return {
       content: '',
-      provider: 'groq',
-      error: 'Groq API key not configured',
+      provider,
+      error: `${config.provider} API key not configured`,
       rateLimitError: false
     };
   }
-
+  
   try {
-    const { text } = await generateText({
-      model: groq('llama-3.3-70b-versatile'),
-      prompt,
-      temperature: request.temperature ?? 0.7,
-      maxOutputTokens: request.maxOutputTokens ?? 4000,
-    });
+    console.log(`[AI Router] Trying provider: ${provider}`);
     
-    return { content: text, provider: 'groq' };
-  } catch (error: any) {
-    console.error('[Groq] Error:', error.message);
+    let result: string;
     
-    const errorMessage = error?.message || '';
-    const isRateLimit = errorMessage.includes('rate_limit') || 
-                        errorMessage.includes('Rate limit') ||
-                        error?.statusCode === 429 ||
-                        errorMessage.includes('tokens per day');
-    
-    if (isRateLimit) {
-      const retryMatch = errorMessage.match(/try again in ([\dms\s.]+)/);
-      const retryTime = retryMatch ? retryMatch[1] : 'some time';
-      
-      return {
-        content: '',
-        provider: 'groq',
-        rateLimitError: true,
-        error: `Groq rate limit reached (100K tokens/day). Try again in ${retryTime}.`,
-        suggestedAction: 'Switching to next available provider...'
-      };
+    switch (config.provider) {
+      case 'anthropic':
+        result = await tryAnthropic(config.model, prompt, options, apiKey);
+        break;
+      case 'openai':
+        result = await tryOpenAI(config.model, prompt, options, apiKey);
+        break;
+      case 'groq':
+        result = await tryGroq(config.model, prompt, options, apiKey);
+        break;
+      case 'google':
+        result = await tryGemini(config.model, prompt, options, apiKey);
+        break;
+      case 'mistral':
+        result = await tryMistral(config.model, prompt, options, apiKey);
+        break;
+      case 'deepseek':
+        result = await tryDeepSeek(config.model, prompt, options, apiKey, config.baseURL!);
+        break;
+      case 'perplexity':
+        result = await tryPerplexity(config.model, prompt, options, apiKey, config.baseURL!);
+        break;
+      case 'together':
+        result = await tryTogether(config.model, prompt, options, apiKey, config.baseURL!);
+        break;
+      case 'cohere':
+        result = await tryCohere(config.model, prompt, options, apiKey);
+        break;
+      case 'openrouter':
+        result = await tryOpenRouter(config.model, prompt, options, apiKey, config.baseURL!);
+        break;
+      case 'fireworks':
+        result = await tryFireworks(config.model, prompt, options, apiKey, config.baseURL!);
+        break;
+      case 'replicate':
+        result = await tryReplicate(config.model, prompt, options, apiKey);
+        break;
+      case 'azure':
+        result = await tryAzure(config.model, prompt, options, apiKey, config.baseURL!);
+        break;
+      default:
+        throw new Error(`Unknown provider: ${config.provider}`);
     }
     
     return {
-      content: '',
-      provider: 'groq',
-      error: errorMessage
+      content: result,
+      provider
     };
-  }
-}
-
-/**
- * Try Google Gemini API
- */
-async function tryGemini(prompt: string, request: AIRequest): Promise<AIResponse> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  
-  if (!apiKey) {
-    return {
-      content: '',
-      provider: 'gemini',
-      error: 'Gemini API key not configured'
-    };
-  }
-
-  try {
-    const { text } = await generateText({
-      model: google('gemini-2.0-flash-exp'),
-      prompt,
-      temperature: request.temperature ?? 0.7,
-      maxOutputTokens: request.maxOutputTokens ?? 4000,
-    });
     
-    return { content: text, provider: 'gemini' };
   } catch (error: any) {
-    console.error('[Gemini] Error:', error.message);
+    console.error(`[${provider}] Error:`, error.message);
     
     const errorMessage = error?.message || '';
-    const isRateLimit = errorMessage.includes('429') || 
-                        errorMessage.includes('quota') ||
-                        errorMessage.includes('rate limit');
+    const isQuotaError = errorMessage.includes('quota') || 
+                         errorMessage.includes('insufficient_quota') ||
+                         errorMessage.includes('billing') ||
+                         errorMessage.includes('credit') ||
+                         error?.statusCode === 429;
     
-    return {
-      content: '',
-      provider: 'gemini',
-      rateLimitError: isRateLimit,
-      error: errorMessage,
-      suggestedAction: isRateLimit ? 'Gemini rate limit reached (1500 requests/day)' : undefined
-    };
-  }
-}
-
-/**
- * Try Mistral AI API
- */
-async function tryMistral(prompt: string, request: AIRequest): Promise<AIResponse> {
-  const apiKey = process.env.MISTRAL_API_KEY;
-  
-  if (!apiKey) {
-    return {
-      content: '',
-      provider: 'mistral',
-      error: 'Mistral API key not configured'
-    };
-  }
-
-  try {
-    const { text } = await generateText({
-      model: mistral('mistral-small-latest'),
-      prompt,
-      temperature: request.temperature ?? 0.7,
-      maxOutputTokens: request.maxOutputTokens ?? 4000,
-    });
-    
-    return { content: text, provider: 'mistral' };
-  } catch (error: any) {
-    console.error('[Mistral] Error:', error.message);
-    
-    const errorMessage = error?.message || '';
-    const isRateLimit = error?.statusCode === 429 || 
-                        errorMessage.includes('rate limit');
-    
-    return {
-      content: '',
-      provider: 'mistral',
-      rateLimitError: isRateLimit,
-      error: errorMessage,
-      suggestedAction: isRateLimit ? 'Mistral rate limit reached' : undefined
-    };
-  }
-}
-
-/**
- * Try Together AI API
- */
-async function tryTogether(prompt: string, request: AIRequest): Promise<AIResponse> {
-  const apiKey = process.env.TOGETHER_API_KEY;
-  
-  if (!apiKey) {
-    return {
-      content: '',
-      provider: 'together',
-      error: 'Together API key not configured'
-    };
-  }
-
-  try {
-    const together = createOpenAICompatible({
-      name: 'together',
-      apiKey,
-      baseURL: 'https://api.together.xyz/v1',
-    });
-    
-    const { text } = await generateText({
-      model: together('meta-llama/Llama-3.3-70B-Instruct-Turbo'),
-      prompt,
-      temperature: request.temperature ?? 0.7,
-      maxOutputTokens: request.maxOutputTokens ?? 4000,
-    });
-    
-    return { content: text, provider: 'together' };
-  } catch (error: any) {
-    console.error('[Together] Error:', error.message);
-    
-    const errorMessage = error?.message || '';
     const isRateLimit = error?.statusCode === 429 || 
                         errorMessage.includes('rate limit') ||
-                        errorMessage.includes('insufficient');
+                        errorMessage.includes('too many requests');
     
     return {
       content: '',
-      provider: 'together',
-      rateLimitError: isRateLimit,
+      provider,
       error: errorMessage,
-      suggestedAction: isRateLimit ? 'Together AI credit exhausted ($5 free tier)' : undefined
+      rateLimitError: isRateLimit && !isQuotaError,
+      quotaExceeded: isQuotaError
     };
   }
 }
 
-/**
- * Try Cohere API
- */
-async function tryCohere(prompt: string, request: AIRequest): Promise<AIResponse> {
-  const apiKey = process.env.COHERE_API_KEY;
+// Provider implementations
+async function tryAnthropic(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string
+): Promise<string> {
+  const { text } = await generateText({
+    model: anthropic(model),
+    prompt,
+    temperature: options.temperature,
+    maxOutputTokens: options.maxOutputTokens
+  });
+  return text;
+}
+
+async function tryOpenAI(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string
+): Promise<string> {
+  const { text } = await generateText({
+    model: openai(model, { apiKey }),
+    prompt,
+    temperature: options.temperature,
+    maxOutputTokens: options.maxOutputTokens
+  });
+  return text;
+}
+
+async function tryGroq(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string
+): Promise<string> {
+  const { text } = await generateText({
+    model: groq(model),
+    prompt,
+    temperature: options.temperature,
+    maxOutputTokens: options.maxOutputTokens
+  });
+  return text;
+}
+
+async function tryGemini(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string
+): Promise<string> {
+  const { text } = await generateText({
+    model: google(model),
+    prompt,
+    temperature: options.temperature,
+    maxOutputTokens: options.maxOutputTokens
+  });
+  return text;
+}
+
+async function tryMistral(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string
+): Promise<string> {
+  const { text } = await generateText({
+    model: mistral(model),
+    prompt,
+    temperature: options.temperature,
+    maxOutputTokens: options.maxOutputTokens
+  });
+  return text;
+}
+
+async function tryDeepSeek(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string,
+  baseURL: string
+): Promise<string> {
+  const deepseek = createOpenAICompatible({
+    name: 'deepseek',
+    apiKey,
+    baseURL
+  });
   
-  if (!apiKey) {
-    return {
-      content: '',
-      provider: 'cohere',
-      error: 'Cohere API key not configured'
-    };
-  }
-
-  try {
-    const response = await fetch('https://api.cohere.ai/v1/generate', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'command-r-plus',
-        prompt,
-        temperature: request.temperature ?? 0.7,
-        max_tokens: request.maxOutputTokens ?? 4000,
-      }),
-    });
-
-    if (!response.ok) {
-      const status = response.status;
-      const data = await response.json().catch(() => ({}));
-      
-      if (status === 429) {
-        return {
-          content: '',
-          provider: 'cohere',
-          rateLimitError: true,
-          error: 'Cohere rate limit reached',
-          suggestedAction: 'Free tier limits exceeded'
-        };
-      }
-      
-      return {
-        content: '',
-        provider: 'cohere',
-        error: data.message || `Cohere HTTP error: ${status}`
-      };
-    }
-
-    const data = await response.json();
-    return { 
-      content: data.generations?.[0]?.text || '', 
-      provider: 'cohere' 
-    };
-  } catch (error: any) {
-    console.error('[Cohere] Error:', error.message);
-    return {
-      content: '',
-      provider: 'cohere',
-      error: error?.message || 'Cohere request failed'
-    };
-  }
+  const { text } = await generateText({
+    model: deepseek(model),
+    prompt,
+    temperature: options.temperature,
+    maxOutputTokens: options.maxOutputTokens
+  });
+  return text;
 }
 
-/**
- * Try OpenRouter API
- */
-async function tryOpenRouter(prompt: string, request: AIRequest): Promise<AIResponse> {
-  const apiKey = process.env.OPENROUTER_API_KEY;
+async function tryPerplexity(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string,
+  baseURL: string
+): Promise<string> {
+  const response = await fetch(`${baseURL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: 'user', content: prompt }],
+      temperature: options.temperature,
+      max_tokens: options.maxOutputTokens
+    })
+  });
   
-  if (!apiKey) {
-    return {
-      content: '',
-      provider: 'openrouter',
-      error: 'OpenRouter API key not configured'
-    };
+  if (!response.ok) {
+    throw new Error(`Perplexity error: ${response.status}`);
   }
-
-  try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-        'X-Title': 'FoundryAI',
-      },
-      body: JSON.stringify({
-        model: 'anthropic/claude-3.5-sonnet',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: request.temperature ?? 0.7,
-        max_tokens: request.maxOutputTokens ?? 4000,
-      }),
-    });
-
-    if (!response.ok) {
-      const status = response.status;
-      
-      if (status === 402) {
-        return {
-          content: '',
-          provider: 'openrouter',
-          rateLimitError: true,
-          error: 'OpenRouter requires payment/credits.',
-          suggestedAction: 'Add credits at https://openrouter.ai/credits'
-        };
-      }
-      
-      if (status === 429) {
-        return {
-          content: '',
-          provider: 'openrouter',
-          rateLimitError: true,
-          error: 'OpenRouter rate limit reached.',
-          suggestedAction: 'Check your account limits or try again later'
-        };
-      }
-      
-      return {
-        content: '',
-        provider: 'openrouter',
-        error: `OpenRouter HTTP error: ${status}`
-      };
-    }
-
-    const data = await response.json();
-    return { 
-      content: data.choices?.[0]?.message?.content || '', 
-      provider: 'openrouter' 
-    };
-  } catch (error: any) {
-    console.error('[OpenRouter] Error:', error.message);
-    return {
-      content: '',
-      provider: 'openrouter',
-      error: error?.message || 'OpenRouter request failed'
-    };
-  }
+  
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || '';
 }
 
-/**
- * Generate fallback response for demo/testing
- */
+async function tryTogether(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string,
+  baseURL: string
+): Promise<string> {
+  const together = createOpenAICompatible({
+    name: 'together',
+    apiKey,
+    baseURL
+  });
+  
+  const { text } = await generateText({
+    model: together(model),
+    prompt,
+    temperature: options.temperature,
+    maxOutputTokens: options.maxOutputTokens
+  });
+  return text;
+}
+
+async function tryCohere(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string
+): Promise<string> {
+  const response = await fetch('https://api.cohere.ai/v1/generate', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model,
+      prompt,
+      temperature: options.temperature,
+      max_tokens: options.maxOutputTokens
+    })
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Cohere error: ${response.status}`);
+  }
+  
+  const data = await response.json();
+  return data.generations?.[0]?.text || '';
+}
+
+async function tryOpenRouter(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string,
+  baseURL: string
+): Promise<string> {
+  const response = await fetch(`${baseURL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL || 'https://foundryai.vercel.app',
+      'X-Title': 'FoundryAI'
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: 'user', content: prompt }],
+      temperature: options.temperature,
+      max_tokens: options.maxOutputTokens
+    })
+  });
+  
+  if (!response.ok) {
+    const status = response.status;
+    if (status === 402) {
+      throw new Error('OpenRouter requires payment/credits');
+    }
+    if (status === 429) {
+      throw new Error('OpenRouter rate limit reached');
+    }
+    throw new Error(`OpenRouter error: ${status}`);
+  }
+  
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+async function tryFireworks(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string,
+  baseURL: string
+): Promise<string> {
+  const fireworks = createOpenAICompatible({
+    name: 'fireworks',
+    apiKey,
+    baseURL
+  });
+  
+  const { text } = await generateText({
+    model: fireworks(model),
+    prompt,
+    temperature: options.temperature,
+    maxOutputTokens: options.maxOutputTokens
+  });
+  return text;
+}
+
+async function tryReplicate(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string
+): Promise<string> {
+  const response = await fetch('https://api.replicate.com/v1/predictions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Token ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      version: model,
+      input: { prompt, max_tokens: options.maxOutputTokens, temperature: options.temperature }
+    })
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Replicate error: ${response.status}`);
+  }
+  
+  // Replicate is async - return empty for now
+  return '';
+}
+
+async function tryAzure(
+  model: string, 
+  prompt: string, 
+  options: { maxOutputTokens: number; temperature: number },
+  apiKey: string,
+  endpoint: string
+): Promise<string> {
+  const response = await fetch(`${endpoint}/openai/deployments/${model}/chat/completions?api-version=2024-02-15-preview`, {
+    method: 'POST',
+    headers: {
+      'api-key': apiKey,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      messages: [{ role: 'user', content: prompt }],
+      temperature: options.temperature,
+      max_tokens: options.maxOutputTokens
+    })
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Azure error: ${response.status}`);
+  }
+  
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+// Fallback response
 function getFallbackResponse(prompt: string): string {
   return JSON.stringify({
-    toolIdea: 'AI-Powered Solution Generator',
+    toolIdea: 'AI-Powered Business Plan Generator',
     targetUser: 'Non-technical entrepreneurs',
     problemStatement: 'Difficulty converting ideas into actionable plans',
     marketResearch: {
@@ -592,58 +961,38 @@ function getFallbackResponse(prompt: string): string {
       'Input processing with natural language understanding',
       'Structured output generation with market research',
       'Interactive refinement system',
-      'Feedback collection and improvement',
+      'Feedback collection and improvement'
     ],
     techStack: [
       { category: 'Frontend', tool: 'Next.js 15', purpose: 'React framework with App Router', isFree: true },
       { category: 'Styling', tool: 'Tailwind CSS + shadcn/ui', purpose: 'Modern UI components', isFree: true },
       { category: 'Database', tool: 'Supabase', purpose: 'PostgreSQL + Auth', isFree: true },
-      { category: 'AI', tool: 'Groq', purpose: 'Fast LLM inference', isFree: true },
-      { category: 'Hosting', tool: 'Vercel', purpose: 'Edge deployment', isFree: true },
+      { category: 'AI', tool: 'Claude/Groq/Gemini', purpose: 'Multi-provider AI', isFree: true },
+      { category: 'Hosting', tool: 'Vercel', purpose: 'Edge deployment', isFree: true }
     ],
     buildPlan: [
-      {
-        step: 1,
-        title: 'Project Setup',
-        description: 'Initialize Next.js with TypeScript, Tailwind, and shadcn/ui',
-        estimatedTime: '30 minutes',
-      },
-      {
-        step: 2,
-        title: 'AI Integration',
-        description: 'Set up Groq API and build prompt engineering system',
-        estimatedTime: '2 hours',
-      },
-      {
-        step: 3,
-        title: 'UI Components',
-        description: 'Create input form, output display, and refinement UI',
-        estimatedTime: '3 hours',
-      },
+      { step: 1, title: 'Project Setup', description: 'Initialize Next.js with TypeScript, Tailwind, and shadcn/ui', estimatedTime: '30 minutes' },
+      { step: 2, title: 'AI Integration', description: 'Set up multi-provider AI router with Claude primary', estimatedTime: '2 hours' },
+      { step: 3, title: 'UI Components', description: 'Create input form, output display, and provider selector', estimatedTime: '3 hours' }
     ],
     monetizationStrategy: {
       model: 'Freemium SaaS',
-      pricing: 'Free: 3 generations/month | Pro: $9/month unlimited',
-      firstUserTactics: [
-        'Launch on Product Hunt',
-        'Post on Indie Hackers',
-        'Create Twitter threads',
-        'SEO-optimized blog content',
-      ],
-      revenueEstimate: '$500-2000 MRR within 6 months',
-    },
+      pricing: 'Free: 3 generations/day | Pro: $9/month unlimited',
+      firstUserTactics: ['Launch on Product Hunt', 'Post on Indie Hackers', 'Create Twitter threads', 'SEO-optimized blog content'],
+      revenueEstimate: '$500-2000 MRR within 6 months'
+    }
   });
 }
 
-/**
- * Get provider status information
- */
-export function getProviderStatus(): Array<{name: AIProvider; available: boolean; description: string}> {
-  return PROVIDER_CONFIGS
-    .filter(p => p.name !== 'fallback')
-    .map(p => ({
-      name: p.name,
-      available: !!process.env[p.apiKeyEnv],
-      description: p.description
-    }));
+// Get provider status for health check
+export function getProviderStatus(): Array<{
+  provider: AIProvider;
+  available: boolean;
+  info: ProviderInfo;
+}> {
+  return PROVIDER_INFO.map(info => ({
+    provider: info.id,
+    available: isProviderConfigured(info.id),
+    info
+  }));
 }

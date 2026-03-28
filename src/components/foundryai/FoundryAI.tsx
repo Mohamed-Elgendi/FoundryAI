@@ -9,6 +9,7 @@ import { RefinementLoadingState } from './RefinementLoadingState';
 import { TemplateGallery } from './TemplateGallery';
 import { Confetti } from '@/components/ui/confetti';
 import { AlertCircle, History } from 'lucide-react';
+import { AIProvider, getDefaultProvider, getProviderStatus } from '@/lib/ai/ai-router';
 
 interface SavedPlan {
   id: string;
@@ -23,16 +24,37 @@ export function FoundryAI() {
   const [isRefining, setIsRefining] = useState(false);
   const [output, setOutput] = useState<FoundryAIOutput | null>(null);
   const [userInput, setUserInput] = useState('');
-  const [error, setError] = useState<{message: string; isRateLimit?: boolean; suggestedAction?: string} | null>(null);
+  const [error, setError] = useState<{message: string; isRateLimit?: boolean; suggestedAction?: string; quotaExceeded?: boolean} | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [savedPlans, setSavedPlans] = useState<SavedPlan[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<AIProvider>(getDefaultProvider());
+  const [availableProviders, setAvailableProviders] = useState<AIProvider[]>([]);
   const [refinementState, setRefinementState] = useState<RefinementState>({
     iterationCount: 0,
     isRefining: false,
     previousRefinements: [],
     originalInput: '',
   });
+
+  // Load available providers on mount
+  useEffect(() => {
+    const loadProviderStatus = async () => {
+      try {
+        const response = await fetch('/api/providers');
+        if (response.ok) {
+          const data = await response.json();
+          const available = data.data.providers
+            .filter((p: { available: boolean }) => p.available)
+            .map((p: { provider: AIProvider }) => p.provider);
+          setAvailableProviders(available);
+        }
+      } catch (err) {
+        console.error('Failed to load provider status:', err);
+      }
+    };
+    loadProviderStatus();
+  }, []);
 
   // Load saved plans on mount
   useEffect(() => {
@@ -90,7 +112,7 @@ export function FoundryAI() {
     setSavedPlans(prev => prev.filter(p => p.id !== id));
   };
 
-  const handleGenerate = async (input: string) => {
+  const handleGenerate = async (input: string, provider: AIProvider) => {
     setIsLoading(true);
     setError(null);
     setUserInput(input);
@@ -99,7 +121,7 @@ export function FoundryAI() {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userInput: input }),
+        body: JSON.stringify({ userInput: input, provider }),
       });
 
       const data = await response.json();
@@ -107,11 +129,12 @@ export function FoundryAI() {
       if (!response.ok) {
         const errorData = data;
         setError({
-          message: errorData.error || 'Failed to generate plan',
-          isRateLimit: errorData.rateLimitError,
-          suggestedAction: errorData.suggestedAction || errorData.hint,
+          message: errorData.error?.message || errorData.error || 'Failed to generate plan',
+          isRateLimit: errorData.error?.rateLimitError,
+          quotaExceeded: errorData.error?.quotaExceeded,
+          suggestedAction: errorData.error?.suggestedAction || errorData.hint,
         });
-        throw new Error(errorData.error);
+        throw new Error(errorData.error?.message || errorData.error);
       }
 
       setOutput(data.output);
@@ -269,11 +292,18 @@ export function FoundryAI() {
         </div>
       )}
 
-      <IdeaInput onGenerate={handleGenerate} isLoading={isLoading} />
+      <IdeaInput 
+        onGenerate={handleGenerate} 
+        isLoading={isLoading}
+        selectedProvider={selectedProvider}
+        onProviderChange={setSelectedProvider}
+        quotaExceeded={error?.quotaExceeded}
+        availableProviders={availableProviders}
+      />
       
       {/* Template Gallery */}
       {!output && !isLoading && (
-        <TemplateGallery onSelect={handleGenerate} isLoading={isLoading} />
+        <TemplateGallery onSelect={(text) => handleGenerate(text, selectedProvider)} isLoading={isLoading} />
       )}
       
       {isLoading && <LoadingState />}
@@ -285,7 +315,7 @@ export function FoundryAI() {
       )}
       
       {error && (
-        <div className={`p-4 border rounded-lg ${error.isRateLimit ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-red-50 border-red-200 text-red-700'}`}>
+        <div className={`p-4 border rounded-lg ${error.isRateLimit || error.quotaExceeded ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-red-50 border-red-200 text-red-700'}`}>
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
             <div className="space-y-2">
@@ -293,13 +323,13 @@ export function FoundryAI() {
               {error.suggestedAction && (
                 <p className="text-sm opacity-90">{error.suggestedAction}</p>
               )}
-              {error.isRateLimit && (
+              {(error.isRateLimit || error.quotaExceeded) && (
                 <div className="text-sm mt-2 p-2 bg-white/50 rounded">
                   <strong>Options:</strong>
                   <ul className="list-disc ml-4 mt-1 space-y-1">
+                    <li>Select a different AI model from the dropdown above</li>
                     <li>Wait for rate limit reset (usually 1 hour)</li>
-                    <li>Switch to OpenRouter in your .env.local file</li>
-                    <li>Check your Groq dashboard for usage: https://console.groq.com</li>
+                    <li>Add more API keys for additional providers</li>
                   </ul>
                 </div>
               )}
