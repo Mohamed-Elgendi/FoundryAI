@@ -119,7 +119,8 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
       console.log('API response received', { status: response.status });
 
       const data = await response.json();
-      console.log('API data parsed', { success: response.ok, hasOutput: !!data.output });
+      console.log('API response data:', data);
+      console.log('Has output:', !!data.output);
 
       if (!response.ok) {
         const errorData = data;

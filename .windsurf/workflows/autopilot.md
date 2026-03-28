@@ -1,0 +1,3 @@
+When I type /autopilot, you go immediately and exceute the steps to be done of the whole project on autopilot without asking my consent, don't stop until you finish the step that you are working on and until you dilver the final output for this step, make a step-at-a-time. step-by-step progress.
+once you finish a step you should provide a summary of what you did and ask me if I want to continue to the next step or stop.
+once step is finished and I agree to it you go and push it on github and make sure it is published online.
