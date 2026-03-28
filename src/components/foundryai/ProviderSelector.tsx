@@ -22,33 +22,11 @@ export function ProviderSelector({
 }: ProviderSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [focusedIndex, setFocusedIndex] = useState(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // Focus search when dropdown opens
-  useEffect(() => {
-    if (isOpen && searchInputRef.current) {
-      setTimeout(() => searchInputRef.current?.focus(), 100);
-    }
-  }, [isOpen]);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setSearchQuery('');
-      }
-    };
-    
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
+  const scrollableRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const selectedInfo = PROVIDER_INFO.find(p => p.id === selectedProvider) || PROVIDER_INFO[0];
 
@@ -70,6 +48,116 @@ export function ProviderSelector({
     free: filteredProviders.filter(p => p.category === 'free'),
     experimental: filteredProviders.filter(p => p.category === 'experimental'),
   }), [filteredProviders]);
+
+  // Flatten all visible providers for keyboard navigation
+  const allVisibleProviders = useMemo(() => {
+    const providers: ProviderInfo[] = [];
+    if (showSelectedAtTop) providers.push(selectedInfo);
+    providers.push(...groupedProviders.premium);
+    providers.push(...groupedProviders.fast);
+    providers.push(...groupedProviders.free);
+    providers.push(...groupedProviders.experimental);
+    return providers;
+  }, [groupedProviders, selectedInfo, showSelectedAtTop]);
+
+  // Reset focused index when search changes
+  useEffect(() => {
+    setFocusedIndex(-1);
+    itemRefs.current = [];
+  }, [searchQuery]);
+
+  // Focus search when dropdown opens
+  useEffect(() => {
+    if (isOpen && searchInputRef.current) {
+      setTimeout(() => searchInputRef.current?.focus(), 100);
+    }
+  }, [isOpen]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          setFocusedIndex(prev => {
+            const next = prev < allVisibleProviders.length - 1 ? prev + 1 : prev;
+            // Scroll into view
+            setTimeout(() => {
+              itemRefs.current[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }, 0);
+            return next;
+          });
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          if (focusedIndex > 0) {
+            setFocusedIndex(prev => {
+              const next = prev - 1;
+              setTimeout(() => {
+                itemRefs.current[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+              }, 0);
+              return next;
+            });
+          } else if (focusedIndex === 0) {
+            // Focus search input when going up from first item
+            searchInputRef.current?.focus();
+            setFocusedIndex(-1);
+          }
+          break;
+        case 'Enter':
+          e.preventDefault();
+          if (focusedIndex >= 0 && allVisibleProviders[focusedIndex]) {
+            const provider = allVisibleProviders[focusedIndex];
+            onSelect(provider.id);
+            setIsOpen(false);
+            setSearchQuery('');
+            setFocusedIndex(-1);
+          }
+          break;
+        case 'Escape':
+          e.preventDefault();
+          setIsOpen(false);
+          setSearchQuery('');
+          setFocusedIndex(-1);
+          break;
+        case 'Tab':
+          // Allow tab to navigate naturally but close dropdown
+          setIsOpen(false);
+          setSearchQuery('');
+          setFocusedIndex(-1);
+          break;
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, focusedIndex, allVisibleProviders, onSelect]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearchQuery('');
+        setFocusedIndex(-1);
+      }
+    };
+    
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   // Check if we have any results
   const hasResults = Object.values(groupedProviders).some(group => group.length > 0);
@@ -167,8 +255,12 @@ export function ProviderSelector({
             </div>
           </div>
 
-          {/* Provider Groups - Scrollable area */}
-          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+          {/* Provider Groups - Scrollable area with forced scrollbar */}
+          <div 
+            ref={scrollableRef}
+            className="flex-1 overflow-y-auto" 
+            style={{ scrollbarWidth: 'thin', scrollbarColor: 'hsl(var(--muted)) transparent' }}
+          >
             {/* Show selected provider at top when searching */}
             {showSelectedAtTop && (
               <div className="py-1 bg-primary/5 border-b">
@@ -176,12 +268,15 @@ export function ProviderSelector({
                   Currently Selected
                 </div>
                 <ProviderItem
+                  ref={el => { itemRefs.current[0] = el; }}
                   provider={selectedInfo}
                   isSelected={true}
+                  isFocused={focusedIndex === 0}
                   onClick={() => {
                     onSelect(selectedInfo.id);
                     setIsOpen(false);
                     setSearchQuery('');
+                    setFocusedIndex(-1);
                   }}
                 />
               </div>
@@ -226,18 +321,24 @@ export function ProviderSelector({
                   <Sparkles className="w-3 h-3" />
                   Premium ({groupedProviders.premium.length})
                 </div>
-                {groupedProviders.premium.map((provider) => (
-                  <ProviderItem
-                    key={provider.id}
-                    provider={provider}
-                    isSelected={selectedProvider === provider.id}
-                    onClick={() => {
-                      onSelect(provider.id);
-                      setIsOpen(false);
-                      setSearchQuery('');
-                    }}
-                  />
-                ))}
+                {groupedProviders.premium.map((provider, idx) => {
+                  const globalIndex = (showSelectedAtTop ? 1 : 0) + idx;
+                  return (
+                    <ProviderItem
+                      key={provider.id}
+                      ref={el => { itemRefs.current[globalIndex] = el; }}
+                      provider={provider}
+                      isSelected={selectedProvider === provider.id}
+                      isFocused={focusedIndex === globalIndex}
+                      onClick={() => {
+                        onSelect(provider.id);
+                        setIsOpen(false);
+                        setSearchQuery('');
+                        setFocusedIndex(-1);
+                      }}
+                    />
+                  );
+                })}
               </div>
             )}
 
@@ -248,18 +349,24 @@ export function ProviderSelector({
                   <Zap className="w-3 h-3" />
                   Fast ({groupedProviders.fast.length})
                 </div>
-                {groupedProviders.fast.map((provider) => (
-                  <ProviderItem
-                    key={provider.id}
-                    provider={provider}
-                    isSelected={selectedProvider === provider.id}
-                    onClick={() => {
-                      onSelect(provider.id);
-                      setIsOpen(false);
-                      setSearchQuery('');
-                    }}
-                  />
-                ))}
+                {groupedProviders.fast.map((provider, idx) => {
+                  const globalIndex = (showSelectedAtTop ? 1 : 0) + groupedProviders.premium.length + idx;
+                  return (
+                    <ProviderItem
+                      key={provider.id}
+                      ref={el => { itemRefs.current[globalIndex] = el; }}
+                      provider={provider}
+                      isSelected={selectedProvider === provider.id}
+                      isFocused={focusedIndex === globalIndex}
+                      onClick={() => {
+                        onSelect(provider.id);
+                        setIsOpen(false);
+                        setSearchQuery('');
+                        setFocusedIndex(-1);
+                      }}
+                    />
+                  );
+                })}
               </div>
             )}
 
@@ -270,18 +377,24 @@ export function ProviderSelector({
                   <Bot className="w-3 h-3" />
                   Free Tier ({groupedProviders.free.length})
                 </div>
-                {groupedProviders.free.map((provider) => (
-                  <ProviderItem
-                    key={provider.id}
-                    provider={provider}
-                    isSelected={selectedProvider === provider.id}
-                    onClick={() => {
-                      onSelect(provider.id);
-                      setIsOpen(false);
-                      setSearchQuery('');
-                    }}
-                  />
-                ))}
+                {groupedProviders.free.map((provider, idx) => {
+                  const globalIndex = (showSelectedAtTop ? 1 : 0) + groupedProviders.premium.length + groupedProviders.fast.length + idx;
+                  return (
+                    <ProviderItem
+                      key={provider.id}
+                      ref={el => { itemRefs.current[globalIndex] = el; }}
+                      provider={provider}
+                      isSelected={selectedProvider === provider.id}
+                      isFocused={focusedIndex === globalIndex}
+                      onClick={() => {
+                        onSelect(provider.id);
+                        setIsOpen(false);
+                        setSearchQuery('');
+                        setFocusedIndex(-1);
+                      }}
+                    />
+                  );
+                })}
               </div>
             )}
 
@@ -292,18 +405,24 @@ export function ProviderSelector({
                   <Bot className="w-3 h-3" />
                   Experimental ({groupedProviders.experimental.length})
                 </div>
-                {groupedProviders.experimental.map((provider) => (
-                  <ProviderItem
-                    key={provider.id}
-                    provider={provider}
-                    isSelected={selectedProvider === provider.id}
-                    onClick={() => {
-                      onSelect(provider.id);
-                      setIsOpen(false);
-                      setSearchQuery('');
-                    }}
-                  />
-                ))}
+                {groupedProviders.experimental.map((provider, idx) => {
+                  const globalIndex = (showSelectedAtTop ? 1 : 0) + groupedProviders.premium.length + groupedProviders.fast.length + groupedProviders.free.length + idx;
+                  return (
+                    <ProviderItem
+                      key={provider.id}
+                      ref={el => { itemRefs.current[globalIndex] = el; }}
+                      provider={provider}
+                      isSelected={selectedProvider === provider.id}
+                      isFocused={focusedIndex === globalIndex}
+                      onClick={() => {
+                        onSelect(provider.id);
+                        setIsOpen(false);
+                        setSearchQuery('');
+                        setFocusedIndex(-1);
+                      }}
+                    />
+                  );
+                })}
               </div>
             )}
           </div>
@@ -322,18 +441,22 @@ export function ProviderSelector({
 interface ProviderItemProps {
   provider: ProviderInfo;
   isSelected: boolean;
+  isFocused?: boolean;
   onClick: () => void;
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
-function ProviderItem({ provider, isSelected, onClick }: ProviderItemProps) {
+const ProviderItem = ({ provider, isSelected, isFocused = false, onClick, ref }: ProviderItemProps) => {
   return (
     <button
+      ref={ref}
       type="button"
       onClick={onClick}
       className={cn(
         "w-full px-3 py-2 flex items-center gap-3 text-left transition-colors",
         "hover:bg-accent focus:bg-accent focus:outline-none",
-        isSelected && "bg-accent"
+        isSelected && "bg-accent",
+        isFocused && "ring-2 ring-primary ring-inset bg-accent/50"
       )}
     >
       <div
@@ -363,6 +486,9 @@ function ProviderItem({ provider, isSelected, onClick }: ProviderItemProps) {
       {isSelected && (
         <Check className="w-4 h-4 text-primary flex-shrink-0" />
       )}
+      {isFocused && !isSelected && (
+        <span className="w-4 h-4 flex-shrink-0 text-xs text-primary">↵</span>
+      )}
     </button>
   );
-}
+};
