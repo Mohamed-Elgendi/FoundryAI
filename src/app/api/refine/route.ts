@@ -45,7 +45,8 @@ export async function POST(request: Request) {
       return errors.internal('Failed to parse refined output', 'The AI refinement response was malformed. Please try again.');
     }
 
-    return successResponse({
+    return NextResponse.json({
+      success: true,
       output: refinedOutput,
       iteration: iterationCount + 1,
       provider: aiResponse.provider,

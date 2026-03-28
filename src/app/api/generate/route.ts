@@ -39,7 +39,8 @@ export async function POST(request: Request) {
       return errors.internal('Failed to parse AI output', 'The AI response was malformed. Please try again.');
     }
 
-    return successResponse({
+    return NextResponse.json({
+      success: true,
       output: parsedOutput,
       provider: aiResponse.provider,
       fallbackUsed: aiResponse.fallbackUsed,
