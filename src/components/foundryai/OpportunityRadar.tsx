@@ -5,8 +5,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AlertCircle, TrendingUp, Clock, Target, Sparkles, ArrowRight, Lightbulb } from 'lucide-react';
+import { AlertCircle, TrendingUp, Clock, Target, Sparkles, ArrowRight, Lightbulb, Loader2, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FoundryAIOutput } from '@/types';
+import { OutputDisplay } from './OutputDisplay';
 
 interface Opportunity {
   id: string;
@@ -23,7 +25,7 @@ interface Opportunity {
 }
 
 interface OpportunityRadarProps {
-  onSelect: (opportunity: Opportunity) => void;
+  onSelect?: (opportunity: Opportunity, output: FoundryAIOutput) => void;
   limit?: number;
 }
 
@@ -32,6 +34,9 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedHorizon, setSelectedHorizon] = useState<'all' | 'short' | 'mid' | 'long'>('all');
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
+  const [generatedOutput, setGeneratedOutput] = useState<FoundryAIOutput | null>(null);
+  const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
 
   useEffect(() => {
     fetchOpportunities();
@@ -132,6 +137,72 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
     );
   }
 
+  async function generatePlan(opportunity: Opportunity) {
+    setGeneratingId(opportunity.id);
+    setSelectedOpportunity(opportunity);
+    
+    try {
+      // Build enriched prompt with ALL radar data
+      const validation = opportunity.validation_data || {};
+      const scoreBreakdown = validation.score_breakdown || {};
+      
+      const enrichedPrompt = `Create a comprehensive business plan for: ${opportunity.title}
+
+PROBLEM TO SOLVE:
+${opportunity.problem}
+
+UNIQUE ANGLE:
+${opportunity.angle}
+
+TARGET MARKET:
+- Market: ${opportunity.market}
+- Niche: ${opportunity.niche}
+${opportunity.sub_niche ? `- Sub-niche: ${opportunity.sub_niche}` : ''}
+
+VALIDATION DATA:
+- Radar Score: ${opportunity.score}/100
+- Market Horizon: ${opportunity.horizon}
+${validation.upvotes ? `- Reddit Upvotes: ${validation.upvotes}` : ''}
+${validation.comments ? `- Reddit Comments: ${validation.comments}` : ''}
+${scoreBreakdown.engagement ? `- Engagement Score: ${scoreBreakdown.engagement}` : ''}
+${scoreBreakdown.market_fit ? `- Market Fit Score: ${scoreBreakdown.market_fit}` : ''}
+
+Use this intelligence to create a detailed, actionable business blueprint.`;
+
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userInput: enrichedPrompt,
+          provider: 'groq'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.output) {
+        throw new Error(data.error?.message || 'Failed to generate plan');
+      }
+
+      setGeneratedOutput(data.output);
+      
+      // Notify parent if callback provided
+      if (onSelect) {
+        onSelect(opportunity, data.output);
+      }
+    } catch (err) {
+      console.error('Generation failed:', err);
+      alert(err instanceof Error ? err.message : 'Failed to generate plan. Please try again.');
+    } finally {
+      setGeneratingId(null);
+    }
+  }
+
+  const resetView = () => {
+    setGeneratedOutput(null);
+    setSelectedOpportunity(null);
+  };
+
   if (opportunities.length === 0) {
     return (
       <Card className="border-dashed">
@@ -143,6 +214,39 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
           </p>
         </CardContent>
       </Card>
+    );
+  }
+
+  // Show generated output view
+  if (generatedOutput && selectedOpportunity) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="sm" onClick={resetView}>
+              ← Back to Opportunities
+            </Button>
+            <span className="text-sm text-slate-500">
+              Generated plan for: <span className="font-medium text-slate-900">{selectedOpportunity.title}</span>
+            </span>
+          </div>
+          <Badge className={getHorizonColor(selectedOpportunity.horizon)}>
+            Score: {Math.round(selectedOpportunity.score)}/100
+          </Badge>
+        </div>
+        
+        <OutputDisplay 
+          output={generatedOutput}
+          onFeedback={() => {}}
+          onRefine={() => {}}
+          refinementState={{
+            iterationCount: 0,
+            isRefining: false,
+            previousRefinements: [],
+            originalInput: selectedOpportunity.problem
+          }}
+        />
+      </div>
     );
   }
 
@@ -259,12 +363,22 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
             
             <CardFooter className="pt-0">
               <Button 
-                onClick={() => onSelect(opp)}
+                onClick={() => generatePlan(opp)}
+                disabled={generatingId === opp.id}
                 className="w-full group/btn"
               >
-                <Sparkles className="w-4 h-4 mr-2" />
-                Generate Plan
-                <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
+                {generatingId === opp.id ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Generating Plan...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Generate Plan
+                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
+                  </>
+                )}
               </Button>
             </CardFooter>
           </Card>
