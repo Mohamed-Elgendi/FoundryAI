@@ -33,7 +33,6 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
   const [savedPlans, setSavedPlans] = useState<SavedPlan[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<AIProvider>(getDefaultProvider());
-  const [availableProviders, setAvailableProviders] = useState<AIProvider[]>([]);
   const [refinementState, setRefinementState] = useState<RefinementState>({
     iterationCount: 0,
     isRefining: false,
@@ -313,7 +312,6 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
         selectedProvider={selectedProvider}
         onProviderChange={setSelectedProvider}
         quotaExceeded={error?.quotaExceeded}
-        availableProviders={availableProviders}
       />
       
       {/* Template Gallery */}
