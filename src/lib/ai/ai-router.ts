@@ -8,8 +8,9 @@ import { generateText } from 'ai';
 import { groq } from '@ai-sdk/groq';
 import { google } from '@ai-sdk/google';
 import { mistral } from '@ai-sdk/mistral';
-import { createOpenAICompatible, openai } from '@ai-sdk/openai-compatible';
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { anthropic } from '@ai-sdk/anthropic';
+import { openai } from '@ai-sdk/openai';
 
 // All available AI providers
 export type AIProvider = 
@@ -667,13 +668,25 @@ async function tryOpenAI(
   options: { maxOutputTokens: number; temperature: number },
   apiKey: string
 ): Promise<string> {
-  const { text } = await generateText({
-    model: openai(model, { apiKey }),
-    prompt,
-    temperature: options.temperature,
-    maxOutputTokens: options.maxOutputTokens
-  });
-  return text;
+  // OpenAI SDK uses OPENAI_API_KEY from env by default
+  // Set it temporarily for this request
+  const originalKey = process.env.OPENAI_API_KEY;
+  process.env.OPENAI_API_KEY = apiKey;
+  
+  try {
+    const { text } = await generateText({
+      model: openai(model),
+      prompt,
+      temperature: options.temperature,
+      maxOutputTokens: options.maxOutputTokens
+    });
+    return text;
+  } finally {
+    // Restore original key
+    if (originalKey) {
+      process.env.OPENAI_API_KEY = originalKey;
+    }
+  }
 }
 
 async function tryGroq(
