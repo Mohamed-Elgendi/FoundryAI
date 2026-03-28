@@ -55,13 +55,19 @@ export function ProviderSelector({
 
       {isOpen && (
         <div 
-          className="absolute z-50 left-0 top-full mt-2 w-64 border border-white/30 rounded-xl shadow-2xl max-h-72 overflow-y-auto"
+          className="absolute z-[100] left-0 top-full mt-2 w-64 border border-white/40 rounded-xl shadow-2xl max-h-72 overflow-y-auto"
           style={{
-            background: 'rgba(255, 255, 255, 0.75)',
-            backdropFilter: 'blur(20px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%)',
+            boxShadow: '0 8px 32px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
           }}
         >
+          {/* Glow overlay */}
+          <div 
+            className="absolute inset-0 rounded-xl pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at top, rgba(139, 92, 246, 0.08) 0%, transparent 70%)',
+            }}
+          />
           <div className="p-2">
             {PROVIDER_INFO.map((provider) => (
               <button
