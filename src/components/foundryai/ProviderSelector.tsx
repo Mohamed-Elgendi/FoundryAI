@@ -54,10 +54,10 @@ export function ProviderSelector({
       </button>
 
       {isOpen && (
-        <div className="absolute z-[100] left-0 top-full mt-2 w-64 rounded-xl overflow-hidden bg-gradient-to-br from-violet-50 via-white to-violet-50 border border-violet-200 shadow-[0_8px_32px_rgba(139,92,246,0.2)]">
+        <div className="absolute z-[100] left-0 top-full mt-2 w-64 rounded-xl overflow-hidden bg-gradient-to-br from-violet-50 via-white to-violet-50 border border-violet-200 shadow-[0_8px_32px_rgba(139,92,246,0.2)] max-h-80">
           {/* Glow header */}
           <div className="h-1 w-full bg-gradient-to-r from-violet-400 via-fuchsia-400 to-violet-400" />
-          <div className="p-2">
+          <div className="p-2 overflow-y-auto max-h-[calc(20rem-0.25rem)] scrollbar-thin scrollbar-thumb-violet-300 scrollbar-track-transparent">
             {PROVIDER_INFO.map((provider) => (
               <button
                 key={provider.id}
