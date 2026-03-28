@@ -133,31 +133,25 @@ const colorMap: Record<string, string> = {
           </div>
 
           {/* Textarea */}
-          <div className="relative">
+          <div className="relative bg-white rounded-lg">
             <Textarea
               ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              placeholder="Describe the problem you're solving, who it's for, and what makes your solution unique. Be specific about your target customers and their pain points."
+              placeholder="Describe the problem you're solving, who it's for, and what makes your solution unique..."
               className="
                 min-h-[140px] text-base resize-none 
-                border-0 bg-transparent 
-                focus-visible:ring-0 focus-visible:ring-offset-0
+                border border-slate-200 rounded-lg
+                bg-white text-slate-800
+                focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:border-violet-400
+                focus-visible:ring-offset-0
                 placeholder:text-slate-400
+                p-3
               "
               disabled={isLoading}
             />
-            
-            {/* Focus Effect */}
-            <div className={`
-              absolute inset-0 rounded-lg pointer-events-none transition-opacity duration-300 z-0
-              ${isFocused ? 'opacity-100' : 'opacity-0'}
-            `}>
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-violet-100 via-violet-50 to-violet-100 blur-sm" />
-            </div>
-          </div>
 
           {/* Action Bar */}
           <div className="flex items-center justify-between pt-2">
