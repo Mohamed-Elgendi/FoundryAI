@@ -709,54 +709,66 @@ async function tryAzure(
 
 // Fallback response - generates dynamic content based on user input
 function getFallbackResponse(prompt: string): string {
-  // Extract the user input from the prompt (it's between triple quotes)
-  const userInputMatch = prompt.match(/"""([^"]+)""/);
-  const userInput = userInputMatch ? userInputMatch[1] : 'business idea';
-  
-  // Extract key terms from user input
-  const keyTerms = userInput.toLowerCase().split(' ').slice(0, 3).join(' ');
+  const userInputMatch = prompt.match(/"""([^"]+)""/) || prompt.match(/USER INPUT\s*\n"""?([^"]+)"""?/);
+  const userInput = userInputMatch ? userInputMatch[1].trim() : 'business automation tool';
+  const keyTerms = userInput.toLowerCase().split(/\s+/).filter(w => w.length > 3).slice(0, 2).join(' ');
+  const toolName = keyTerms.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('') || 'SmartPro';
   
   return JSON.stringify({
-    toolIdea: `${keyTerms.charAt(0).toUpperCase() + keyTerms.slice(1)} Platform`,
-    targetUser: 'Target users interested in this solution',
-    problemStatement: `Users struggle with ${userInput.toLowerCase().slice(0, 50)}... Current solutions are inadequate or too expensive.`,
+    toolIdea: toolName,
+    targetUser: `SMBs and professionals earning $50K-150K who need streamlined ${keyTerms || 'business'} operations`,
+    problemStatement: `Teams lose 8-12 hours weekly to manual ${keyTerms || 'workflow'} processes costing $1,500-3,000 monthly. Enterprise tools are too expensive ($200-500/month) and complex. ${toolName} reduces task time 80% through intelligent automation.`,
     marketResearch: {
-      tam: '$10B+ global market opportunity',
-      sam: '$500M addressable market segment',
-      som: '$5M initial target market',
-      marketGrowthRate: '15-20% YoY growth',
-      keyTrends: ['Digital transformation', 'AI automation', 'Remote work adoption'],
+      tam: '$186B global SaaS market (2024)',
+      sam: '$2.1B SMB SaaS tools segment',
+      som: '$50M initial target niche',
+      marketGrowthRate: '18% YoY growth',
+      keyTrends: ['AI workflow automation becoming standard by 2025', 'Remote operations demanding cloud-native tools', 'SMBs seeking alternatives to enterprise suites', 'No-code adoption accelerating', 'Integration-first architecture replacing all-in-one'],
       competitorAnalysis: [
-        { name: 'Market Leader', strengths: 'Brand recognition', weaknesses: 'High pricing', marketShare: '30%', pricing: '$50-200/month' },
-        { name: 'Alternative Solution', strengths: 'Feature-rich', weaknesses: 'Complex UI', marketShare: '20%', pricing: '$30-100/month' }
+        { name: 'Enterprise Leader', strengths: 'Comprehensive features, brand recognition', weaknesses: 'Expensive ($50-300/user), steep learning curve', marketShare: '35%', pricing: '$50-300/month' },
+        { name: 'Generic Workflow Tools', strengths: 'Flexible automation', weaknesses: 'Requires technical setup, task limits', marketShare: '25%', pricing: '$20-100/month' },
+        { name: 'Point Solutions', strengths: 'Specific focus, lower cost', weaknesses: 'Fragmented workflow, integration gaps', marketShare: '30%', pricing: '$10-50/month' }
       ],
-      targetDemographics: '25-45 year old professionals seeking solutions',
-      userPainPoints: ['Current tools too expensive', 'Solutions too complex', 'Lack of specialized features'],
-      marketGaps: ['Affordable alternatives', 'Simplified UX', 'Targeted functionality']
+      targetDemographics: '28-45 year old founders, operations managers. Income: $60K-200K. Tech-savvy but not developers. Urban/suburban North America/Europe.',
+      userPainPoints: ['Tools require 5-10 hours setup before value', 'Monthly costs exceed $200 with minimal usage', 'Data scattered across 4-6 platforms', 'Automation breaks when processes change', 'Steep learning curves requiring training', 'Enterprise features create clutter', 'Poor mobile experience', 'No support for SMBs on lower tiers'],
+      marketGaps: ['Affordable automation for 1-20 person teams', 'AI-assisted setup eliminating complexity', 'Pre-built templates for common workflows', 'Transparent pricing without per-user fees', 'Native integrations with SMB tools']
     },
     mvpFeatures: [
-      'Core functionality for primary use case',
-      'User authentication and profiles',
-      'Dashboard and analytics',
-      'Basic integrations'
+      'Smart input capture: AI extracts data from emails/forms with 95%+ accuracy',
+      'Visual workflow builder: Drag-and-drop with 50+ pre-built templates',
+      'Unified dashboard: Real-time metrics and alerts in one view',
+      'Team collaboration: Role-based access and activity history',
+      'Integration hub: Native Gmail, Slack, Stripe, Calendar + 20 more',
+      'Mobile-first: Full iOS/Android functionality with offline mode',
+      'AI assistant: Natural language commands for all operations',
+      'Export & reporting: PDF, CSV, scheduled email reports'
     ],
     techStack: [
-      { category: 'Frontend', tool: 'Next.js 15', purpose: 'React framework', isFree: true },
-      { category: 'Styling', tool: 'Tailwind CSS', purpose: 'Modern UI', isFree: true },
-      { category: 'Database', tool: 'Supabase', purpose: 'PostgreSQL + Auth', isFree: true },
-      { category: 'AI', tool: 'OpenAI/Groq', purpose: 'AI features', isFree: true },
-      { category: 'Hosting', tool: 'Vercel', purpose: 'Deployment', isFree: true }
+      { category: 'Frontend', tool: 'Next.js 15 + TypeScript', purpose: 'Full-stack React framework', isFree: true },
+      { category: 'Styling', tool: 'Tailwind + shadcn/ui', purpose: '40+ accessible UI components', isFree: true },
+      { category: 'Database', tool: 'Supabase', purpose: 'Postgres + Auth + Realtime', isFree: true },
+      { category: 'AI', tool: 'Groq API', purpose: 'Ultra-fast inference, 1M tokens/day free', isFree: true },
+      { category: 'Storage', tool: 'Supabase Storage', purpose: 'Files with CDN, 1GB free', isFree: true },
+      { category: 'Email', tool: 'Resend', purpose: '3,000 emails/month free', isFree: true },
+      { category: 'Payments', tool: 'Stripe', purpose: 'Subscription billing', isFree: true },
+      { category: 'Monitoring', tool: 'Vercel Analytics', purpose: 'Performance insights', isFree: true }
     ],
     buildPlan: [
-      { step: 1, title: 'MVP Setup', description: 'Core functionality and basic UI', estimatedTime: '1 week' },
-      { step: 2, title: 'User Features', description: 'Auth, profiles, dashboard', estimatedTime: '2 weeks' },
-      { step: 3, title: 'Launch Prep', description: 'Testing, deployment, marketing', estimatedTime: '1 week' }
+      { step: 1, title: 'Foundation', description: 'Next.js setup, Tailwind, shadcn/ui, Supabase config', estimatedTime: '2 hours', aiToolAction: 'Create Next.js project with shadcn/ui, Supabase connection, dashboard shell' },
+      { step: 2, title: 'Auth & DB', description: 'Supabase Auth, schema, RLS policies, onboarding', estimatedTime: '3 hours', aiToolAction: 'Build auth system, user profiles, protected routes, onboarding checklist' },
+      { step: 3, title: 'Core Data', description: 'CRUD interfaces, search/filter, optimistic updates', estimatedTime: '5 hours', aiToolAction: 'Create data management UI with tables, forms, React Hook Form + Zod' },
+      { step: 4, title: 'AI Features', description: 'Groq integration, NLP commands, smart extraction', estimatedTime: '4 hours', aiToolAction: 'Build AI module, natural language parser, data extraction' },
+      { step: 5, title: 'Workflows', description: 'Visual builder, 25+ templates, scheduling engine', estimatedTime: '6 hours', aiToolAction: 'Create drag-and-drop builder, triggers, actions, template gallery' },
+      { step: 6, title: 'Integrations', description: 'OAuth for Gmail/Slack/Stripe, webhooks, status dashboard', estimatedTime: '5 hours', aiToolAction: 'Build OAuth flows, webhook handlers, API key management' },
+      { step: 7, title: 'Mobile & Polish', description: 'Responsive design, skeletons, error handling, accessibility', estimatedTime: '4 hours', aiToolAction: 'Apply responsive styling, loading states, error boundaries, toast notifications' },
+      { step: 8, title: 'Monetization', description: 'Stripe subscriptions, pricing page, feature gating', estimatedTime: '5 hours', aiToolAction: 'Implement Stripe Checkout, subscription tiers, usage tracking' },
+      { step: 9, title: 'Launch', description: 'Landing page, analytics, Product Hunt prep', estimatedTime: '6 hours', aiToolAction: 'Build landing page with hero, features, pricing, testimonials' }
     ],
     monetizationStrategy: {
       model: 'Freemium SaaS',
-      pricing: 'Free tier with limits, Pro at $9-19/month',
-      firstUserTactics: ['Launch on Product Hunt', 'Social media marketing', 'Content strategy', 'Community outreach'],
-      revenueEstimate: '$500-2000 MRR within 6 months'
+      pricing: 'Free: 3 users, 500 records, 5 automations | Pro: $19/month unlimited | Enterprise: $49/user SSO',
+      firstUserTactics: ['Product Hunt launch with demo video', 'Reddit/LinkedIn case studies', '30-day content series', 'Micro-influencer partnerships', 'First 100 users: 50% lifetime discount', 'Viral referral loop', 'Cold outreach to 200/week'],
+      revenueEstimate: 'M1-3: $0-500 | M4-6: $1K-3K | M7-12: $5K-15K/month | Break-even: 4-6mo | $50K MRR: 24mo'
     }
   });
 }
