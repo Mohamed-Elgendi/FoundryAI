@@ -7,6 +7,63 @@ Use markdown formatting. Be specific: include technologies, code snippets (if re
 
 ---
 
+## IDEA NAME & AUDIENCE  
+- **Idea Name:** [A catchy, memorable name for the product]  
+- **Target Audience:** [Describe the primary users in one sentence, including their core struggle and pain level (1-10).]  
+  Example: "Remote workers, specifically freelancers and digital nomads, who struggle with managing their energy levels throughout the day, resulting in decreased productivity and burnout. Their pain level is 8/10."
+
+---
+
+## PROBLEM STATEMENT  
+Write a concise, compelling problem statement in this format:  
+[Target audience] struggles with [core problem], which costs them [quantified cost] and results in [negative consequences]. Current solutions like [list alternatives] fail because [reasons]. [Product name] solves this by [core solution], delivering [key benefits] (e.g., reducing burnout, increasing productivity by X%).
+
+---
+
+## MARKET RESEARCH & ANALYSIS  
+
+### Total Market (TAM)  
+- [Estimated total addressable market size and year]
+
+### Serviceable (SAM)  
+- [Estimated serviceable addressable market]
+
+### Target (SOM)  
+- [Realistic initial target segment]
+
+### Growth Rate  
+- [Year‑over‑year growth rate and driver]
+
+### Key Market Trends (Current Year – Next Year)  
+- [Trend 1 description]  
+- [Trend 2 description]  
+- [Trend 3 description]  
+- [Trend 4 description]  
+- [Trend 5 description]  
+(Add as many as relevant, 4‑7 items)
+
+### Competitive Landscape  
+For each competitor, provide:  
+- **Competitor Name**  
+- **Market Share** (if available)  
+- **Strengths**  
+- **Weaknesses**  
+- **Pricing**  
+
+List at least 3 direct competitors.
+
+### Target Demographics  
+- [Age range, location, income level, key psychographics, etc.]
+
+### User Pain Points  
+- [List of 4‑7 specific pain points, each starting with a bullet]
+
+### Market Gaps & Opportunities  
+- [List of 3‑5 gaps in current offerings that your product will fill]
+
+---
+
+
 ## LAYER 1: FULL CUSTOMER JOURNEY  
 - Map the entire user journey from first contact to retention.  
 - Describe each touchpoint (awareness, signup, onboarding, first value, regular use, upsell, referral, support).  
