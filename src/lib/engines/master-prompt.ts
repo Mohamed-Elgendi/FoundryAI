@@ -272,15 +272,51 @@ Now generate the plan for the following idea:
 `;
 
 import { FoundryAIOutput } from '@/types';
+import { parseJSON } from '@/lib/utils/json-parser';
 
 export function buildMasterPrompt(userInput: string): string {
   return MASTER_PROMPT.replace('{{userIdea}}', userInput);
 }
 
-export function parseAIResponse(response: string): FoundryAIOutput | null {
-  try {
-    return JSON.parse(response) as FoundryAIOutput;
-  } catch {
+function validateFoundryAIOutput(parsed: unknown): FoundryAIOutput | null {
+  if (!parsed || typeof parsed !== 'object') return null;
+  
+  const output = parsed as Partial<FoundryAIOutput>;
+  
+  // Check required Layer 0 fields
+  const hasIdeaName = typeof output.ideaName === 'string' && output.ideaName.length > 0;
+  const hasTargetAudience = output.targetAudience && typeof output.targetAudience === 'object';
+  const hasProblemStatement = output.problemStatement && typeof output.problemStatement === 'object';
+  const hasMarketResearch = output.marketResearch && typeof output.marketResearch === 'object';
+  const hasMvpFeatures = Array.isArray(output.mvpFeatures) && output.mvpFeatures.length > 0;
+  const hasTechStack = Array.isArray(output.techStack) && output.techStack.length > 0;
+  const hasBuildPlan = Array.isArray(output.buildPlan) && output.buildPlan.length > 0;
+  
+  if (!hasIdeaName || !hasTargetAudience || !hasProblemStatement || !hasMarketResearch || 
+      !hasMvpFeatures || !hasTechStack || !hasBuildPlan) {
+    console.log('[Validation] Missing required fields:', {
+      ideaName: hasIdeaName,
+      targetAudience: hasTargetAudience,
+      problemStatement: hasProblemStatement,
+      marketResearch: hasMarketResearch,
+      mvpFeatures: hasMvpFeatures,
+      techStack: hasTechStack,
+      buildPlan: hasBuildPlan,
+    });
     return null;
   }
+  
+  return output as FoundryAIOutput;
+}
+
+export function parseAIResponse(response: string): FoundryAIOutput | null {
+  const result = parseJSON<FoundryAIOutput>(response, validateFoundryAIOutput);
+  
+  if (!result.success) {
+    console.error('[ParseAIResponse] Failed:', result.error);
+    console.error('[ParseAIResponse] Raw snippet:', result.rawSnippet?.slice(0, 500));
+    return null;
+  }
+  
+  return result.data || null;
 }
