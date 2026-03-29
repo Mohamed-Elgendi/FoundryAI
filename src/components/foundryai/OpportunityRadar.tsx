@@ -148,7 +148,7 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
       const validation = opportunity.validation_data || {};
       const scoreBreakdown = validation.score_breakdown || {};
       
-      const enrichedPrompt = `Create a comprehensive business plan for: ${opportunity.title}
+      const enrichedPrompt = `Create a comprehensive, detailed business plan with EXTENSIVE information for: ${opportunity.title}
 
 PROBLEM TO SOLVE:
 ${opportunity.problem}
@@ -169,7 +169,38 @@ ${validation.comments ? `- Reddit Comments: ${validation.comments}` : ''}
 ${scoreBreakdown.engagement ? `- Engagement Score: ${scoreBreakdown.engagement}` : ''}
 ${scoreBreakdown.market_fit ? `- Market Fit Score: ${scoreBreakdown.market_fit}` : ''}
 
-Use this intelligence to create a detailed, actionable business blueprint.`;
+REQUIREMENTS - Create a VERY DETAILED, COMPREHENSIVE business blueprint with:
+
+1. EXTENSIVE Market Research (300+ words):
+   - Deep TAM/SAM/SOM analysis with calculations
+   - 5-7 key market trends with explanations
+   - Detailed competitor analysis (4-5 competitors with full SWOT)
+   - Target demographics with personas
+   - 6-8 specific user pain points
+   - 5-6 market gaps with opportunity sizing
+
+2. COMPREHENSIVE MVP Features (8-12 features):
+   - Each feature with detailed description
+   - Priority level and estimated development time
+   - User benefit explanation
+
+3. DETAILED Tech Stack (8-10 technologies):
+   - Frontend, backend, database, AI, hosting, analytics, auth, payments
+   - Specific purpose for each tool
+   - Cost analysis (free vs paid)
+
+4. STEP-BY-STEP Build Plan (6-8 phases):
+   - Detailed tasks for each step
+   - Time estimates in hours/days
+   - Dependencies and prerequisites
+
+5. EXTENSIVE Monetization Strategy:
+   - Multiple revenue streams
+   - 3-tier pricing model with justifications
+   - Customer acquisition tactics (8-10 strategies)
+   - 12-month revenue projections with milestones
+
+Make every section thorough, actionable, and rich with specific details.`;
 
       console.log('Sending API request with prompt length:', enrichedPrompt.length);
 
