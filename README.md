@@ -2,7 +2,7 @@
 
 **Where million-dollar ideas are forged.**
 
-FoundryAI is a crash-proof startup ideation platform that transforms raw concepts into actionable business plans. Built with a 6-layer resilient architecture and multi-provider AI fallback system.
+FoundryAI is a money-proof startup ideation platform that transforms raw concepts into actionable plans. Built with a mulitple-layer resilient architecture and multi-provider AI fallback system.
 
 ![FoundryAI](https://img.shields.io/badge/FoundryAI-forge-blue)
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)

@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle, TrendingUp, Clock, Target, Sparkles, ArrowRight, Lightbulb, Loader2, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FoundryAIOutput } from '@/types';
-import { OutputDisplay } from './OutputDisplay';
+import { PlanGenerator, PlanOutput } from '@/modules/plan-generator';
 
 interface Opportunity {
   id: string;
@@ -277,7 +277,7 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
     );
   }
 
-  // Show generated output view
+  // Show generated output view using PlanOutput component
   if (generatedOutput && selectedOpportunity) {
     return (
       <div className="space-y-6">
@@ -295,56 +295,11 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
           </Badge>
         </div>
         
-        {/* Simple Output Display */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-4 bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-slate-200">
-            <h3 className="font-bold text-xl text-slate-900">{generatedOutput.toolIdea}</h3>
-            <p className="text-slate-600 mt-1">{generatedOutput.problemStatement}</p>
-          </div>
-          
-          <div className="p-4 space-y-4">
-            <div>
-              <h4 className="font-semibold text-slate-900 mb-2">Target User</h4>
-              <p className="text-slate-600">{generatedOutput.targetUser}</p>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold text-slate-900 mb-2">Market Opportunity</h4>
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div className="p-3 bg-slate-50 rounded-lg">
-                  <div className="text-lg font-bold text-violet-600">{generatedOutput.marketResearch?.tam || 'N/A'}</div>
-                  <div className="text-xs text-slate-500">TAM</div>
-                </div>
-                <div className="p-3 bg-slate-50 rounded-lg">
-                  <div className="text-lg font-bold text-violet-600">{generatedOutput.marketResearch?.sam || 'N/A'}</div>
-                  <div className="text-xs text-slate-500">SAM</div>
-                </div>
-                <div className="p-3 bg-slate-50 rounded-lg">
-                  <div className="text-lg font-bold text-violet-600">{generatedOutput.marketResearch?.som || 'N/A'}</div>
-                  <div className="text-xs text-slate-500">SOM</div>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold text-slate-900 mb-2">MVP Features</h4>
-              <ul className="space-y-1">
-                {generatedOutput.mvpFeatures?.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-2 text-slate-600">
-                    <span className="text-violet-500 mt-1">•</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold text-slate-900 mb-2">Monetization</h4>
-              <p className="text-slate-600">{generatedOutput.monetizationStrategy?.model}</p>
-              <p className="text-slate-600 mt-1">{generatedOutput.monetizationStrategy?.pricing}</p>
-            </div>
-          </div>
-        </div>
+        {/* Unified Plan Output Display */}
+        <PlanOutput 
+          output={generatedOutput}
+          onReset={resetView}
+        />
       </div>
     );
   }

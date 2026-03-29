@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { FoundryAIOutput, RefinementState } from '@/types';
+import { PlanGenerator } from '@/modules/plan-generator';
 import { IdeaInput } from './IdeaInput';
 import { OutputDisplay } from './OutputDisplay';
 import { LoadingState } from './LoadingState';
 import { RefinementLoadingState } from './RefinementLoadingState';
 import { TemplateGallery } from './TemplateGallery';
 import { Confetti } from '@/components/ui/confetti';
-import { AlertCircle, History } from 'lucide-react';
+import { AlertCircle, History, Sparkles } from 'lucide-react';
 import { AIProvider, getDefaultProvider } from '@/lib/ai/ai-types';
 
 interface SavedPlan {
@@ -288,53 +289,18 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
         </div>
       )}
 
-      <IdeaInput 
-        onGenerate={handleGenerate} 
-        isLoading={isLoading}
-        selectedProvider={selectedProvider}
-        onProviderChange={setSelectedProvider}
-        quotaExceeded={error?.quotaExceeded}
-        initialValue={userInput}
-      />
-      
-      {/* Template Gallery */}
-      {!output && !isLoading && (
-        <TemplateGallery onSelect={(text) => handleGenerate(text, selectedProvider)} isLoading={isLoading} />
-      )}
-      
-      {isLoading && <LoadingState />}
-      
-      {isRefining && (
-        <RefinementLoadingState 
-          iteration={refinementState.iterationCount + 1} 
+      {/* Main Content */}
+      {!output ? (
+        <PlanGenerator
+          initialInput={userInput || initialIdea}
+          context={{ source: 'idea' }}
+          onPlanGenerated={(newOutput: FoundryAIOutput) => {
+            setOutput(newOutput);
+            setShowConfetti(true);
+          }}
+          onError={(err: string) => setError({ message: err })}
         />
-      )}
-      
-      {error && (
-        <div className={`p-4 border rounded-lg ${error.isRateLimit || error.quotaExceeded ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-red-50 border-red-200 text-red-700'}`}>
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
-            <div className="space-y-2">
-              <p className="font-medium">{error.message}</p>
-              {error.suggestedAction && (
-                <p className="text-sm opacity-90">{error.suggestedAction}</p>
-              )}
-              {(error.isRateLimit || error.quotaExceeded) && (
-                <div className="text-sm mt-2 p-2 bg-white/50 rounded">
-                  <strong>Options:</strong>
-                  <ul className="list-disc ml-4 mt-1 space-y-1">
-                    <li>Select a different AI model from the dropdown above</li>
-                    <li>Wait for rate limit reset (usually 1 hour)</li>
-                    <li>Add more API keys for additional providers</li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {output && !isLoading && !isRefining && (
+      ) : (
         <OutputDisplay 
           output={output} 
           onFeedback={handleFeedback}
