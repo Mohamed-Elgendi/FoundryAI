@@ -2,12 +2,15 @@
 
 import { useState } from 'react';
 import { FoundryAIOutput } from '@/types';
-import { ChevronDown, ChevronUp, Users, Search, Wrench, Code, ListTodo, DollarSign, TrendingUp, Target, AlertCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, Users, Search, Wrench, Code, ListTodo, DollarSign, TrendingUp, Target, AlertCircle, Sparkles, Loader2, Wand2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PlanOutputProps {
   output: FoundryAIOutput;
   onReset?: () => void;
+  onRefine?: () => void;
+  isRefining?: boolean;
+  refinementCount?: number;
 }
 
 interface SectionProps {
@@ -43,7 +46,8 @@ function CollapsibleSection({ title, icon, children, defaultExpanded = true }: S
   );
 }
 
-export function PlanOutput({ output, onReset }: PlanOutputProps) {
+export function PlanOutput({ output, onReset, onRefine, isRefining, refinementCount = 0 }: PlanOutputProps) {
+  const hasBeenRefined = refinementCount > 0;
   return (
     <div className="space-y-4">
       {/* Header - Layer 0: Idea Name & Target Audience */}
@@ -314,6 +318,44 @@ export function PlanOutput({ output, onReset }: PlanOutputProps) {
           ))}
         </div>
       </CollapsibleSection>
+
+      {/* Refinement Status & CTA */}
+      {onRefine && (
+        <div className="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl p-6 text-white">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h3 className="font-semibold text-lg flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                {hasBeenRefined 
+                  ? `Refined ${refinementCount} Time${refinementCount !== 1 ? 's' : ''}` 
+                  : 'Want a More Detailed Plan?'}
+              </h3>
+              <p className="text-violet-100 text-sm mt-1">
+                {hasBeenRefined 
+                  ? 'Each refinement adds more detail, better structure, and actionable insights.'
+                  : 'Transform this into a meticulously-crafted, publication-quality blueprint.'}
+              </p>
+            </div>
+            <button
+              onClick={onRefine}
+              disabled={isRefining}
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-violet-600 font-semibold rounded-lg hover:bg-violet-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg whitespace-nowrap"
+            >
+              {isRefining ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Refining...
+                </>
+              ) : (
+                <>
+                  <Wand2 className="w-5 h-5" />
+                  {hasBeenRefined ? `Refine Again (#${refinementCount + 1})` : '✨ Refine Plan'}
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Monetization */}
       {output.monetizationStrategy && (
