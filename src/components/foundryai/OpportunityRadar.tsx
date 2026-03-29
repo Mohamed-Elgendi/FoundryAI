@@ -196,10 +196,7 @@ Use this intelligence to create a detailed, actionable business blueprint.`;
 
       console.log('Setting generated output');
       setGeneratedOutput(data.output);
-      
-      if (onSelect) {
-        onSelect(opportunity, data.output);
-      }
+      // Don't call onSelect - keep output displayed locally in Radar
     } catch (err) {
       console.error('=== GENERATION FAILED ===', err);
       const errorMsg = err instanceof Error ? err.message : 'Failed to generate plan';
