@@ -20,6 +20,7 @@ import {
   LogOut
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 // Navigation items
 export interface NavItem {
@@ -136,8 +137,8 @@ export function DashboardShell({ children, user, onSignOut }: DashboardShellProp
           sidebarOpen ? "w-64" : "w-16"
         )}
       >
-        {/* Logo */}
-        <div className="h-16 flex items-center px-4 border-b border-slate-200">
+        {/* Logo - Clickable */}
+        <Link href="/dashboard" className="h-16 flex items-center px-4 border-b border-slate-200 hover:bg-slate-50 transition-colors">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
               <span className="text-white font-bold text-sm">F</span>
@@ -146,7 +147,7 @@ export function DashboardShell({ children, user, onSignOut }: DashboardShellProp
               <span className="font-bold text-slate-900">FoundryAI</span>
             )}
           </div>
-        </div>
+        </Link>
 
         {/* Navigation */}
         <nav className="p-2 space-y-1">
@@ -220,6 +221,9 @@ export function DashboardShell({ children, user, onSignOut }: DashboardShellProp
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Theme Toggle */}
+            <ThemeToggle variant="ghost" />
+            
             {/* Notifications */}
             <div className="relative">
               <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors relative">

@@ -156,7 +156,9 @@ function CategoryProgress({ category }: { category: { name: string; count: numbe
 
 // Plan List Item
 function PlanListItem({ plan }: { plan: SavedPlan }) {
-  const planName = plan.output.ideaName || plan.output.toolIdea || 'Untitled Plan';
+  // Safe access to plan output with fallbacks
+  const planOutput = plan?.output || {};
+  const planName = planOutput.ideaName || planOutput.toolIdea || 'Untitled Plan';
   const initial = planName.charAt(0).toUpperCase();
 
   return (
@@ -168,12 +170,12 @@ function PlanListItem({ plan }: { plan: SavedPlan }) {
         <h4 className="font-medium text-slate-900 truncate">{planName}</h4>
         <div className="flex items-center gap-3 mt-1 flex-wrap">
           <span className="text-sm text-slate-500">
-            {new Date(plan.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            {plan?.createdAt ? new Date(plan.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Unknown date'}
           </span>
           <Badge variant="success">Active</Badge>
         </div>
       </div>
-      <Link href={`/plan?id=${plan.id}`}>
+      <Link href={`/plan?id=${plan?.id || ''}`}>
         <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
           View
         </Button>
