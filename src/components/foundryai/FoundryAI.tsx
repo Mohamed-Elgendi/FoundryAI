@@ -271,7 +271,7 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
                   onClick={() => loadPlan(plan)}
                   className="flex-1 text-left"
                 >
-                  <p className="font-medium text-sm truncate">{plan.output.toolIdea}</p>
+                  <p className="font-medium text-sm truncate">{plan.output.ideaName || plan.output.toolIdea}</p>
                   <p className="text-xs text-muted-foreground">
                     {new Date(plan.createdAt).toLocaleDateString()} • 
                     {plan.refinementState.iterationCount} refinements

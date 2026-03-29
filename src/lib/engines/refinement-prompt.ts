@@ -301,9 +301,18 @@ function validateRefinedOutput(parsed: unknown): FoundryAIOutput | null {
   }
   
   return {
-    toolIdea: output.toolIdea || 'Refined AI Tool',
-    targetUser: output.targetUser || 'Target users',
-    problemStatement: output.problemStatement || 'Problem statement',
+    ideaName: output.ideaName || output.toolIdea || 'Refined AI Tool',
+    targetAudience: output.targetAudience || { description: output.targetUser || 'Target users', painLevel: 5 },
+    problemStatement: output.problemStatement || {
+      coreProblem: 'Problem to be solved',
+      quantifiedCost: 'Cost in time/money',
+      negativeConsequences: ['Consequence 1', 'Consequence 2'],
+      alternatives: ['Current solution 1'],
+      reasonsTheyFail: ['Why it fails'],
+      coreSolution: 'Our solution',
+      keyBenefits: ['Benefit 1', 'Benefit 2'],
+      fullStatement: 'Problem statement'
+    },
     marketResearch: output.marketResearch || {
       tam: '$10B+ global market in 2024',
       sam: '$500M serviceable market segment',
@@ -327,5 +336,8 @@ function validateRefinedOutput(parsed: unknown): FoundryAIOutput | null {
       firstUserTactics: ['Product Hunt launch', 'Content marketing', 'Community engagement'],
       revenueEstimate: '$500-5000/month within 12 months',
     },
+    // Backward compatibility
+    toolIdea: output.toolIdea,
+    targetUser: output.targetUser,
   };
 }

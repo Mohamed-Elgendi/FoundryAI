@@ -6,6 +6,7 @@ The plan must be structured into the layers below, each as a separate section wi
 Use markdown formatting. Be specific: include technologies, code snippets (if relevant), and concrete steps.
 
 ---
+### Layer 0: Market & User Research and anaylsis
 
 ## IDEA NAME & AUDIENCE  
 - **Idea Name:** [A catchy, memorable name for the product]  
@@ -56,10 +57,10 @@ List at least 3 direct competitors.
 - [Age range, location, income level, key psychographics, etc.]
 
 ### User Pain Points  
-- [List of 4‑7 specific pain points, each starting with a bullet]
+- [List of 7‑10 specific pain points, each starting with a bullet]
 
 ### Market Gaps & Opportunities  
-- [List of 3‑5 gaps in current offerings that your product will fill]
+- [List of 7‑10 gaps in current offerings that your product will fill]
 
 ---
 
@@ -203,6 +204,65 @@ Make this prompt chain **very‑well‑planned, logically built, organized, and 
 Combine the layers into a single, chronological roadmap.  
 Provide a checklist of actions (Week 1: set up auth, Week 2: data model, …).  
 Include links to tutorials, official docs, and code examples for each major piece.
+
+---
+
+## JSON OUTPUT FORMAT (REQUIRED)
+
+You MUST return a valid JSON object with this exact structure. Do not include markdown code blocks, explanations, or any text outside the JSON:
+
+{
+  "ideaName": "Catchy product name",
+  "targetAudience": {
+    "description": "Target users with their core struggle",
+    "painLevel": 8
+  },
+  "problemStatement": {
+    "coreProblem": "What the user struggles with",
+    "quantifiedCost": "Cost in time/money/stress",
+    "negativeConsequences": ["Consequence 1", "Consequence 2"],
+    "alternatives": ["Current solution 1", "Current solution 2"],
+    "reasonsTheyFail": ["Why alternative 1 fails", "Why alternative 2 fails"],
+    "coreSolution": "How your product solves it",
+    "keyBenefits": ["Benefit 1", "Benefit 2", "Benefit 3"],
+    "fullStatement": "Complete problem statement paragraph"
+  },
+  "marketResearch": {
+    "tam": "$X billion (year)",
+    "sam": "$X million",
+    "som": "$X initial target",
+    "marketGrowthRate": "X% YoY",
+    "keyTrends": ["Trend 1", "Trend 2", "Trend 3", "Trend 4", "Trend 5"],
+    "competitorAnalysis": [
+      {
+        "name": "Competitor 1",
+        "marketShare": "X%",
+        "strengths": "What they do well",
+        "weaknesses": "Their gaps",
+        "pricing": "$X/month"
+      }
+    ],
+    "targetDemographics": "Age, location, income, psychographics",
+    "userPainPoints": ["Pain 1", "Pain 2", "Pain 3", "Pain 4"],
+    "marketGaps": ["Gap 1", "Gap 2", "Gap 3"]
+  },
+  "mvpFeatures": [
+    "Feature 1: Description with user benefit",
+    "Feature 2: Description with user benefit"
+  ],
+  "techStack": [
+    {"category": "Frontend", "tool": "Next.js 15", "purpose": "React framework", "isFree": true}
+  ],
+  "buildPlan": [
+    {"step": 1, "title": "Step name", "description": "What to do", "estimatedTime": "X hours", "aiToolAction": "AI prompt"}
+  ],
+  "monetizationStrategy": {
+    "model": "Freemium SaaS",
+    "pricing": "Free: X | Pro: $X/month | Enterprise: $X/user",
+    "firstUserTactics": ["Tactic 1", "Tactic 2", "Tactic 3"],
+    "revenueEstimate": "M1-3: $X | M4-6: $X | M7-12: $X"
+  }
+}
 
 ---
 

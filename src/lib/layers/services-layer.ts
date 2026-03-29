@@ -146,9 +146,21 @@ export class AIService implements Service {
   
   private getFallbackOutput(userInput: string): FoundryAIOutput {
     return {
-      toolIdea: 'AI-Powered Business Solution',
-      targetUser: 'Small to medium businesses',
-      problemStatement: `Addressing needs for: ${userInput.slice(0, 100)}`,
+      ideaName: 'AI-Powered Business Solution',
+      targetAudience: {
+        description: 'Small to medium businesses struggling with inefficiencies',
+        painLevel: 6
+      },
+      problemStatement: {
+        coreProblem: 'Businesses struggle with inefficient manual processes',
+        quantifiedCost: 'Loss of 10-20 hours/week and $5,000-15,000 annually',
+        negativeConsequences: ['Decreased productivity', 'Employee burnout', 'Missed opportunities'],
+        alternatives: ['Hire more staff', 'Use generic tools', 'Outsource tasks'],
+        reasonsTheyFail: ['Too expensive', 'Not tailored to needs', 'Loss of control'],
+        coreSolution: 'AI-powered automation to streamline operations',
+        keyBenefits: ['Save 15+ hours/week', 'Reduce costs by 40%', 'Scale without hiring'],
+        fullStatement: `Addressing needs for: ${userInput.slice(0, 100)}`
+      },
       marketResearch: {
         tam: '$100B+ global market',
         sam: '$1B serviceable market',
@@ -182,6 +194,9 @@ export class AIService implements Service {
         firstUserTactics: ['Product Hunt launch'],
         revenueEstimate: '$1K-5K MRR within 6 months',
       },
+      // Backward compatibility
+      toolIdea: 'AI-Powered Business Solution',
+      targetUser: 'Small to medium businesses',
     };
   }
 }

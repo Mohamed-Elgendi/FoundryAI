@@ -1,8 +1,11 @@
 export interface FoundryAIOutput {
-  toolIdea: string;
-  targetUser: string;
-  problemStatement: string;
+  // Layer 0: Market & User Research
+  ideaName: string;
+  targetAudience: TargetAudience;
+  problemStatement: ProblemStatement;
   marketResearch: MarketResearch;
+  
+  // Layer 1-12 outputs
   mvpFeatures: string[];
   techStack: TechStackItem[];
   buildPlan: BuildStep[];
@@ -12,6 +15,27 @@ export interface FoundryAIOutput {
     lastRefinedAt: string;
     refinementFocus: string[];
   };
+  
+  // Backward compatibility - old field names
+  toolIdea?: string;
+  targetUser?: string;
+}
+
+export interface TargetAudience {
+  description: string;
+  painLevel: number; // 1-10
+}
+
+export interface ProblemStatement {
+  coreProblem: string;
+  quantifiedCost: string;
+  negativeConsequences: string[];
+  alternatives: string[];
+  reasonsTheyFail: string[];
+  coreSolution: string;
+  keyBenefits: string[];
+  // Fallback to simple string if structured not available
+  fullStatement?: string;
 }
 
 export interface MarketResearch {

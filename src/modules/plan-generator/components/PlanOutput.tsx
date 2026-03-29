@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { FoundryAIOutput } from '@/types';
-import { ChevronDown, ChevronUp, Lightbulb, Users, Search, Wrench, Code, ListTodo, DollarSign, TrendingUp, Target, AlertCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, Users, Search, Wrench, Code, ListTodo, DollarSign, TrendingUp, Target, AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PlanOutputProps {
   output: FoundryAIOutput;
@@ -45,25 +46,123 @@ function CollapsibleSection({ title, icon, children, defaultExpanded = true }: S
 export function PlanOutput({ output, onReset }: PlanOutputProps) {
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900">{output.toolIdea}</h2>
-          <p className="text-slate-600 mt-1">{output.targetUser}</p>
+      {/* Header - Layer 0: Idea Name & Target Audience */}
+      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-xl p-6 text-white">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold mb-2">{output.ideaName || output.toolIdea}</h1>
+            <div className="flex items-center gap-3 text-violet-100">
+              <Users className="w-5 h-5" />
+              <span className="text-lg">{output.targetAudience?.description || output.targetUser}</span>
+              {output.targetAudience?.painLevel && (
+                <span className={cn(
+                  "px-2 py-0.5 rounded-full text-sm font-medium",
+                  output.targetAudience.painLevel >= 7 ? "bg-red-500/30 text-red-100" :
+                  output.targetAudience.painLevel >= 4 ? "bg-amber-500/30 text-amber-100" :
+                  "bg-green-500/30 text-green-100"
+                )}>
+                  Pain Level: {output.targetAudience.painLevel}/10
+                </span>
+              )}
+            </div>
+          </div>
+          {onReset && (
+            <button
+              onClick={onReset}
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors"
+            >
+              New Plan
+            </button>
+          )}
         </div>
-        {onReset && (
-          <button
-            onClick={onReset}
-            className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
-          >
-            Generate New Plan
-          </button>
-        )}
       </div>
 
-      {/* Problem Statement */}
-      <CollapsibleSection title="Problem & Solution" icon={<Lightbulb className="w-5 h-5" />}>
-        <p className="text-slate-700 leading-relaxed">{output.problemStatement}</p>
+      {/* Layer 0: Problem Statement - Structured */}
+      <CollapsibleSection title="Problem Statement" icon={<AlertCircle className="w-5 h-5" />} defaultExpanded={true}>
+        <div className="space-y-4">
+          {/* Full statement */}
+          {output.problemStatement?.fullStatement && (
+            <p className="text-lg text-slate-800 font-medium leading-relaxed bg-slate-50 p-4 rounded-lg">
+              {output.problemStatement.fullStatement}
+            </p>
+          )}
+          
+          {/* Core Problem & Cost */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-red-50 rounded-lg border border-red-100">
+              <p className="text-sm font-medium text-red-700 mb-1">Core Problem</p>
+              <p className="text-slate-800">{output.problemStatement?.coreProblem || 'Not specified'}</p>
+            </div>
+            <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
+              <p className="text-sm font-medium text-amber-700 mb-1">Quantified Cost</p>
+              <p className="text-slate-800">{output.problemStatement?.quantifiedCost || 'Not specified'}</p>
+            </div>
+          </div>
+          
+          {/* Current Alternatives */}
+          {output.problemStatement?.alternatives && output.problemStatement.alternatives.length > 0 && (
+            <div>
+              <p className="font-medium text-slate-900 mb-2">Current Alternatives</p>
+              <ul className="space-y-2">
+                {output.problemStatement.alternatives.map((alt, i) => (
+                  <li key={i} className="flex items-start gap-2 text-slate-700">
+                    <span className="text-slate-400 mt-1">→</span>
+                    {alt}
+                  </li>
+                ))}
+              </ul>
+              {output.problemStatement.reasonsTheyFail && output.problemStatement.reasonsTheyFail.length > 0 && (
+                <div className="mt-3 p-3 bg-slate-50 rounded-lg">
+                  <p className="text-sm font-medium text-slate-700 mb-1">Why they fail:</p>
+                  <ul className="space-y-1">
+                    {output.problemStatement.reasonsTheyFail.map((reason, i) => (
+                      <li key={i} className="text-sm text-slate-600 flex items-start gap-2">
+                        <span className="text-red-400">×</span>
+                        {reason}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* Solution & Benefits */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-green-50 rounded-lg border border-green-100">
+              <p className="text-sm font-medium text-green-700 mb-1">Our Solution</p>
+              <p className="text-slate-800">{output.problemStatement?.coreSolution || 'Not specified'}</p>
+            </div>
+            {output.problemStatement?.keyBenefits && output.problemStatement.keyBenefits.length > 0 && (
+              <div className="p-4 bg-violet-50 rounded-lg border border-violet-100">
+                <p className="text-sm font-medium text-violet-700 mb-1">Key Benefits</p>
+                <ul className="space-y-1">
+                  {output.problemStatement.keyBenefits.map((benefit, i) => (
+                    <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
+                      <span className="text-green-500">✓</span>
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          
+          {/* Negative Consequences */}
+          {output.problemStatement?.negativeConsequences && output.problemStatement.negativeConsequences.length > 0 && (
+            <div>
+              <p className="font-medium text-slate-900 mb-2">What happens if unsolved:</p>
+              <ul className="space-y-1">
+                {output.problemStatement.negativeConsequences.map((consequence, i) => (
+                  <li key={i} className="text-slate-700 flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    {consequence}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </CollapsibleSection>
 
       {/* Market Research */}
