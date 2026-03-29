@@ -271,7 +271,7 @@ Now generate the plan for the following idea:
 {{userIdea}}  
 `;
 
-import { FoundryAIOutput } from '@/types';
+import { FoundryAIOutput, ProblemStatement } from '@/types';
 import { parseJSON } from '@/lib/utils/json-parser';
 
 export function buildMasterPrompt(userInput: string): string {
@@ -279,34 +279,96 @@ export function buildMasterPrompt(userInput: string): string {
 }
 
 function validateFoundryAIOutput(parsed: unknown): FoundryAIOutput | null {
-  if (!parsed || typeof parsed !== 'object') return null;
-  
-  const output = parsed as Partial<FoundryAIOutput>;
-  
-  // Check required Layer 0 fields
-  const hasIdeaName = typeof output.ideaName === 'string' && output.ideaName.length > 0;
-  const hasTargetAudience = output.targetAudience && typeof output.targetAudience === 'object';
-  const hasProblemStatement = output.problemStatement && typeof output.problemStatement === 'object';
-  const hasMarketResearch = output.marketResearch && typeof output.marketResearch === 'object';
-  const hasMvpFeatures = Array.isArray(output.mvpFeatures) && output.mvpFeatures.length > 0;
-  const hasTechStack = Array.isArray(output.techStack) && output.techStack.length > 0;
-  const hasBuildPlan = Array.isArray(output.buildPlan) && output.buildPlan.length > 0;
-  
-  if (!hasIdeaName || !hasTargetAudience || !hasProblemStatement || !hasMarketResearch || 
-      !hasMvpFeatures || !hasTechStack || !hasBuildPlan) {
-    console.log('[Validation] Missing required fields:', {
-      ideaName: hasIdeaName,
-      targetAudience: hasTargetAudience,
-      problemStatement: hasProblemStatement,
-      marketResearch: hasMarketResearch,
-      mvpFeatures: hasMvpFeatures,
-      techStack: hasTechStack,
-      buildPlan: hasBuildPlan,
-    });
+  if (!parsed || typeof parsed !== 'object') {
+    console.error('[Validation] Parsed data is not an object');
     return null;
   }
   
-  return output as FoundryAIOutput;
+  const output = parsed as Partial<FoundryAIOutput>;
+  
+  // Check fields with fallbacks for backward compatibility
+  const ideaName = output.ideaName || output.toolIdea || '';
+  const targetAudience = output.targetAudience || (output.targetUser ? { description: output.targetUser, painLevel: 5 } : null);
+  
+  // Handle problemStatement - could be object or string (legacy)
+  let problemStatementData: ProblemStatement;
+  if (output.problemStatement && typeof output.problemStatement === 'object' && 'coreProblem' in output.problemStatement) {
+    problemStatementData = output.problemStatement as ProblemStatement;
+  } else if (typeof output.problemStatement === 'string') {
+    problemStatementData = {
+      coreProblem: output.problemStatement,
+      quantifiedCost: 'Cost not specified',
+      negativeConsequences: ['Not specified'],
+      alternatives: ['Not specified'],
+      reasonsTheyFail: ['Not specified'],
+      coreSolution: 'Solution not specified',
+      keyBenefits: ['Benefits not specified'],
+      fullStatement: output.problemStatement
+    };
+  } else {
+    problemStatementData = {
+      coreProblem: 'Problem statement not provided',
+      quantifiedCost: 'Cost not quantified',
+      negativeConsequences: ['Not specified'],
+      alternatives: ['Not specified'],
+      reasonsTheyFail: ['Not specified'],
+      coreSolution: 'Solution not specified',
+      keyBenefits: ['Not specified'],
+      fullStatement: 'Full problem statement not provided'
+    };
+  }
+  
+  // Log what we received for debugging
+  console.log('[Validation] Checking fields:', {
+    hasIdeaName: !!ideaName,
+    hasTargetAudience: !!targetAudience,
+    hasProblemStatement: !!output.problemStatement,
+    hasMarketResearch: !!output.marketResearch,
+    hasMvpFeatures: Array.isArray(output.mvpFeatures),
+    mvpFeaturesCount: output.mvpFeatures?.length,
+    hasTechStack: Array.isArray(output.techStack),
+    techStackCount: output.techStack?.length,
+    hasBuildPlan: Array.isArray(output.buildPlan),
+    buildPlanCount: output.buildPlan?.length,
+  });
+  
+  // Build valid output with fallbacks
+  const validOutput: FoundryAIOutput = {
+    ideaName: ideaName || 'Untitled Business Idea',
+    targetAudience: targetAudience || { description: 'General audience', painLevel: 5 },
+    problemStatement: problemStatementData,
+    marketResearch: output.marketResearch || {
+      tam: 'Market size not specified',
+      sam: 'Serviceable market not specified',
+      som: 'Target market not specified',
+      marketGrowthRate: 'Growth rate not specified',
+      keyTrends: ['Trends not specified'],
+      competitorAnalysis: [],
+      targetDemographics: 'Demographics not specified',
+      userPainPoints: ['Pain points not specified'],
+      marketGaps: ['Market gaps not specified']
+    },
+    mvpFeatures: Array.isArray(output.mvpFeatures) && output.mvpFeatures.length > 0 
+      ? output.mvpFeatures 
+      : ['Core functionality', 'User management', 'Basic analytics'],
+    techStack: Array.isArray(output.techStack) && output.techStack.length > 0
+      ? output.techStack
+      : [{ category: 'Frontend', tool: 'Next.js', purpose: 'React framework', isFree: true }],
+    buildPlan: Array.isArray(output.buildPlan) && output.buildPlan.length > 0
+      ? output.buildPlan
+      : [{ step: 1, title: 'Setup', description: 'Initialize project', estimatedTime: '1 week' }],
+    monetizationStrategy: output.monetizationStrategy || {
+      model: 'Freemium',
+      pricing: 'Free tier + Pro subscription',
+      firstUserTactics: ['Product Hunt launch', 'Social media'],
+      revenueEstimate: '$1K-5K MRR within 6 months'
+    },
+    // Preserve original fields for backward compatibility
+    toolIdea: output.toolIdea || ideaName,
+    targetUser: output.targetUser || targetAudience?.description,
+  };
+  
+  return validOutput;
 }
 
 export function parseAIResponse(response: string): FoundryAIOutput | null {

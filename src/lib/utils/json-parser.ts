@@ -16,15 +16,22 @@ export interface ParseResult<T> {
 export function extractJSON(response: string): string {
   let jsonStr = response;
   
-  // Extract from markdown code blocks
-  if (response.includes('```')) {
-    const match = response.match(/```(?:json)?\s*([\s\S]*?)```/);
+  // Try multiple code block patterns
+  const patterns = [
+    /```json\s*([\s\S]*?)```/,  // ```json ... ```
+    /```\s*([\s\S]*?)```/,      // ``` ... ```
+    /`{3,}\s*([\s\S]*?)`{3,}/,  // any triple backticks
+  ];
+  
+  for (const pattern of patterns) {
+    const match = response.match(pattern);
     if (match && match[1]) {
       jsonStr = match[1];
+      break;
     }
   }
   
-  // Find JSON object boundaries
+  // Find JSON object boundaries - look for outermost braces
   const firstBrace = jsonStr.indexOf('{');
   const lastBrace = jsonStr.lastIndexOf('}');
   
