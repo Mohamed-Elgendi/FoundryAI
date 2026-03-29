@@ -302,6 +302,23 @@ function SettingsContent() {
           ))}
         </ul>
       </div>
+
+      {/* Sign Out Card */}
+      <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <h3 className="font-semibold text-slate-900 mb-4">Account Session</h3>
+        <p className="text-sm text-slate-500 mb-4">
+          Sign out of your account on this device.
+        </p>
+        <button
+          onClick={() => {
+            const event = new CustomEvent('settings-signout');
+            window.dispatchEvent(event);
+          }}
+          className="w-full py-2.5 px-4 border border-red-200 text-red-600 font-medium rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center gap-2"
+        >
+          Sign Out
+        </button>
+      </div>
     </div>
   );
 }
@@ -314,6 +331,15 @@ export default function SettingsPage() {
     await signOut();
     router.push('/login');
   };
+
+  // Listen for sign out event from SettingsContent
+  useEffect(() => {
+    const handleSettingsSignOut = () => {
+      handleSignOut();
+    };
+    window.addEventListener('settings-signout', handleSettingsSignOut);
+    return () => window.removeEventListener('settings-signout', handleSettingsSignOut);
+  }, []);
 
   return (
     <DashboardProvider>
