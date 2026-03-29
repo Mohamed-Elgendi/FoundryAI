@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { FoundryAIOutput } from '@/types';
+import { AIProvider } from '@/lib/ai/ai-types';
 import { PlanContext, PlanGeneratorState } from '../types';
 
 export function usePlanGenerator(context: PlanContext) {
@@ -10,14 +11,14 @@ export function usePlanGenerator(context: PlanContext) {
     output: null,
     isGenerating: false,
     error: null,
-    provider: 'groq'
+    provider: 'groq' as AIProvider
   });
 
   const setInput = useCallback((input: string) => {
     setState(prev => ({ ...prev, input }));
   }, []);
 
-  const setProvider = useCallback((provider: string) => {
+  const setProvider = useCallback((provider: AIProvider) => {
     setState(prev => ({ ...prev, provider }));
   }, []);
 
@@ -27,11 +28,11 @@ export function usePlanGenerator(context: PlanContext) {
       output: null,
       isGenerating: false,
       error: null,
-      provider: 'groq'
+      provider: 'groq' as AIProvider
     });
   }, []);
 
-  const generatePlan = useCallback(async (inputText: string, selectedProvider: string = 'groq'): Promise<FoundryAIOutput | null> => {
+  const generatePlan = useCallback(async (inputText: string, selectedProvider: AIProvider = 'groq' as AIProvider): Promise<FoundryAIOutput | null> => {
     setState(prev => ({ ...prev, isGenerating: true, error: null }));
 
     try {

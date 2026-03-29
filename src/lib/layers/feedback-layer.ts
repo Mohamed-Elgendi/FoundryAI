@@ -133,7 +133,7 @@ export class FeedbackLayer {
   // Error reporting
   async reportError(error: Error, severity: ErrorSeverity = ErrorSeverity.ERROR, metadata?: Record<string, unknown>): Promise<void> {
     const report: ErrorReport = {
-      userId: metadata?.userId,
+      userId: metadata?.userId as string | undefined,
       severity,
       message: error.message,
       stack: error.stack,

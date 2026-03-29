@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { Wand2, Loader2 } from 'lucide-react';
 import { ProviderSelector } from '@/components/foundryai/ProviderSelector';
+import { AIProvider } from '@/lib/ai/ai-types';
 
 interface PlanInputProps {
   initialValue?: string;
-  provider: string;
+  provider: AIProvider;
   isGenerating: boolean;
-  onProviderChange: (provider: string) => void;
+  onProviderChange: (provider: AIProvider) => void;
   onGenerate: (input: string) => void;
   placeholder?: string;
 }

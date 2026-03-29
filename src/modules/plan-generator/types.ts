@@ -1,11 +1,12 @@
 import { FoundryAIOutput } from '@/types';
+import { AIProvider } from '@/lib/ai/ai-types';
 
 export interface PlanGeneratorState {
   input: string;
   output: FoundryAIOutput | null;
   isGenerating: boolean;
   error: string | null;
-  provider: string;
+  provider: AIProvider;
 }
 
 export interface PlanContext {

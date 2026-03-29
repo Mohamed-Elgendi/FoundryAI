@@ -3,10 +3,11 @@
  * Business logic, workflows, state management
  */
 
-import { FoundryAIOutput, AIProvider } from '@/types';
+import { FoundryAIOutput } from '@/types';
 import { AIService, PlanService } from './services-layer';
 import { SecurityLayer, Permission } from './security-layer';
 import { FeedbackLayer, AnalyticsEventType } from './feedback-layer';
+import { AIProvider } from '@/lib/ai/ai-router';
 
 // Business logic workflows
 export class LogicLayer {
@@ -64,7 +65,7 @@ export class LogicLayer {
     this.security.requirePermission(Permission.REFINE_PLAN);
     
     // Step 2: Fetch existing plan
-    const plans = await this.planService.getUserPlans(userId, 1);
+    const plans = await this.planService.getUserPlans(userId, 1) as Array<{ id: string; content: FoundryAIOutput }>;
     const plan = plans.find(p => p.id === planId);
     
     if (!plan) {
@@ -145,7 +146,7 @@ Provide an enhanced version with more detail in the ${focusArea} section.`;
     this.security.requirePermission(Permission.EXPORT_PLAN);
     
     // Step 2: Fetch plan
-    const plans = await this.planService.getUserPlans(userId, 1);
+    const plans = await this.planService.getUserPlans(userId, 1) as Array<{ id: string; content: FoundryAIOutput }>;
     const plan = plans.find(p => p.id === planId);
     
     if (!plan) {
