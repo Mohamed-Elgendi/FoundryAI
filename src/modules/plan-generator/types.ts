@@ -18,7 +18,7 @@ export interface PlanContext {
     niche: string;
     score: number;
     horizon: string;
-    validationData?: Record<string, any>;
+    validationData?: Record<string, unknown>;
   };
 }
 
@@ -32,6 +32,6 @@ export interface PlanGeneratorProps {
 export interface PlanSection {
   id: string;
   title: string;
-  content: any;
+  content: unknown;
   isExpanded: boolean;
 }

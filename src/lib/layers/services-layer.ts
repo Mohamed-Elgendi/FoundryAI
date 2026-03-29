@@ -258,7 +258,7 @@ export class PlanService implements Service {
     return data.id;
   }
   
-  async getUserPlans(userId: string, limit: number = 10): Promise<any[]> {
+  async getUserPlans(userId: string, limit: number = 10): Promise<unknown[]> {
     const { data, error } = await Database.getInstance()
       .from('plans')
       .select('*')

@@ -130,7 +130,7 @@ export class SecurityLayer {
   }
   
   // Row Level Security helpers
-  getRLSFilter(): Record<string, any> {
+  getRLSFilter(): Record<string, unknown> {
     if (!this.currentUser) return { user_id: 'anonymous' };
     return { user_id: this.currentUser.userId };
   }

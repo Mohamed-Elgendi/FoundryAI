@@ -51,8 +51,8 @@ export function PlanInput({
 
         <div className="flex items-center justify-between">
           <ProviderSelector
-            selectedProvider={provider as any}
-            onSelect={onProviderChange as any}
+            selectedProvider={provider}
+            onSelect={onProviderChange}
             disabled={isGenerating}
           />
 

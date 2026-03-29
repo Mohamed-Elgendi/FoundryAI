@@ -25,7 +25,7 @@ export interface AnalyticsEvent {
   id?: string;
   userId: string;
   type: AnalyticsEventType;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   timestamp: string;
   sessionId: string;
 }
@@ -49,7 +49,7 @@ export interface ErrorReport {
     url: string;
     userAgent: string;
     timestamp: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   };
 }
 
@@ -131,7 +131,7 @@ export class FeedbackLayer {
   }
   
   // Error reporting
-  async reportError(error: Error, severity: ErrorSeverity = ErrorSeverity.ERROR, metadata?: Record<string, any>): Promise<void> {
+  async reportError(error: Error, severity: ErrorSeverity = ErrorSeverity.ERROR, metadata?: Record<string, unknown>): Promise<void> {
     const report: ErrorReport = {
       userId: metadata?.userId,
       severity,
@@ -206,7 +206,7 @@ export class FeedbackLayer {
       lastActive: '',
     };
     
-    events?.forEach((event: any) => {
+    events?.forEach((event: { event_type: string; timestamp: string; metadata?: { duration?: number } }) => {
       switch (event.event_type) {
         case AnalyticsEventType.PLAN_GENERATED:
           stats.totalPlans++;
@@ -266,7 +266,7 @@ export function useAnalytics() {
     trackPageView: (page: string) => {
       // Implementation in hook
     },
-    trackEvent: (type: AnalyticsEventType, metadata?: Record<string, any>) => {
+    trackEvent: (type: AnalyticsEventType, metadata?: Record<string, unknown>) => {
       // Implementation in hook
     },
     trackTiming: (action: string, duration: number) => {

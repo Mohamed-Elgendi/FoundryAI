@@ -73,6 +73,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
+  const dismissNotification = useCallback((id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  }, []);
+
   const addNotification = useCallback((notification: Omit<Notification, 'id' | 'timestamp'>) => {
     const newNotification: Notification = {
       ...notification,
@@ -86,11 +90,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         dismissNotification(newNotification.id);
       }, 5000);
     }
-  }, []);
-
-  const dismissNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
-  };
+  }, [dismissNotification]);
 
   return (
     <DashboardContext.Provider

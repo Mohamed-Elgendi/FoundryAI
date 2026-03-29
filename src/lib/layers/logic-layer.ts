@@ -3,10 +3,10 @@
  * Business logic, workflows, state management
  */
 
-import { FoundryAIOutput } from '@/types';
+import { FoundryAIOutput, AIProvider } from '@/types';
 import { AIService, PlanService } from './services-layer';
 import { SecurityLayer, Permission } from './security-layer';
-import { FeedbackLayer } from './feedback-layer';
+import { FeedbackLayer, AnalyticsEventType } from './feedback-layer';
 
 // Business logic workflows
 export class LogicLayer {
@@ -40,7 +40,7 @@ export class LogicLayer {
     this.security.requirePermission(Permission.GENERATE_PLAN);
     
     // Step 3: Generate plan
-    const output = await this.aiService.generatePlan(userInput, provider as any, userId);
+    const output = await this.aiService.generatePlan(userInput, provider as AIProvider, userId);
     
     // Step 4: Auto-save to database
     let planId: string | undefined;
@@ -73,7 +73,7 @@ export class LogicLayer {
     
     // Step 3: Generate refined content
     const refinementPrompt = this.buildRefinementPrompt(plan.content, focusArea);
-    const refined = await this.aiService.generatePlan(refinementPrompt, 'groq-llama-3-3' as any, userId);
+    const refined = await this.aiService.generatePlan(refinementPrompt, 'groq-llama-3-3' as AIProvider, userId);
     
     // Step 4: Update plan in database
     // Implementation would update the plan record
@@ -115,7 +115,7 @@ Provide an enhanced version with more detail in the ${focusArea} section.`;
     // Step 1: Track signup
     await this.feedback.track({
       userId,
-      type: 'user_signup' as any,
+      type: AnalyticsEventType.USER_SIGNUP,
       metadata: { email },
       timestamp: new Date().toISOString(),
     });
@@ -133,7 +133,7 @@ Provide an enhanced version with more detail in the ${focusArea} section.`;
     // Step 4: Track conversion
     await this.feedback.track({
       userId,
-      type: 'subscription_upgrade' as any,
+      type: AnalyticsEventType.SUBSCRIPTION_UPGRADE,
       metadata: { tier },
       timestamp: new Date().toISOString(),
     });
@@ -172,7 +172,7 @@ Provide an enhanced version with more detail in the ${focusArea} section.`;
     // Step 4: Track export
     await this.feedback.track({
       userId,
-      type: 'plan_exported' as any,
+      type: AnalyticsEventType.PLAN_EXPORTED,
       metadata: { format },
       timestamp: new Date().toISOString(),
     });
