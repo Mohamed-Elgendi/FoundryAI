@@ -37,13 +37,25 @@ export default function SignupPage() {
       const { error } = await signUp(email, password);
       
       if (error) {
-        setError(error.message);
+        // Handle specific error messages better
+        let errorMessage = error.message;
+        
+        if (error.message.includes('rate limit')) {
+          errorMessage = 'Too many attempts. Please wait a few minutes before trying again.';
+        } else if (error.message.includes('email')) {
+          errorMessage = 'Please check your email address and try again.';
+        } else if (error.message.includes('password')) {
+          errorMessage = 'Please choose a stronger password.';
+        }
+        
+        setError(errorMessage);
         return;
       }
 
       setSuccess(true);
-    } catch {
-      setError('An unexpected error occurred');
+    } catch (err: any) {
+      console.error('Signup error:', err);
+      setError('An unexpected error occurred. Please try again later.');
     } finally {
       setIsLoading(false);
     }
