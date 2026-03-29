@@ -5,7 +5,9 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
+import { useState, useCallback, createContext, useContext, ReactNode } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { 
   LayoutDashboard, 
   Lightbulb, 
@@ -122,7 +124,8 @@ interface DashboardShellProps {
 }
 
 export function DashboardShell({ children, user, onSignOut }: DashboardShellProps) {
-  const { sidebarOpen, setSidebarOpen, notifications, dismissNotification, currentView, setCurrentView } = useDashboard();
+  const { sidebarOpen, setSidebarOpen, notifications, dismissNotification } = useDashboard();
+  const pathname = usePathname();
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
@@ -147,31 +150,35 @@ export function DashboardShell({ children, user, onSignOut }: DashboardShellProp
 
         {/* Navigation */}
         <nav className="p-2 space-y-1">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setCurrentView(item.id)}
-              className={cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                currentView === item.id
-                  ? "bg-violet-50 text-violet-700"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
-                !sidebarOpen && "justify-center"
-              )}
-            >
-              <item.icon className="w-5 h-5 flex-shrink-0" />
-              {sidebarOpen && (
-                <>
-                  <span className="flex-1 text-left">{item.label}</span>
-                  {item.badge && (
-                    <span className="bg-violet-100 text-violet-700 text-xs px-2 py-0.5 rounded-full">
-                      {item.badge}
-                    </span>
-                  )}
-                </>
-              )}
-            </button>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={cn(
+                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-violet-50 text-violet-700"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900",
+                  !sidebarOpen && "justify-center"
+                )}
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                {sidebarOpen && (
+                  <>
+                    <span className="flex-1 text-left">{item.label}</span>
+                    {item.badge && (
+                      <span className="bg-violet-100 text-violet-700 text-xs px-2 py-0.5 rounded-full">
+                        {item.badge}
+                      </span>
+                    )}
+                  </>
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* User section */}
@@ -208,7 +215,7 @@ export function DashboardShell({ children, user, onSignOut }: DashboardShellProp
               <Menu className="w-5 h-5 text-slate-600" />
             </button>
             <h1 className="font-semibold text-slate-900">
-              {NAV_ITEMS.find(i => i.id === currentView)?.label || 'Dashboard'}
+              {NAV_ITEMS.find(i => pathname === i.href || pathname.startsWith(i.href + '/'))?.label || 'Dashboard'}
             </h1>
           </div>
 
