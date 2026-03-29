@@ -247,30 +247,97 @@ function DashboardContent() {
         const lastPlan = savedPlans[0];
         const lastActive = lastPlan ? new Date(lastPlan.createdAt).toLocaleDateString() : 'Never';
 
-        // Generate realistic activity data
+        // Calculate real activity data from plan creation dates
+        const now = new Date();
         const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
-        const activityData = Array.from({ length: 7 }, (_, i) => ({
-          date: new Date(Date.now() - (6 - i) * 24 * 60 * 60 * 1000).toLocaleDateString('en', { weekday: 'short' }),
-          plans: Math.floor(Math.random() * 4),
-          views: Math.floor(Math.random() * 15) + 3
-        }));
+        const activityData = Array.from({ length: 7 }, (_, i) => {
+          const date = new Date(now.getTime() - (6 - i) * 24 * 60 * 60 * 1000);
+          const dateStr = date.toLocaleDateString('en', { weekday: 'short' });
+          
+          // Count plans created on this date
+          const plansCount = savedPlans.filter(plan => {
+            const planDate = new Date(plan.createdAt);
+            return planDate.toDateString() === date.toDateString();
+          }).length;
+          
+          return {
+            date: dateStr,
+            plans: plansCount,
+            views: Math.floor(Math.random() * 5) // Views are still simulated since we don't track them
+          };
+        });
 
-        // Calculate top categories
-        const categories = ['SaaS', 'Mobile App', 'AI Tool', 'E-commerce', 'Marketplace'];
-        const topCategories = categories.map((name, i) => ({
-          name,
-          count: Math.floor(Math.random() * 8) + 1,
-          percentage: Math.floor(Math.random() * 40) + 10
-        })).sort((a, b) => b.count - a.count).slice(0, 4);
+        // Calculate real top categories from plan data
+        const categoryCounts: Record<string, number> = {};
+        savedPlans.forEach(plan => {
+          const output = plan.output || {};
+          // Try to extract category from various fields
+          let category = 'Other';
+          if (output.marketResearch?.targetDemographics) {
+            const demo = output.marketResearch.targetDemographics.toLowerCase();
+            if (demo.includes('saas') || demo.includes('software')) category = 'SaaS';
+            else if (demo.includes('mobile') || demo.includes('app')) category = 'Mobile App';
+            else if (demo.includes('ai') || demo.includes('ml')) category = 'AI Tool';
+            else if (demo.includes('e-commerce') || demo.includes('shop')) category = 'E-commerce';
+            else if (demo.includes('marketplace')) category = 'Marketplace';
+          }
+          categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+        });
+
+        // Convert to array and calculate percentages
+        const totalPlansForCategories = savedPlans.length || 1;
+        const topCategories = Object.entries(categoryCounts)
+          .map(([name, count]) => ({
+            name,
+            count,
+            percentage: Math.round((count / totalPlansForCategories) * 100)
+          }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 4);
+
+        // Calculate real monthly growth
+        const thisMonth = new Date().getMonth();
+        const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+        const thisYear = new Date().getFullYear();
+        const lastMonthYear = thisMonth === 0 ? thisYear - 1 : thisYear;
+
+        const thisMonthPlans = savedPlans.filter(plan => {
+          const planDate = new Date(plan.createdAt);
+          return planDate.getMonth() === thisMonth && planDate.getFullYear() === thisYear;
+        }).length;
+
+        const lastMonthPlans = savedPlans.filter(plan => {
+          const planDate = new Date(plan.createdAt);
+          return planDate.getMonth() === lastMonth && planDate.getFullYear() === lastMonthYear;
+        }).length;
+
+        const monthlyGrowth = lastMonthPlans === 0 
+          ? (thisMonthPlans > 0 ? 100 : 0)
+          : Math.round(((thisMonthPlans - lastMonthPlans) / lastMonthPlans) * 100);
+
+        // Calculate average plan score based on plan completeness
+        const avgPlanScore = savedPlans.length > 0
+          ? Math.round(savedPlans.reduce((acc, plan) => {
+              const output = plan.output || {};
+              let score = 70; // Base score
+              if (output.marketResearch) score += 10;
+              if (output.mvpFeatures && output.mvpFeatures.length > 0) score += 10;
+              if (output.techStack && output.techStack.length > 0) score += 5;
+              if (output.monetizationStrategy) score += 5;
+              return acc + Math.min(score, 100);
+            }, 0) / savedPlans.length)
+          : 0;
 
         setStats({
           totalPlans: savedPlans.length,
           totalOpportunities: opportunitiesCount,
           lastActive,
           recentPlans: savedPlans.slice(0, 5),
-          monthlyGrowth: 12,
-          avgPlanScore: 87,
-          topCategories,
+          monthlyGrowth,
+          avgPlanScore,
+          topCategories: topCategories.length > 0 ? topCategories : [
+            { name: 'No data yet', count: 0, percentage: 0 }
+          ],
           activityData
         });
       } catch (error) {
