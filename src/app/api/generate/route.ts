@@ -7,12 +7,15 @@ import { getSuccessfulPatterns } from '@/lib/db/supabase';
 export async function POST(request: Request) {
   try {
     const { userInput, provider } = await request.json();
+    console.log('[Generate API] Received request:', { userInputLength: userInput?.length, provider });
 
     if (!userInput || typeof userInput !== 'string') {
+      console.log('[Generate API] Invalid input:', userInput);
       return errors.badRequest('Invalid input: userInput is required');
     }
 
     const selectedProvider: AIProvider = provider || getDefaultProvider();
+    console.log('[Generate API] Using provider:', selectedProvider);
 
     const patterns = await getSuccessfulPatterns(10);
     const patternHints = patterns.length > 0
@@ -20,9 +23,19 @@ export async function POST(request: Request) {
       : '';
 
     const prompt = buildMasterPrompt(userInput) + patternHints;
+    console.log('[Generate API] Prompt length:', prompt.length);
+    
     const aiResponse = await processWithAI({ prompt, preferredProvider: selectedProvider });
+    console.log('[Generate API] AI response:', { 
+      hasContent: !!aiResponse.content, 
+      hasError: !!aiResponse.error,
+      provider: aiResponse.provider,
+      fallbackUsed: aiResponse.fallbackUsed,
+      contentLength: aiResponse.content?.length
+    });
 
     if (aiResponse.error || !aiResponse.content) {
+      console.error('[Generate API] AI error:', aiResponse.error);
       return errors.aiError(
         aiResponse.error || 'Failed to generate output',
         aiResponse.suggestedAction,
@@ -34,8 +47,10 @@ export async function POST(request: Request) {
     }
 
     const parsedOutput = parseAIResponse(aiResponse.content);
+    console.log('[Generate API] Parsed output:', { hasOutput: !!parsedOutput });
 
     if (!parsedOutput) {
+      console.error('[Generate API] Parse failed. Raw content preview:', aiResponse.content?.substring(0, 500));
       return errors.internal('Failed to parse AI output', 'The AI response was malformed. Please try again.');
     }
 
@@ -47,7 +62,7 @@ export async function POST(request: Request) {
     });
 
   } catch (error: any) {
-    console.error('Generate API error:', error);
+    console.error('[Generate API] Error:', error?.message, error?.stack);
     return errors.internal(error?.message || 'Internal server error');
   }
 }
