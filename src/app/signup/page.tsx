@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '@/lib/auth/auth-context';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, Mail, Lock, Crown, Loader2, User, Chrome, Github } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Crown, Loader2, User } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function SignupPage() {
@@ -214,36 +214,6 @@ export default function SignupPage() {
               )}
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200 dark:border-slate-600" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white dark:bg-slate-800 text-slate-500">Or continue with</span>
-            </div>
-          </div>
-
-          {/* OAuth Buttons */}
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
-              onClick={() => signInWithOAuth('google')}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-            >
-              <Chrome className="w-5 h-5 text-red-500" />
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Google</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => signInWithOAuth('github')}
-              className="flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-            >
-              <Github className="w-5 h-5" />
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">GitHub</span>
-            </button>
-          </div>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-slate-600 dark:text-slate-400">

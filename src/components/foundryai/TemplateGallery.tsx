@@ -235,7 +235,7 @@ export function TemplateGallery({ onSelect, isLoading }: TemplateGalleryProps) {
                     <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
                       {template.description}
                     </p>
-                    <Badge variant="secondary" className="mt-2 text-[10px]">
+                    <Badge variant="default" className="mt-2 text-[10px]">
                       {template.category}
                     </Badge>
                   </div>

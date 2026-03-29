@@ -35,8 +35,8 @@ export function Card({
   return (
     <div
       className={cn(
-        'bg-white rounded-xl overflow-hidden',
-        border && 'border border-slate-200',
+        'bg-white dark:bg-slate-800 rounded-xl overflow-hidden',
+        border && 'border border-slate-200 dark:border-slate-700',
         paddings[padding],
         shadows[shadow],
         className
@@ -48,27 +48,62 @@ export function Card({
 }
 
 interface CardHeaderProps {
-  title: string;
-  description?: string;
-  action?: ReactNode;
-  icon?: ReactNode;
+  children?: ReactNode;
+  className?: string;
 }
 
-export function CardHeader({ title, description, action, icon }: CardHeaderProps) {
+export function CardHeader({ children, className }: CardHeaderProps) {
   return (
-    <div className="flex items-start justify-between mb-4">
-      <div className="flex items-center gap-3">
-        {icon && (
-          <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center">
-            {icon}
-          </div>
-        )}
-        <div>
-          <h3 className="font-semibold text-slate-900">{title}</h3>
-          {description && <p className="text-sm text-slate-500 mt-0.5">{description}</p>}
-        </div>
-      </div>
-      {action && <div>{action}</div>}
+    <div className={cn('flex flex-col space-y-1.5', className)}>
+      {children}
+    </div>
+  );
+}
+
+interface CardTitleProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function CardTitle({ children, className }: CardTitleProps) {
+  return (
+    <h3 className={cn('font-semibold leading-none tracking-tight text-slate-900 dark:text-white', className)}>
+      {children}
+    </h3>
+  );
+}
+
+interface CardDescriptionProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function CardDescription({ children, className }: CardDescriptionProps) {
+  return (
+    <p className={cn('text-sm text-slate-500 dark:text-slate-400', className)}>
+      {children}
+    </p>
+  );
+}
+
+interface CardContentProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function CardContent({ children, className }: CardContentProps) {
+  return <div className={cn('', className)}>{children}</div>;
+}
+
+interface CardFooterProps {
+  children: ReactNode;
+  className?: string;
+}
+
+export function CardFooter({ children, className }: CardFooterProps) {
+  return (
+    <div className={cn('flex items-center pt-4', className)}>
+      {children}
     </div>
   );
 }

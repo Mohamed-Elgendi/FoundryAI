@@ -378,7 +378,7 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
                         Top Pick
                       </Badge>
                     )}
-                    <Badge variant="secondary" className={getHorizonColor(opp.horizon)}>
+                    <Badge variant="default" className={getHorizonColor(opp.horizon)}>
                       <Clock className="w-3 h-3 mr-1" />
                       {getHorizonLabel(opp.horizon)}
                     </Badge>
