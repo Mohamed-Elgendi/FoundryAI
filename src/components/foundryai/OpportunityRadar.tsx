@@ -37,6 +37,7 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
   const [generatingId, setGeneratingId] = useState<string | null>(null);
   const [generatedOutput, setGeneratedOutput] = useState<FoundryAIOutput | null>(null);
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
+  const [generationError, setGenerationError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchOpportunities();
@@ -138,11 +139,12 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
   }
 
   async function generatePlan(opportunity: Opportunity) {
+    console.log('=== GENERATE PLAN STARTED ===', opportunity.id);
     setGeneratingId(opportunity.id);
     setSelectedOpportunity(opportunity);
+    setGenerationError(null);
     
     try {
-      // Build enriched prompt with ALL radar data
       const validation = opportunity.validation_data || {};
       const scoreBreakdown = validation.score_breakdown || {};
       
@@ -169,6 +171,8 @@ ${scoreBreakdown.market_fit ? `- Market Fit Score: ${scoreBreakdown.market_fit}`
 
 Use this intelligence to create a detailed, actionable business blueprint.`;
 
+      console.log('Sending API request with prompt length:', enrichedPrompt.length);
+
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -178,21 +182,28 @@ Use this intelligence to create a detailed, actionable business blueprint.`;
         }),
       });
 
+      console.log('API response status:', response.status);
       const data = await response.json();
+      console.log('API response data:', data);
 
-      if (!response.ok || !data.output) {
-        throw new Error(data.error?.message || 'Failed to generate plan');
+      if (!response.ok) {
+        throw new Error(data.error?.message || `API error: ${response.status}`);
       }
 
+      if (!data.output) {
+        throw new Error('No output in response');
+      }
+
+      console.log('Setting generated output');
       setGeneratedOutput(data.output);
       
-      // Notify parent if callback provided
       if (onSelect) {
         onSelect(opportunity, data.output);
       }
     } catch (err) {
-      console.error('Generation failed:', err);
-      alert(err instanceof Error ? err.message : 'Failed to generate plan. Please try again.');
+      console.error('=== GENERATION FAILED ===', err);
+      const errorMsg = err instanceof Error ? err.message : 'Failed to generate plan';
+      setGenerationError(errorMsg);
     } finally {
       setGeneratingId(null);
     }
@@ -201,6 +212,7 @@ Use this intelligence to create a detailed, actionable business blueprint.`;
   const resetView = () => {
     setGeneratedOutput(null);
     setSelectedOpportunity(null);
+    setGenerationError(null);
   };
 
   if (opportunities.length === 0) {
@@ -284,6 +296,25 @@ Use this intelligence to create a detailed, actionable business blueprint.`;
           ))}
         </div>
       </div>
+
+      {/* Generation Error */}
+      {generationError && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-medium text-red-900">Generation Failed</p>
+              <p className="text-sm text-red-700 mt-1">{generationError}</p>
+            </div>
+            <button 
+              onClick={() => setGenerationError(null)}
+              className="text-sm text-red-600 hover:text-red-800"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Opportunity Cards */}
       <div className="grid gap-4">
