@@ -1,4 +1,4 @@
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/Card';
 import { Loader2, Sparkles, Lightbulb, Code, Rocket, Brain, TrendingUp, Wrench, DollarSign } from 'lucide-react';
 
 export function LoadingState() {

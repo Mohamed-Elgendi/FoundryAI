@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { Wand2, Sparkles, ArrowRight, Lightbulb, Code, Rocket, Zap, Command, Copy, Check } from 'lucide-react';
 import { AIProvider } from '@/lib/ai/ai-types';
 import { ProviderSelector } from './ProviderSelector';
