@@ -190,8 +190,8 @@ function PlansContent() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900">My Plans</h2>
-          <p className="text-slate-600 mt-1">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">My Plans</h2>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">
             {plans.length} {plans.length === 1 ? 'plan' : 'plans'} saved
           </p>
         </div>
@@ -212,28 +212,28 @@ function PlansContent() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search plans..."
-          className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all"
+          className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 outline-none transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400"
         />
       </div>
 
       {/* Plans List */}
       {filteredPlans.length > 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div className="divide-y divide-slate-200">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div className="divide-y divide-slate-200 dark:divide-slate-700">
             {filteredPlans.map((plan) => (
               <div 
                 key={plan.id}
-                className="p-4 sm:p-6 hover:bg-slate-50 transition-colors"
+                className="p-4 sm:p-6 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
               >
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-slate-900 truncate">
+                    <h3 className="font-semibold text-slate-900 dark:text-white truncate">
                       {plan.output.ideaName || plan.output.toolIdea || 'Untitled Plan'}
                     </h3>
-                    <p className="text-sm text-slate-500 mt-1 line-clamp-2">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
                       {plan.userInput || 'No description'}
                     </p>
-                    <div className="flex items-center gap-4 mt-3 text-xs text-slate-400">
+                    <div className="flex items-center gap-4 mt-3 text-xs text-slate-400 dark:text-slate-500">
                       <span>Created {new Date(plan.createdAt).toLocaleDateString()}</span>
                       {plan.updatedAt !== plan.createdAt && (
                         <span>Updated {new Date(plan.updatedAt).toLocaleDateString()}</span>
@@ -245,21 +245,21 @@ function PlansContent() {
                   <div className="flex items-center gap-2">
                     <Link
                       href={`/?plan=${plan.id}`}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/30 rounded-lg transition-colors"
                     >
                       <Eye className="w-4 h-4" />
                       View
                     </Link>
                     <button
                       onClick={() => exportPlan(plan)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
                       title="Export as JSON"
                     >
                       <Download className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => sharePlan(plan)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
                       title="Share"
                     >
                       <Share2 className="w-4 h-4" />
@@ -267,7 +267,7 @@ function PlansContent() {
                     <button
                       onClick={() => deletePlan(plan.id)}
                       disabled={deleteLoading === plan.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors disabled:opacity-50"
                       title="Delete"
                     >
                       {deleteLoading === plan.id ? (
@@ -284,14 +284,14 @@ function PlansContent() {
         </div>
       ) : (
         /* Empty State */
-        <div className="text-center py-12 bg-slate-50 rounded-xl border border-slate-200">
-          <div className="w-12 h-12 bg-violet-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <FileText className="w-6 h-6 text-violet-600" />
+        <div className="text-center py-12 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+          <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <FileText className="w-6 h-6 text-violet-600 dark:text-violet-400" />
           </div>
-          <h3 className="font-semibold text-slate-900 mb-2">
+          <h3 className="font-semibold text-slate-900 dark:text-white mb-2">
             {searchQuery ? 'No plans found' : 'No plans yet'}
           </h3>
-          <p className="text-slate-600 mb-4 max-w-sm mx-auto">
+          <p className="text-slate-600 dark:text-slate-400 mb-4 max-w-sm mx-auto">
             {searchQuery 
               ? 'Try adjusting your search query'
               : 'Start by generating your first business plan'

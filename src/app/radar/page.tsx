@@ -35,18 +35,18 @@ function RadarContent() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <TrendingUp className="w-6 h-6 text-emerald-600" />
             Opportunity Radar
           </h2>
-          <p className="text-slate-600 mt-1">
+          <p className="text-slate-600 dark:text-slate-400 mt-1">
             Discover and validate new market opportunities with AI-powered insights
           </p>
         </div>
       </div>
 
       {/* Radar Component */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
         <OpportunityRadar limit={10} />
       </div>
     </div>

@@ -249,7 +249,7 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
         <div className="flex justify-end">
           <button
             onClick={() => setShowHistory(!showHistory)}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
           >
             <History className="w-4 h-4" />
             {showHistory ? 'Hide History' : `View History (${savedPlans.length})`}
@@ -259,27 +259,27 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
       
       {/* History Panel */}
       {showHistory && savedPlans.length > 0 && (
-        <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-          <h3 className="font-semibold mb-3">Recent Plans</h3>
+        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-200 dark:border-slate-700/50">
+          <h3 className="font-semibold mb-3 text-slate-900 dark:text-white">Recent Plans</h3>
           <div className="space-y-2">
             {savedPlans.map((plan) => (
               <div
                 key={plan.id}
-                className="flex items-center justify-between p-3 bg-white rounded-lg border border-border/50 hover:border-primary/50 transition-colors"
+                className="flex items-center justify-between p-3 bg-white dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600 hover:border-violet-300 dark:hover:border-violet-500/50 transition-colors"
               >
                 <button
                   onClick={() => loadPlan(plan)}
                   className="flex-1 text-left"
                 >
-                  <p className="font-medium text-sm truncate">{plan.output.ideaName || plan.output.toolIdea}</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="font-medium text-sm truncate text-slate-900 dark:text-white">{plan.output.ideaName || plan.output.toolIdea}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     {new Date(plan.createdAt).toLocaleDateString()} • 
                     {plan.refinementState.iterationCount} refinements
                   </p>
                 </button>
                 <button
                   onClick={() => deletePlan(plan.id)}
-                  className="p-2 text-muted-foreground hover:text-red-500 transition-colors"
+                  className="p-2 text-slate-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                 >
                   ×
                 </button>

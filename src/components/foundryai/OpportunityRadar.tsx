@@ -86,11 +86,11 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
 
   const getHorizonColor = (horizon: string) => {
     const colors = {
-      short: 'bg-emerald-100 text-emerald-700',
-      mid: 'bg-amber-100 text-amber-700',
-      long: 'bg-blue-100 text-blue-700'
+      short: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400',
+      mid: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400',
+      long: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
     };
-    return colors[horizon as keyof typeof colors] || 'bg-gray-100 text-gray-700';
+    return colors[horizon as keyof typeof colors] || 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400';
   };
 
   if (loading) {
@@ -116,13 +116,13 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
 
   if (error) {
     return (
-      <Card className="border-red-200 bg-red-50">
+      <Card className="border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
         <CardContent className="pt-6">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5" />
             <div>
-              <p className="font-medium text-red-900">Failed to load opportunities</p>
-              <p className="text-sm text-red-700 mt-1">{error}</p>
+              <p className="font-medium text-red-900 dark:text-red-300">Failed to load opportunities</p>
+              <p className="text-sm text-red-700 dark:text-red-400 mt-1">{error}</p>
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -265,11 +265,11 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
 
   if (opportunities.length === 0) {
     return (
-      <Card className="border-dashed">
+      <Card className="border-dashed dark:border-slate-700">
         <CardContent className="pt-6 pb-6 text-center">
-          <Lightbulb className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <p className="font-medium text-lg">No opportunities yet</p>
-          <p className="text-sm text-muted-foreground mt-1">
+          <Lightbulb className="w-12 h-12 text-slate-400 dark:text-slate-500 mx-auto mb-4" />
+          <p className="font-medium text-lg text-slate-900 dark:text-white">No opportunities yet</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             The radar is scanning for new ideas. Check back soon!
           </p>
         </CardContent>
@@ -286,8 +286,8 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
             <Button variant="outline" size="sm" onClick={resetView}>
               ← Back to Opportunities
             </Button>
-            <span className="text-sm text-slate-500">
-              Generated plan for: <span className="font-medium text-slate-900">{selectedOpportunity.title}</span>
+            <span className="text-sm text-slate-500 dark:text-slate-400">
+              Generated plan for: <span className="font-medium text-slate-900 dark:text-white">{selectedOpportunity.title}</span>
             </span>
           </div>
           <Badge className={getHorizonColor(selectedOpportunity.horizon)}>
@@ -313,15 +313,15 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
             <TrendingUp className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="font-semibold text-lg text-slate-900">Trending Opportunities</h2>
-            <p className="text-sm text-slate-500">
+            <h2 className="font-semibold text-lg text-slate-900 dark:text-white">Trending Opportunities</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               AI-curated business ideas ranked by market potential
             </p>
           </div>
         </div>
         
         {/* Horizon Filter */}
-        <div className="flex items-center gap-1 bg-muted p-1 rounded-lg">
+        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
           {(['all', 'short', 'mid', 'long'] as const).map((h) => (
             <button
               key={h}
@@ -329,8 +329,8 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
               className={cn(
                 "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
                 selectedHorizon === h
-                  ? "bg-white text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
               )}
             >
               {h === 'all' ? 'All' : h.charAt(0).toUpperCase() + h.slice(1)}
@@ -341,16 +341,16 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
 
       {/* Generation Error */}
       {generationError && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5" />
             <div className="flex-1">
-              <p className="font-medium text-red-900">Generation Failed</p>
-              <p className="text-sm text-red-700 mt-1">{generationError}</p>
+              <p className="font-medium text-red-900 dark:text-red-300">Generation Failed</p>
+              <p className="text-sm text-red-700 dark:text-red-400 mt-1">{generationError}</p>
             </div>
             <button 
               onClick={() => setGenerationError(null)}
-              className="text-sm text-red-600 hover:text-red-800"
+              className="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
             >
               Dismiss
             </button>
@@ -386,14 +386,14 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
                   <CardTitle className="text-lg leading-tight">
                     {opp.title}
                   </CardTitle>
-                  <CardDescription className="flex items-center gap-2 mt-1">
-                    <span className="font-medium text-foreground">{opp.market}</span>
+                  <CardDescription className="flex items-center gap-2 mt-1 text-slate-500 dark:text-slate-400">
+                    <span className="font-medium text-slate-700 dark:text-slate-300">{opp.market}</span>
                     <span>•</span>
                     <span>{opp.niche}</span>
                     {opp.sub_niche && opp.sub_niche !== opp.niche && (
                       <>
                         <span>•</span>
-                        <span className="text-muted-foreground">{opp.sub_niche}</span>
+                        <span className="text-slate-400 dark:text-slate-500">{opp.sub_niche}</span>
                       </>
                     )}
                   </CardDescription>
@@ -424,11 +424,11 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
                 </div>
                 
                 {/* Angle */}
-                <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/50">
+                <div className="flex items-start gap-2 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
                   <Lightbulb className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     <span className="font-medium">Angle:</span>{' '}
-                    <span className="text-muted-foreground">{opp.angle}</span>
+                    <span className="text-slate-600 dark:text-slate-400">{opp.angle}</span>
                   </p>
                 </div>
               </div>
@@ -459,11 +459,11 @@ ${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
       </div>
 
       {/* Footer Info */}
-      <p className="text-xs text-slate-400 text-center">
+      <p className="text-xs text-slate-400 dark:text-slate-500 text-center">
         Opportunities are continuously analyzed and ranked by market potential and viability.
         {' '}<button 
           onClick={fetchOpportunities}
-          className="underline hover:text-slate-600"
+          className="underline hover:text-slate-600 dark:hover:text-slate-400"
         >
           Refresh Data
         </button>
