@@ -247,17 +247,56 @@ Use this intelligence to create a detailed, actionable business blueprint.`;
           </Badge>
         </div>
         
-        <OutputDisplay 
-          output={generatedOutput}
-          onFeedback={() => {}}
-          onRefine={() => {}}
-          refinementState={{
-            iterationCount: 0,
-            isRefining: false,
-            previousRefinements: [],
-            originalInput: selectedOpportunity.problem
-          }}
-        />
+        {/* Simple Output Display */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-4 bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-slate-200">
+            <h3 className="font-bold text-xl text-slate-900">{generatedOutput.toolIdea}</h3>
+            <p className="text-slate-600 mt-1">{generatedOutput.problemStatement}</p>
+          </div>
+          
+          <div className="p-4 space-y-4">
+            <div>
+              <h4 className="font-semibold text-slate-900 mb-2">Target User</h4>
+              <p className="text-slate-600">{generatedOutput.targetUser}</p>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-slate-900 mb-2">Market Opportunity</h4>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="p-3 bg-slate-50 rounded-lg">
+                  <div className="text-lg font-bold text-violet-600">{generatedOutput.marketResearch?.tam || 'N/A'}</div>
+                  <div className="text-xs text-slate-500">TAM</div>
+                </div>
+                <div className="p-3 bg-slate-50 rounded-lg">
+                  <div className="text-lg font-bold text-violet-600">{generatedOutput.marketResearch?.sam || 'N/A'}</div>
+                  <div className="text-xs text-slate-500">SAM</div>
+                </div>
+                <div className="p-3 bg-slate-50 rounded-lg">
+                  <div className="text-lg font-bold text-violet-600">{generatedOutput.marketResearch?.som || 'N/A'}</div>
+                  <div className="text-xs text-slate-500">SOM</div>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-slate-900 mb-2">MVP Features</h4>
+              <ul className="space-y-1">
+                {generatedOutput.mvpFeatures?.map((feature, i) => (
+                  <li key={i} className="flex items-start gap-2 text-slate-600">
+                    <span className="text-violet-500 mt-1">•</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-slate-900 mb-2">Monetization</h4>
+              <p className="text-slate-600">{generatedOutput.monetizationStrategy?.model}</p>
+              <p className="text-slate-600 mt-1">{generatedOutput.monetizationStrategy?.pricing}</p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
