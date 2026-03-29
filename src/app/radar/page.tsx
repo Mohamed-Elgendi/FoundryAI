@@ -54,9 +54,20 @@ function RadarContent() {
 }
 
 export default function RadarPage() {
+  const { signOut, user } = useAuth();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/login');
+  };
+
   return (
     <DashboardProvider>
-      <DashboardShell>
+      <DashboardShell 
+        user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
+        onSignOut={handleSignOut}
+      >
         <RadarContent />
       </DashboardShell>
     </DashboardProvider>

@@ -12,6 +12,7 @@ interface AuthContextType {
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithOAuth: (provider: 'google' | 'github') => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<{ error: Error | null }>;
   isAuthenticated: boolean;
 }
 
@@ -81,6 +82,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await supabase.auth.signOut();
   };
 
+  const resetPassword = async (email: string) => {
+    if (!supabase) return { error: new Error('Auth not configured') };
+    
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    
+    return { error };
+  };
+
   const value: AuthContextType = {
     user,
     session,
@@ -89,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUp,
     signInWithOAuth,
     signOut,
+    resetPassword,
     isAuthenticated: !!user,
   };
 

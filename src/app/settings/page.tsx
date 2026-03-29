@@ -307,9 +307,20 @@ function SettingsContent() {
 }
 
 export default function SettingsPage() {
+  const { signOut, user } = useAuth();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/login');
+  };
+
   return (
     <DashboardProvider>
-      <DashboardShell>
+      <DashboardShell 
+        user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
+        onSignOut={handleSignOut}
+      >
         <Suspense fallback={<div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin" /></div>}>
           <SettingsContent />
         </Suspense>
