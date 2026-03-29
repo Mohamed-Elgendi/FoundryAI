@@ -248,7 +248,16 @@ Respond with a valid JSON object. Each field must contain substantial, specific 
 
 8. **RISK ACKNOWLEDGMENT**: Note the biggest risks (competition, user acquisition cost, technical complexity) and mitigation strategies.
 
-9. **JSON VALIDATION**: Output must be parseable JSON. Escape quotes properly. No trailing commas. No comments in JSON.
+9. **MANDATORY MINIMUMS**:
+   - mvpFeatures: AT LEAST 8 features with detailed descriptions
+   - competitorAnalysis: AT LEAST 3 real competitors with full details
+   - keyTrends: AT LEAST 5 trends with explanations
+   - userPainPoints: AT LEAST 5 specific pain points
+   - techStack: AT LEAST 8 specific tools
+   - buildPlan: AT LEAST 9 steps with aiToolAction
+   - firstUserTactics: AT LEAST 7 specific tactics
+
+10. **JSON VALIDATION**: Output must be parseable JSON. Escape quotes properly. No trailing commas. No comments in JSON.
 
 Return ONLY the JSON object. No markdown, no explanations, no code blocks.`;
 }
