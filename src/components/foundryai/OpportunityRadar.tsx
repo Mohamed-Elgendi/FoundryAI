@@ -148,59 +148,79 @@ export function OpportunityRadar({ onSelect, limit = 5 }: OpportunityRadarProps)
       const validation = opportunity.validation_data || {};
       const scoreBreakdown = validation.score_breakdown || {};
       
-      const enrichedPrompt = `Create a comprehensive, detailed business plan with EXTENSIVE information for: ${opportunity.title}
+      const enrichedPrompt = `You are FoundryAI - create a complete executable business plan for: ${opportunity.title}
 
-PROBLEM TO SOLVE:
-${opportunity.problem}
+## VALIDATED INTELLIGENCE
+Problem: ${opportunity.problem}
+Angle: ${opportunity.angle}
+Market: ${opportunity.market} / ${opportunity.niche}${opportunity.sub_niche ? ` / ${opportunity.sub_niche}` : ''}
+Radar Score: ${opportunity.score}/100 | Horizon: ${opportunity.horizon}
+${validation.upvotes ? `Community: ${validation.upvotes} upvotes` : ''}
 
-UNIQUE ANGLE:
-${opportunity.angle}
+## REQUIRED OUTPUT - Complete JSON Business Plan
 
-TARGET MARKET:
-- Market: ${opportunity.market}
-- Niche: ${opportunity.niche}
-${opportunity.sub_niche ? `- Sub-niche: ${opportunity.sub_niche}` : ''}
+{
+  "toolIdea": "Specific compelling product name (2-5 words)",
+  "targetUser": "Detailed persona with job title, income, pain level 1-10",
+  "problemStatement": "Specific user struggles with quantified pain. Current solutions X and Y fail because Z. This solves by mechanism.",
+  "marketResearch": {
+    "tam": "$X billion market with 2024 data source",
+    "sam": "$X million serviceable segment",
+    "som": "$X initial target",
+    "marketGrowthRate": "X% YoY with specific driver",
+    "keyTrends": ["Trend 1", "Trend 2", "Trend 3", "Trend 4", "Trend 5"],
+    "competitorAnalysis": [
+      {"name": "Competitor 1", "strengths": "...", "weaknesses": "...", "marketShare": "X%", "pricing": "$X/month"}
+    ],
+    "targetDemographics": "Age, income, location, company size, tech level",
+    "userPainPoints": ["Pain 1", "Pain 2", "Pain 3", "Pain 4", "Pain 5"],
+    "marketGaps": ["Gap 1", "Gap 2", "Gap 3"]
+  },
+  "mvpFeatures": [
+    "Feature 1: Core function - specific capability",
+    "Feature 2: Secondary - specific",
+    "Feature 3: UX element - specific",
+    "Feature 4: Integration - specific",
+    "Feature 5: Admin - specific",
+    "Feature 6: Monetization - specific",
+    "Feature 7: Analytics - specific",
+    "Feature 8: Operations - specific"
+  ],
+  "techStack": [
+    {"category": "Frontend", "tool": "Next.js 15 + TypeScript", "purpose": "Full-stack React framework", "isFree": true},
+    {"category": "Styling", "tool": "Tailwind + shadcn/ui", "purpose": "UI components", "isFree": true},
+    {"category": "Database", "tool": "Supabase", "purpose": "PostgreSQL + Auth", "isFree": true},
+    {"category": "AI", "tool": "Groq API", "purpose": "LLM processing", "isFree": true},
+    {"category": "Storage", "tool": "Supabase Storage", "purpose": "File storage", "isFree": true},
+    {"category": "Email", "tool": "Resend", "purpose": "Transactional emails", "isFree": true},
+    {"category": "Payments", "tool": "Stripe", "purpose": "Subscriptions", "isFree": true},
+    {"category": "Hosting", "tool": "Vercel", "purpose": "Deployment", "isFree": true}
+  ],
+  "buildPlan": [
+    {"step": 1, "title": "Project Setup", "description": "Initialize Next.js, Tailwind, shadcn/ui, Supabase. Create dashboard layout.", "estimatedTime": "45 min", "aiToolAction": "Create Next.js 15 app with shadcn/ui, dashboard layout, navigation"},
+    {"step": 2, "title": "Database & Auth", "description": "Create Supabase tables, RLS policies, Auth with email/Google.", "estimatedTime": "1.5 hours", "aiToolAction": "Generate SQL schema with 4 tables, RLS policies, TypeScript types"},
+    {"step": 3, "title": "Core CRUD UI", "description": "Build management interface: list, forms, filters, detail views.", "estimatedTime": "3 hours", "aiToolAction": "Create dashboard with list, form, detail components, React Hook Form + Zod"},
+    {"step": 4, "title": "AI Features", "description": "Integrate Groq for parsing, categorization, natural language.", "estimatedTime": "2.5 hours", "aiToolAction": "Build AI module with parseInput(), generateFromNL(), suggestMatches()"},
+    {"step": 5, "title": "Email System", "description": "Resend integration, templates, send tracking.", "estimatedTime": "2 hours", "aiToolAction": "Create email templates, send API route, tracking"},
+    {"step": 6, "title": "Payments", "description": "Stripe subscriptions, pricing page, feature gating.", "estimatedTime": "3 hours", "aiToolAction": "Implement Stripe Checkout, webhooks, subscription context"},
+    {"step": 7, "title": "Analytics", "description": "Revenue charts, breakdowns, top customers, CSV export.", "estimatedTime": "2 hours", "aiToolAction": "Create Recharts dashboard with filters, summaries"},
+    {"step": 8, "title": "Polish", "description": "Responsive, loading states, errors, onboarding, landing page.", "estimatedTime": "3 hours", "aiToolAction": "Add skeletons, toasts, error boundaries, empty states, onboarding"},
+    {"step": 9, "title": "Deploy", "description": "Vercel deploy, production config, testing.", "estimatedTime": "1 hour", "aiToolAction": "Create DEPLOY.md, env checklist, testing script"}
+  ],
+  "monetizationStrategy": {
+    "model": "Freemium SaaS",
+    "pricing": "Free: limited usage | Pro: $9/month or $79/year - unlimited, AI, branding",
+    "firstUserTactics": ["Product Hunt launch", "Demo video + thread", "Community posts", "Viral loop", "Direct outreach", "Content SEO", "Launch discount"],
+    "revenueEstimate": "M1-3: $0-200 | M4-6: $500-1,500 | M7-12: $2K-5K | Break-even: 6mo | $10K MRR: 18-24mo"
+  }
+}
 
-VALIDATION DATA:
-- Radar Score: ${opportunity.score}/100
-- Market Horizon: ${opportunity.horizon}
-${validation.upvotes ? `- Reddit Upvotes: ${validation.upvotes}` : ''}
-${validation.comments ? `- Reddit Comments: ${validation.comments}` : ''}
-${scoreBreakdown.engagement ? `- Engagement Score: ${scoreBreakdown.engagement}` : ''}
-${scoreBreakdown.market_fit ? `- Market Fit Score: ${scoreBreakdown.market_fit}` : ''}
-
-REQUIREMENTS - Create a VERY DETAILED, COMPREHENSIVE business blueprint with:
-
-1. EXTENSIVE Market Research (300+ words):
-   - Deep TAM/SAM/SOM analysis with calculations
-   - 5-7 key market trends with explanations
-   - Detailed competitor analysis (4-5 competitors with full SWOT)
-   - Target demographics with personas
-   - 6-8 specific user pain points
-   - 5-6 market gaps with opportunity sizing
-
-2. COMPREHENSIVE MVP Features (8-12 features):
-   - Each feature with detailed description
-   - Priority level and estimated development time
-   - User benefit explanation
-
-3. DETAILED Tech Stack (8-10 technologies):
-   - Frontend, backend, database, AI, hosting, analytics, auth, payments
-   - Specific purpose for each tool
-   - Cost analysis (free vs paid)
-
-4. STEP-BY-STEP Build Plan (6-8 phases):
-   - Detailed tasks for each step
-   - Time estimates in hours/days
-   - Dependencies and prerequisites
-
-5. EXTENSIVE Monetization Strategy:
-   - Multiple revenue streams
-   - 3-tier pricing model with justifications
-   - Customer acquisition tactics (8-10 strategies)
-   - 12-month revenue projections with milestones
-
-Make every section thorough, actionable, and rich with specific details.`;
+## RULES
+- NO generic advice - every item SPECIFIC and IMPLEMENTABLE
+- QUANTIFY everything - numbers for time, cost, market
+- REALISTIC scope - 40 hours total across 9 steps
+- SPECIFIC tools only - real available tools
+- JSON ONLY - no markdown, no explanation`;
 
       console.log('Sending API request with prompt length:', enrichedPrompt.length);
 
