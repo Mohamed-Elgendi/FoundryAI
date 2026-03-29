@@ -1,0 +1,64 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
+import { useAuth } from '@/lib/auth/auth-context';
+import { FoundryAI } from '@/components/foundryai/FoundryAI';
+import { useRouter } from 'next/navigation';
+import { Lightbulb, Sparkles } from 'lucide-react';
+
+function PlanContent() {
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const router = useRouter();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [authLoading, isAuthenticated, router]);
+
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <Lightbulb className="w-6 h-6 text-violet-600" />
+            Plan Your Idea
+          </h2>
+          <p className="text-slate-600 mt-1">
+            Describe your business idea and let AI create a complete blueprint
+          </p>
+        </div>
+      </div>
+
+      {/* Plan Generator */}
+      <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <FoundryAI />
+      </div>
+    </div>
+  );
+}
+
+export default function PlanPage() {
+  return (
+    <DashboardProvider>
+      <DashboardShell>
+        <PlanContent />
+      </DashboardShell>
+    </DashboardProvider>
+  );
+}
