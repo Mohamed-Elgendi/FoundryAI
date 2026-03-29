@@ -235,7 +235,7 @@ export class PlanService implements Service {
       .from('plans')
       .insert({
         user_id: userId,
-        title: content.toolIdea,
+        title: content.ideaName || content.toolIdea || 'Untitled Plan',
         content: content,
         status: 'complete',
         version: 1,

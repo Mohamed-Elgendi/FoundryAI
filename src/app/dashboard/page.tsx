@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
+import { useAuth } from '@/lib/auth/auth-context';
+import { supabase } from '@/lib/db/supabase';
 import { FoundryAIOutput } from '@/types';
 import { 
   Lightbulb, 
@@ -14,6 +16,7 @@ import {
   Zap
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface SavedPlan {
   id: string;
@@ -30,6 +33,8 @@ interface DashboardStats {
 }
 
 function DashboardContent() {
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const router = useRouter();
   const [stats, setStats] = useState<DashboardStats>({
     totalPlans: 0,
     totalOpportunities: 0,
@@ -38,18 +43,64 @@ function DashboardContent() {
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  // Redirect to login if not authenticated
   useEffect(() => {
-    // Load real data from localStorage
-    const loadData = () => {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [authLoading, isAuthenticated, router]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    // Load data from Supabase
+    const loadData = async () => {
       try {
-        // Load saved plans
-        const savedPlansJson = localStorage.getItem('foundryai-plans');
-        const savedPlans: SavedPlan[] = savedPlansJson ? JSON.parse(savedPlansJson) : [];
-        
-        // Load opportunities count from radar data
-        const radarData = localStorage.getItem('radar-opportunities');
-        const opportunities = radarData ? JSON.parse(radarData) : [];
-        
+        setIsLoading(true);
+
+        // Fetch user's plans from Supabase
+        let savedPlans: SavedPlan[] = [];
+        let opportunitiesCount = 0;
+
+        if (supabase) {
+          const { data: plans, error: plansError } = await supabase
+            .from('plans')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(5);
+
+          if (plansError) {
+            console.error('Error fetching plans:', plansError);
+          }
+
+          // Fetch opportunities count
+          const { count: oppCount, error: oppError } = await supabase
+            .from('opportunities')
+            .select('*', { count: 'exact', head: true });
+
+          if (oppError) {
+            console.error('Error fetching opportunities:', oppError);
+          }
+
+          opportunitiesCount = oppCount || 0;
+
+          // Transform plans to SavedPlan format
+          savedPlans = (plans || []).map((plan: any) => ({
+            id: plan.id,
+            userInput: plan.user_input || '',
+            output: plan.content as FoundryAIOutput,
+            createdAt: plan.created_at
+          }));
+        } else {
+          // Fallback to localStorage if Supabase not configured
+          const savedPlansJson = localStorage.getItem('foundryai-plans');
+          savedPlans = savedPlansJson ? JSON.parse(savedPlansJson) : [];
+          
+          const radarData = localStorage.getItem('radar-opportunities');
+          opportunitiesCount = radarData ? JSON.parse(radarData).length : 0;
+        }
+
         // Get last active time
         const lastPlan = savedPlans[0];
         const lastActive = lastPlan 
@@ -58,9 +109,9 @@ function DashboardContent() {
 
         setStats({
           totalPlans: savedPlans.length,
-          totalOpportunities: opportunities.length,
+          totalOpportunities: opportunitiesCount || 0,
           lastActive,
-          recentPlans: savedPlans.slice(0, 5)
+          recentPlans: savedPlans
         });
       } catch (error) {
         console.error('Failed to load dashboard data:', error);
@@ -70,14 +121,18 @@ function DashboardContent() {
     };
 
     loadData();
-  }, []);
+  }, [user]);
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-violet-600" />
       </div>
     );
+  }
+
+  if (!isAuthenticated) {
+    return null; // Will redirect
   }
 
   return (
