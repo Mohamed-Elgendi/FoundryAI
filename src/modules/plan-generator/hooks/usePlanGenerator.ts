@@ -95,9 +95,21 @@ ${validationData?.upvotes ? `Community: ${validationData.upvotes} upvotes` : ''}
 ## REQUIRED OUTPUT - Complete JSON Business Plan
 
 {
-  "toolIdea": "Specific compelling product name (2-5 words)",
-  "targetUser": "Detailed persona with job title, income, pain level 1-10",
-  "problemStatement": "Specific user struggles with quantified pain. Current solutions X and Y fail because Z. This solves by mechanism.",
+  "ideaName": "Specific compelling product name (2-5 words)",
+  "targetAudience": {
+    "description": "Detailed persona with job title, income, pain level 1-10",
+    "painLevel": 8
+  },
+  "problemStatement": {
+    "coreProblem": "What the user struggles with",
+    "quantifiedCost": "Cost in time/money/stress",
+    "negativeConsequences": ["Consequence 1", "Consequence 2"],
+    "alternatives": ["Current solution 1", "Current solution 2"],
+    "reasonsTheyFail": ["Why alternative 1 fails", "Why alternative 2 fails"],
+    "coreSolution": "How your product solves it",
+    "keyBenefits": ["Benefit 1", "Benefit 2", "Benefit 3"],
+    "fullStatement": "Complete problem statement paragraph"
+  },
   "marketResearch": {
     "tam": "$X billion market with 2024 data source",
     "sam": "$X million serviceable segment",
@@ -166,9 +178,21 @@ ${input}
 ## REQUIRED OUTPUT - Complete JSON Business Plan
 
 {
-  "toolIdea": "Specific compelling product name (2-5 words)",
-  "targetUser": "Detailed persona with job title, income, pain level 1-10",
-  "problemStatement": "Specific user struggles with quantified pain. Current solutions X and Y fail because Z. This solves by mechanism.",
+  "ideaName": "Specific compelling product name (2-5 words)",
+  "targetAudience": {
+    "description": "Detailed persona with job title, income, pain level 1-10",
+    "painLevel": 8
+  },
+  "problemStatement": {
+    "coreProblem": "What the user struggles with",
+    "quantifiedCost": "Cost in time/money/stress",
+    "negativeConsequences": ["Consequence 1", "Consequence 2"],
+    "alternatives": ["Current solution 1", "Current solution 2"],
+    "reasonsTheyFail": ["Why alternative 1 fails", "Why alternative 2 fails"],
+    "coreSolution": "How your product solves it",
+    "keyBenefits": ["Benefit 1", "Benefit 2", "Benefit 3"],
+    "fullStatement": "Complete problem statement paragraph"
+  },
   "marketResearch": {
     "tam": "$X billion market with 2024 data source",
     "sam": "$X million serviceable segment",
