@@ -86,7 +86,7 @@ function DashboardContent() {
           opportunitiesCount = oppCount || 0;
 
           // Transform plans to SavedPlan format
-          savedPlans = (plans || []).map((plan: any) => ({
+          savedPlans = (plans || []).map((plan: { id: string; user_input?: string; content: unknown; created_at: string }) => ({
             id: plan.id,
             userInput: plan.user_input || '',
             output: plan.content as FoundryAIOutput,
@@ -142,7 +142,7 @@ function DashboardContent() {
         <div>
           <h2 className="text-2xl font-bold text-slate-900">Welcome back!</h2>
           <p className="text-slate-600 mt-1">
-            Here's what's happening with your business ideas
+            Here&#39;s what&#39;s happening with your business ideas
           </p>
         </div>
         <Link

@@ -5,19 +5,17 @@
 
 'use client';
 
-import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
 import { 
   LayoutDashboard, 
   Lightbulb, 
   Radar, 
   FileText, 
   Settings, 
-  User,
   Bell,
   Menu,
   X,
-  LogOut,
-  ChevronRight
+  LogOut
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -75,10 +73,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const addNotification = (notification: Omit<Notification, 'id' | 'timestamp'>) => {
+  const addNotification = useCallback((notification: Omit<Notification, 'id' | 'timestamp'>) => {
     const newNotification: Notification = {
       ...notification,
-      id: Math.random().toString(36).substr(2, 9),
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: Date.now(),
     };
     setNotifications(prev => [newNotification, ...prev]);
@@ -88,7 +86,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         dismissNotification(newNotification.id);
       }, 5000);
     }
-  };
+  }, []);
 
   const dismissNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
