@@ -19,7 +19,14 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@layer-1/*": ["./src/layer-1-security/*"],
+      "@layer-2/*": ["./src/layer-2-ai/*"],
+      "@layer-3/*": ["./src/layer-3-data/*"],
+      "@layer-4/*": ["./src/layer-4-logic/*"],
+      "@layer-5/*": ["./src/layer-5-presentation/*"],
+      "@layer-6/*": ["./src/layer-6-ux/*"],
+      "@layer-7/*": ["./src/layer-7-design-system/*"]
     }
   },
   "include": [
