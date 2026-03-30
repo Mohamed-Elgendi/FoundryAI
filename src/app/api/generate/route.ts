@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { processWithAI, AIProvider, getDefaultProvider } from '@/layer-2-ai/router/ai-router';
 import { successResponse, errorResponse, errors } from '@/lib/api/response';
 import { buildMasterPrompt, parseAIResponse } from '@/lib/engines/master-prompt';
-import { getSuccessfulPatterns } from '@/lib/db/supabase';
+import { getSuccessfulPatterns } from '@/layer-3-data/storage/supabase-client';
 
 export async function POST(request: Request) {
   try {
