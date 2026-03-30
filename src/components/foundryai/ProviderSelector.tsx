@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Check, AlertCircle } from 'lucide-react';
-import { AIProvider, PROVIDER_INFO } from '@/lib/ai/ai-types';
+import { AIProvider, PROVIDER_INFO } from '@/layer-2-ai/router/ai-types';
 import { cn } from '@/lib/utils';
 
 interface ProviderSelectorProps {

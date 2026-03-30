@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
-import { supabase } from '@/lib/db/supabase';
+import { createSupabaseClient } from '@/layer-3-data/storage/createSupabaseClient()-client';
 
 export async function POST(request: Request) {
   if (!stripe) {
@@ -34,9 +34,9 @@ export async function POST(request: Request) {
         const userId = session.metadata?.userId;
         const tier = session.metadata?.tier;
 
-        if (userId && supabase) {
+        if (userId && createSupabaseClient()) {
           // Update user's subscription in database
-          await supabase
+          await createSupabaseClient()
             .from('users')
             .update({
               subscription_tier: tier,
@@ -53,9 +53,9 @@ export async function POST(request: Request) {
         const invoice = event.data.object;
         const customerId = invoice.customer as string;
         
-        if (supabase) {
+        if (createSupabaseClient()) {
           // Update subscription status
-          await supabase
+          await createSupabaseClient()
             .from('users')
             .update({
               subscription_status: 'active',
@@ -69,9 +69,9 @@ export async function POST(request: Request) {
         const subscription = event.data.object;
         const customerId = subscription.customer as string;
 
-        if (supabase) {
+        if (createSupabaseClient()) {
           // Downgrade to free tier
-          await supabase
+          await createSupabaseClient()
             .from('users')
             .update({
               subscription_tier: 'free',

@@ -1,3 +1,8 @@
-When I type /autopilot, you go immediately and exceute the steps to be done of the whole project on autopilot without asking my consent, don't stop until you finish the step that you are working on and until you dilver the final output for this step, make a step-at-a-time. step-by-step progress.
+When I type /autopilot, you go immediately and check the implementation plan and to check the current status of the implented tasks, figure out what taks are in progress, detect and define the next upcoming task that needs to be accomplished in the mean time.
+ Then go implement and exceute the steps to be done without asking my consent, don't stop until you finish the step that you are working on and until you dilver the final output for this step, make a step-at-a-time. step-by-step progress.
 once you finish a step you should provide a summary of what you did and ask me if I want to continue to the next step or stop.
-once step is finished and I agree to it you go and push it on github and make sure it is published online.
+once step is finished and I agree to it you go and update the implemenation plan to reflect the progress.
+Then you push it on github and make sure it is published online.
+5.Check about the deployment issue and make sure that everything was pushed correctly and doplyed successful and the platform is running online and up to date.
+If there is no implementation roadmap plan exists or you can't find it within the project folders and files>>>
+Then> go and establish a tottaly refined, very-well-planned, very-well-logically-built, very-well-organized, very-well-visually-mapped, very-well-designed, very-well-developed, very-well-written, very-well-structured, very-well-articulated, very-full-detailed-comprehensive, meticulously-crafted,high-quality, standalone, combined, internalized, synethized, self-contained implementation plan roadmap in order to get the highest benefits and the maximum values out of your ai cabablitites and go with all the above tasks>

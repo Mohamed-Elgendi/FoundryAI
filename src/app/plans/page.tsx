@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
-import { useAuth } from '@/lib/auth/auth-context';
-import { supabase } from '@/lib/db/supabase';
+import { useAuth } from '@/layer-1-security/auth';
+import { getSupabaseBrowserClient } from '@/layer-3-data/storage/supabase-client';
 import { FoundryAIOutput } from '@/types';
 import { 
   FileText, 
@@ -68,8 +68,8 @@ function PlansContent() {
     try {
       setIsLoading(true);
 
-      if (supabase) {
-        const { data, error } = await supabase
+      if (getSupabaseBrowserClient()) {
+        const { data, error } = await getSupabaseBrowserClient()
           .from('plans')
           .select('*')
           .eq('user_id', user?.id)
@@ -110,8 +110,8 @@ function PlansContent() {
     try {
       setDeleteLoading(planId);
 
-      if (supabase) {
-        const { error } = await supabase
+      if (getSupabaseBrowserClient()) {
+        const { error } = await getSupabaseBrowserClient()
           .from('plans')
           .delete()
           .eq('id', planId)

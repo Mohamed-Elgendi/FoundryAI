@@ -1,5 +1,5 @@
 import { FoundryAIOutput } from '@/types';
-import { AIProvider } from '@/lib/ai/ai-types';
+import { AIProvider } from '@/layer-2-ai/router/ai-types';
 
 export interface PlanGeneratorState {
   input: string;

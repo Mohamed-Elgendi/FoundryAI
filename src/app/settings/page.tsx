@@ -2,8 +2,8 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
-import { useAuth } from '@/lib/auth/auth-context';
-import { supabase } from '@/lib/db/supabase';
+import { useAuth } from '@/layer-1-security/auth';
+import { getSupabaseBrowserClient } from '@/layer-3-data/storage/supabase-client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { 
   User, 
@@ -62,8 +62,8 @@ function SettingsContent() {
         let userData = null;
         let queryError = null;
 
-        if (supabase) {
-          const result = await supabase
+        if (getSupabaseBrowserClient()) {
+          const result = await getSupabaseBrowserClient()
             .from('users')
             .select('subscription_tier, subscription_status, created_at')
             .eq('id', user.id)

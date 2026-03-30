@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { processWithAI, getDefaultProvider } from '@/lib/ai/ai-router';
+import { processWithAI, getDefaultProvider } from '@/layer-2-ai/router/ai-router';
 import { successResponse, errors } from '@/lib/api/response';
 import { buildRefinementPrompt, parseRefinementResponse, RefinementContext } from '@/lib/engines/refinement-prompt';
 import { getSuccessfulPatterns } from '@/lib/db/supabase';

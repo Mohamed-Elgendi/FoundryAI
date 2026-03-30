@@ -10,7 +10,7 @@ import { RefinementLoadingState } from './RefinementLoadingState';
 import { TemplateGallery } from './TemplateGallery';
 import { Confetti } from '@/components/ui/confetti';
 import { AlertCircle, History, Sparkles } from 'lucide-react';
-import { AIProvider, getDefaultProvider } from '@/lib/ai/ai-types';
+import { AIProvider, getDefaultProvider } from '@/layer-2-ai/router/ai-types';
 
 interface SavedPlan {
   id: string;

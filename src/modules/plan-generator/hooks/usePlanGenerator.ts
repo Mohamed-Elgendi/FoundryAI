@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { FoundryAIOutput } from '@/types';
-import { AIProvider } from '@/lib/ai/ai-types';
+import { AIProvider } from '@/layer-2-ai/router/ai-types';
 import { PlanContext, PlanGeneratorState } from '../types';
 
 export function usePlanGenerator(context: PlanContext) {

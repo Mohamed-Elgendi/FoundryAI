@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
-import { supabase } from '@/lib/db/supabase';
+import { createSupabaseClient } from '@/layer-3-data/storage/createSupabaseClient()-client';
 
 export async function POST(request: Request) {
   try {
@@ -14,14 +14,14 @@ export async function POST(request: Request) {
     const { userId } = await request.json();
 
     // Get user's Stripe customer ID
-    if (!supabase) {
+    if (!createSupabaseClient()) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
       );
     }
 
-    const { data: user, error } = await supabase
+    const { data: user, error } = await createSupabaseClient()
       ?.from('users')
       .select('stripe_customer_id')
       .eq('id', userId)

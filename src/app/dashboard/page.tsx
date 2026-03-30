@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
-import { useAuth } from '@/lib/auth/auth-context';
-import { supabase } from '@/lib/db/supabase';
+// import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
+import { useAuth } from '@/layer-1-security/auth';
+import { getSupabaseBrowserClient } from '@/layer-3-data/storage/supabase-client';
 import { FoundryAIOutput } from '@/types';
 import {
   TrendingUp,
@@ -215,8 +215,8 @@ function DashboardContent() {
         let savedPlans: SavedPlan[] = [];
         let opportunitiesCount = 0;
 
-        if (supabase) {
-          const { data: plans, error: plansError } = await supabase
+        if (getSupabaseBrowserClient()) {
+          const { data: plans, error: plansError } = await getSupabaseBrowserClient()
             .from('plans')
             .select('*')
             .eq('user_id', user.id)
@@ -224,7 +224,7 @@ function DashboardContent() {
 
           if (plansError) console.error('Error fetching plans:', plansError);
 
-          const { count: oppCount, error: oppError } = await supabase
+          const { count: oppCount, error: oppError } = await getSupabaseBrowserClient()
             .from('opportunities')
             .select('*', { count: 'exact', head: true });
 

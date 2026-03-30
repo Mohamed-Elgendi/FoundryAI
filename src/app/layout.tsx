@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/lib/auth/auth-context";
+import { AuthProvider } from "@/layer-1-security/auth";
 import { ThemeProvider } from "@/lib/theme/theme-context";
 
 const inter = Inter({

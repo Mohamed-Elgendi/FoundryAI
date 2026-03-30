@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Dynamic build required for API routes
+  output: 'standalone',
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;

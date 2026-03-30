@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getProviderStatus, getDefaultProvider } from '@/lib/ai/ai-router';
+import { getProviderStatus, getDefaultProvider } from '@/layer-2-ai/router/ai-router';
 import { successResponse } from '@/lib/api/response';
 
 export async function GET() {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
-import { useAuth } from '@/lib/auth/auth-context';
+import { useAuth } from '@/layer-1-security/auth';
 import { FoundryAI } from '@/components/foundryai/FoundryAI';
 import { useRouter } from 'next/navigation';
 import { Lightbulb, Sparkles } from 'lucide-react';

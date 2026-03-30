@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { storeFeedback, getFeedbackStats } from '@/lib/db/supabase';
+import { storeFeedback, getFeedbackStats } from '@/layer-3-data/storage/createSupabaseClient()-client';
 import { FeedbackData } from '@/types';
 
 export async function POST(request: Request) {

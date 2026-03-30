@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAuth } from '@/lib/auth/auth-context';
+import { useAuth } from '@/layer-1-security/auth';
 import { useRouter } from 'next/navigation';
 import { LandingPage } from './landing/LandingPage';
 
