@@ -29,7 +29,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
+    }).catch(() => {
+      // If Supabase fails, still stop loading
+      setIsLoading(false);
     });
+
+    // Fallback: ensure loading stops after 3 seconds even if Supabase is not configured
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
 
     // Listen for auth changes
     const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event, session) => {
@@ -38,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }) ?? { data: { subscription: null } };
 
     return () => {
+      clearTimeout(timeout);
       subscription?.unsubscribe();
     };
   }, []);
