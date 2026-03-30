@@ -1,0 +1,11 @@
+# Ignore subdirectories that have their own package.json
+# to prevent Vercel from trying to build them as monorepo packages
+
+FoundryAi-Landing-page-design/
+radar-service/
+node_modules/
+.github/
+tier1_section.md
+landing-page-design-prompt.md
+system-design-prompts-part1.md
+system-design-prompts-part2.md
