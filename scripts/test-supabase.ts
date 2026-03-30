@@ -1,4 +1,8 @@
+import { config } from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
+
+// Load environment variables from .env.local
+config({ path: '.env.local' });
 
 async function testSupabaseConnection() {
   console.log('🔍 Testing Supabase Connection...\n');
@@ -20,20 +24,20 @@ async function testSupabaseConnection() {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   try {
-    // Test connection
-    const { data, error } = await supabase.from('profiles').select('count');
+    // Test connection - use foundryai_ prefixed table
+    const { data, error } = await supabase.from('foundryai_profiles').select('count');
     
     if (error) {
-      if (error.message.includes('does not exist')) {
+      if (error.message.includes('does not exist') || error.message.includes('Could not find the table')) {
         console.log('✅ Connection successful!');
-        console.log('⚠️  Table "profiles" does not exist yet (run migrations)');
+        console.log('⚠️  Table "foundryai_profiles" does not exist yet (run migrations)');
       } else {
         console.error('❌ Connection failed:', error.message);
         process.exit(1);
       }
     } else {
       console.log('✅ Supabase connection successful!');
-      console.log('✅ Can query database');
+      console.log('✅ FoundryAI schema exists');
     }
 
     // Test auth
