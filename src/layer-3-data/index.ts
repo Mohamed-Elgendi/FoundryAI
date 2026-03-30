@@ -11,4 +11,3 @@ export * from './repositories/revenue-repository';
 export * from './repositories/template-repository';
 export * from './cache/cache-manager';
 export * from './data-layer-service';
-export * from './realtime';

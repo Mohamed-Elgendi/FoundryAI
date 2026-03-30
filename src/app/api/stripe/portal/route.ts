@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
-import { createSupabaseClient } from '@/layer-3-data/storage/createSupabaseClient()-client';
+import { createSupabaseClient } from '@/layer-3-data/storage/createSupabaseClient';
 
 export async function POST(request: Request) {
   try {
