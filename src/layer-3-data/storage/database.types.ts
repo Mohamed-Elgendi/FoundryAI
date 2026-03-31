@@ -225,6 +225,41 @@ export interface Database {
           updated_at?: string;
         };
       };
+      users: {
+        Row: {
+          id: string;
+          email: string;
+          subscription_tier: string | null;
+          subscription_status: string | null;
+          stripe_customer_id: string | null;
+          subscription_period_start: string | null;
+          subscription_period_end: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          subscription_tier?: string | null;
+          subscription_status?: string | null;
+          stripe_customer_id?: string | null;
+          subscription_period_start?: string | null;
+          subscription_period_end?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          subscription_tier?: string | null;
+          subscription_status?: string | null;
+          stripe_customer_id?: string | null;
+          subscription_period_start?: string | null;
+          subscription_period_end?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
     };
     Views: {
       [_ in never]: never;
