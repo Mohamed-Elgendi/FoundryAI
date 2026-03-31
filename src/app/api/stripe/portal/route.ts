@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
 import { createSupabaseClient } from '@/layer-3-data/storage/supabase-client';
 
+interface User {
+  stripe_customer_id: string | null;
+}
+
 export async function POST(request: Request) {
   try {
     if (!stripe) {
@@ -25,7 +29,7 @@ export async function POST(request: Request) {
       ?.from('users')
       .select('stripe_customer_id')
       .eq('id', userId)
-      .single();
+      .single<User>();
 
     if (error || !user?.stripe_customer_id) {
       return NextResponse.json(
