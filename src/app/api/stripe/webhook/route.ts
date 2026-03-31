@@ -58,7 +58,7 @@ export async function POST(request: Request) {
 
             await createSupabaseClient()
               .from('users')
-              .update(updateData)
+              .update(updateData as any)
               .eq('id', userId);
           }
         }
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
 
           await createSupabaseClient()
             .from('users')
-            .update(updateData)
+            .update(updateData as any)
             .eq('stripe_customer_id', customerId);
         }
         break;
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
 
           await createSupabaseClient()
             .from('users')
-            .update(updateData)
+            .update(updateData as any)
             .eq('stripe_customer_id', customerId);
         }
         break;
