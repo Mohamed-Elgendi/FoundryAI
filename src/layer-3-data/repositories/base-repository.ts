@@ -101,10 +101,10 @@ export abstract class BaseRepository<T extends keyof Tables> implements Reposito
 
   async create(data: Tables[T]['Insert']): Promise<Tables[T]['Row']> {
     const { data: result, error } = await (this.client
-      .from(this.table as string)
-      .insert(data as Record<string, unknown>)
+      .from(this.table as string) as any)
+      .insert(data)
       .select()
-      .single() as any);
+      .single();
 
     if (error) {
       this.handleError(error, 'create');
@@ -122,11 +122,11 @@ export abstract class BaseRepository<T extends keyof Tables> implements Reposito
 
   async update(id: string, data: Tables[T]['Update']): Promise<Tables[T]['Row']> {
     const { data: result, error } = await (this.client
-      .from(this.table as string)
-      .update(data as Record<string, unknown>)
+      .from(this.table as string) as any)
+      .update(data)
       .eq('id', id)
       .select()
-      .single() as any);
+      .single();
 
     if (error) {
       this.handleError(error, 'update');

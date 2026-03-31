@@ -7,7 +7,7 @@ import { FoundryAIOutput } from '@/types';
 import { AIService, PlanService } from './services-layer';
 import { SecurityLayer, Permission } from './security-layer';
 import { FeedbackLayer, AnalyticsEventType } from './feedback-layer';
-import { AIProvider } from '@/lib/ai/ai-router';
+import { AIProvider } from '@/layer-2-ai/router/ai-types';
 
 // Business logic workflows
 export class LogicLayer {

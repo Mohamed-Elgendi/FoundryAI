@@ -8,7 +8,7 @@
 import { safeLogError, safeExecuteAsync } from '@/lib/utils/logger';
 import { withRetry, withRetryStrategy } from '@/lib/utils/retry';
 import { CircuitBreaker, apiCircuitBreakers } from '@/lib/utils/circuit-breaker';
-import { globalEventBus } from './logic-layer';
+import { globalEventBus } from '@/layer-3-data/repositories/logic-layer';
 
 // ==========================================
 // SERVICE INTERFACES

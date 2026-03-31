@@ -68,11 +68,11 @@ function PlansContent() {
     try {
       setIsLoading(true);
 
-      if (getSupabaseBrowserClient()) {
-        const { data, error } = await getSupabaseBrowserClient()
-          .from('plans')
+      if (getSupabaseBrowserClient() && user?.id) {
+        const { data, error } = await (getSupabaseBrowserClient()
+          .from('plans') as any)
           .select('*')
-          .eq('user_id', user?.id)
+          .eq('user_id', user.id)
           .order('updated_at', { ascending: false });
 
         if (error) {
@@ -110,12 +110,12 @@ function PlansContent() {
     try {
       setDeleteLoading(planId);
 
-      if (getSupabaseBrowserClient()) {
-        const { error } = await getSupabaseBrowserClient()
-          .from('plans')
+      if (getSupabaseBrowserClient() && user?.id) {
+        const { error } = await (getSupabaseBrowserClient()
+          .from('plans') as any)
           .delete()
           .eq('id', planId)
-          .eq('user_id', user?.id);
+          .eq('user_id', user.id);
 
         if (error) {
           console.error('Error deleting plan:', error);

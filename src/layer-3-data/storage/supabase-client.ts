@@ -71,13 +71,13 @@ export async function storeFeedback(data: {
   rating?: number;
 }): Promise<{ success: boolean; error?: string }> {
   const supabase = createSupabaseClient();
-  const { error } = await supabase.from('feedback').insert({
+  const { error } = await ((supabase.from('feedback') as any).insert({
     user_id: data.userId,
     type: data.type,
     message: data.message,
     rating: data.rating,
     created_at: new Date().toISOString(),
-  });
+  }));
 
   if (error) {
     console.error('Error storing feedback:', error);
@@ -96,9 +96,9 @@ export async function getFeedbackStats(): Promise<{
   averageRating: number;
 }> {
   const supabase = createSupabaseClient();
-  const { data, error } = await supabase
+  const { data, error } = await (supabase
     .from('feedback')
-    .select('type, rating');
+    .select('type, rating') as any);
 
   if (error) {
     console.error('Error getting feedback stats:', error);
@@ -110,7 +110,7 @@ export async function getFeedbackStats(): Promise<{
   let ratingSum = 0;
   let ratingCount = 0;
 
-  data?.forEach((item) => {
+  data?.forEach((item: { type: string; rating?: number }) => {
     byType[item.type] = (byType[item.type] || 0) + 1;
     if (item.rating) {
       ratingSum += item.rating;
@@ -140,12 +140,12 @@ export async function getSuccessfulPatterns(limit: number = 50): Promise<{
   error?: string;
 }> {
   const supabase = createSupabaseClient();
-  const { data, error } = await supabase
+  const { data, error } = await (supabase
     .from('ai_interactions')
     .select('id, type, prompt, response, rating, created_at')
     .eq('successful', true)
     .order('rating', { ascending: false })
-    .limit(limit);
+    .limit(limit) as any);
 
   if (error) {
     console.error('Error getting successful patterns:', error);
@@ -165,11 +165,11 @@ export async function checkExpiredStatus(userId: string): Promise<{
   error?: string;
 }> {
   const supabase = createSupabaseClient();
-  const { data, error } = await supabase
+  const { data, error } = await (supabase
     .from('users')
     .select('subscription_status, subscription_period_end')
     .eq('id', userId)
-    .single();
+    .single() as any);
 
   if (error) {
     console.error('Error checking subscription status:', error);
@@ -189,13 +189,13 @@ export async function checkExpiredStatus(userId: string): Promise<{
   
   // If expired and status is still active, update it
   if (isExpired && data.subscription_status === 'active') {
-    await supabase
-      .from('users')
+    await ((supabase
+      .from('users') as any)
       .update({ 
         subscription_status: 'expired',
         updated_at: new Date().toISOString()
-      } as any)
-      .eq('id', userId);
+      })
+      .eq('id', userId));
   }
 
   return {

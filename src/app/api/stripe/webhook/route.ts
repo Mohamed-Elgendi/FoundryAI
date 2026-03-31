@@ -50,15 +50,15 @@ export async function POST(request: Request) {
             : null;
 
           if (customerId) {
-            await client
-              .from('users')
+            await (client
+              .from('users') as any)
               .update({
                 subscription_tier: tier,
                 subscription_status: 'active',
                 stripe_customer_id: customerId,
                 subscription_period_start: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
-              } as any)
+              })
               .eq('id', userId);
           }
         }
@@ -70,12 +70,12 @@ export async function POST(request: Request) {
         const customerId = invoice.customer as string;
         
         if (client) {
-          await client
-            .from('users')
+          await (client
+            .from('users') as any)
             .update({
               subscription_status: 'active',
               updated_at: new Date().toISOString(),
-            } as any)
+            })
             .eq('stripe_customer_id', customerId);
         }
         break;
@@ -86,13 +86,13 @@ export async function POST(request: Request) {
         const customerId = subscription.customer as string;
 
         if (client) {
-          await client
-            .from('users')
+          await (client
+            .from('users') as any)
             .update({
               subscription_tier: 'free',
               subscription_status: 'canceled',
               updated_at: new Date().toISOString(),
-            } as any)
+            })
             .eq('stripe_customer_id', customerId);
         }
         break;

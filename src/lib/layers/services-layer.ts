@@ -4,7 +4,8 @@
  */
 
 import { FoundryAIOutput } from '@/types';
-import { processWithAI, AIProvider } from '@/lib/ai/ai-router';
+import { processWithAI } from '@/layer-2-ai/router/ai-router';
+import { AIProvider } from '@/layer-2-ai/router/ai-types';
 import { buildMasterPrompt } from '@/lib/engines/master-prompt';
 import { Database } from './data-layer';
 import { SecurityLayer, Permission } from './security-layer';

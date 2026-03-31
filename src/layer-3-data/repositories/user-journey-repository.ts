@@ -92,7 +92,8 @@ export class UserJourneyRepository extends BaseRepository<'foundryai_user_journe
    */
   async updateMomentumScores(userId: string, scores: Record<string, number>): Promise<UserJourney> {
     const journey = await this.getOrCreate(userId);
-    const updatedScores = { ...(journey.momentum_scores || {}), ...scores };
+    const currentScores = (journey.momentum_scores || {}) as Record<string, number>;
+    const updatedScores = { ...currentScores, ...scores };
     return this.update(journey.id, { momentum_scores: updatedScores });
   }
 
@@ -101,8 +102,8 @@ export class UserJourneyRepository extends BaseRepository<'foundryai_user_journe
    */
   async addBrainDump(userId: string, dump: { title: string; content: string; date: string }): Promise<UserJourney> {
     const journey = await this.getOrCreate(userId);
-    const dumps = [...(journey.brain_dumps as Array<Record<string, unknown>> || []), dump];
-    return this.update(journey.id, { brain_dumps: dumps });
+    const dumps = [...((journey.brain_dumps as unknown as Array<Record<string, unknown>>) || []), dump as Record<string, unknown>];
+    return this.update(journey.id, { brain_dumps: dumps as unknown as never });
   }
 
   /**

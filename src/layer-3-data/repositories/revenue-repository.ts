@@ -59,7 +59,7 @@ export class RevenueRepository extends BaseRepository<'foundryai_revenue'> {
       this.handleError(error, 'getTotalRevenue');
     }
 
-    return (data || []).reduce((sum, r) => sum + (r.amount || 0), 0);
+    return (data || []).reduce((sum, r: { amount?: number }) => sum + (r.amount || 0), 0);
   }
 
   /**
@@ -127,7 +127,7 @@ export class RevenueRepository extends BaseRepository<'foundryai_revenue'> {
     const revenues = data || [];
     const monthlyMap = new Map<string, number>();
 
-    revenues.forEach(r => {
+    revenues.forEach((r: { date: string; amount: number }) => {
       const month = r.date.substring(0, 7); // YYYY-MM
       monthlyMap.set(month, (monthlyMap.get(month) || 0) + r.amount);
     });
