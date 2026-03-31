@@ -154,3 +154,53 @@ export async function getSuccessfulPatterns(limit: number = 50): Promise<{
 
   return { patterns: data || [] };
 }
+
+/**
+ * Check if a user's subscription has expired
+ */
+export async function checkExpiredStatus(userId: string): Promise<{
+  expired: boolean;
+  subscription_status?: string;
+  subscription_period_end?: string;
+  error?: string;
+}> {
+  const supabase = createSupabaseClient();
+  const { data, error } = await supabase
+    .from('users')
+    .select('subscription_status, subscription_period_end')
+    .eq('id', userId)
+    .single();
+
+  if (error) {
+    console.error('Error checking subscription status:', error);
+    return { expired: false, error: error.message };
+  }
+
+  if (!data) {
+    return { expired: false, error: 'User not found' };
+  }
+
+  const now = new Date();
+  const periodEnd = data.subscription_period_end 
+    ? new Date(data.subscription_period_end) 
+    : null;
+  
+  const isExpired = periodEnd ? now > periodEnd : false;
+  
+  // If expired and status is still active, update it
+  if (isExpired && data.subscription_status === 'active') {
+    await supabase
+      .from('users')
+      .update({ 
+        subscription_status: 'expired',
+        updated_at: new Date().toISOString()
+      } as any)
+      .eq('id', userId);
+  }
+
+  return {
+    expired: isExpired,
+    subscription_status: data.subscription_status,
+    subscription_period_end: data.subscription_period_end,
+  };
+}
