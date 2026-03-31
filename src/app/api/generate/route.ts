@@ -17,9 +17,10 @@ export async function POST(request: Request) {
     const selectedProvider: AIProvider = provider || getDefaultProvider();
     console.log('[Generate API] Using provider:', selectedProvider);
 
-    const patterns = await getSuccessfulPatterns(10);
+    const result = await getSuccessfulPatterns(10);
+    const patterns = result.patterns;
     const patternHints = patterns.length > 0
-      ? `\n\n## SUCCESSFUL PATTERNS TO CONSIDER\n${patterns.map(p => `- Input type: ${p.inputPattern}`).join('\n')}`
+      ? `\n\n## SUCCESSFUL PATTERNS TO CONSIDER\n${patterns.map(p => `- Input type: ${p.type}`).join('\n')}`
       : '';
 
     const prompt = buildMasterPrompt(userInput) + patternHints;

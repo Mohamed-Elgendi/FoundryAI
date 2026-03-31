@@ -20,7 +20,8 @@ export async function POST(request: Request) {
     };
 
     // Get patterns for enhancement
-    const patterns = await getSuccessfulPatterns(10);
+    const result = await getSuccessfulPatterns(10);
+    const patterns = result.patterns;
     
     const prompt = buildRefinementPrompt(context);
     

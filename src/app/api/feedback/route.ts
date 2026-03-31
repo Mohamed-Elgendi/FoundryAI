@@ -21,7 +21,13 @@ export async function POST(request: Request) {
       userAgent: request.headers.get('user-agent') || undefined,
     };
 
-    await storeFeedback(feedback);
+    // Transform FeedbackData to match storeFeedback requirements
+    await storeFeedback({
+      userId: 'anonymous', // or extract from auth context if available
+      type: 'general',
+      message: `${userInput}: ${output}`,
+      rating: isHelpful ? 5 : 1,
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
