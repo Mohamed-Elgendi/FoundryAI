@@ -59,7 +59,7 @@ export async function POST(request: Request) {
             
             await createSupabaseClient()
               .from('users')
-              .update(updateData)
+              .update(updateData as any)
               .eq('id', userId);
           }
         }
