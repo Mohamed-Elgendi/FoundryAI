@@ -5,8 +5,6 @@
  * XSS prevention, CSRF protection, input sanitization, rate limiting
  */
 
-import { safeLogError } from '@/lib/utils/logger';
-
 // ==========================================
 // XSS PREVENTION
 // ==========================================

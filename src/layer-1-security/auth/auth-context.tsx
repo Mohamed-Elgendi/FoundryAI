@@ -1,8 +1,31 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { supabase } from '@/layer-3-data/storage/supabase-client';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { User, Session } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+let supabase: SupabaseClient | null = null;
+
+if (typeof window !== 'undefined') {
+  if (supabaseUrl && supabaseAnonKey) {
+    supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+      },
+    });
+    console.log('[Auth] Supabase client initialized successfully');
+  } else {
+    console.error('[Auth] Missing Supabase environment variables:', {
+      url: supabaseUrl ? 'set' : 'missing',
+      key: supabaseAnonKey ? 'set' : 'missing'
+    });
+  }
+}
 
 interface AuthContextType {
   user: User | null;

@@ -66,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchProfile = async (userId: string) => {
@@ -84,17 +85,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error };
+    try {
+      console.log('[Auth] Attempting sign in with:', email);
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        console.error('[Auth] Sign in error:', error.message);
+      } else {
+        console.log('[Auth] Sign in successful');
+      }
+      return { error };
+    } catch (err) {
+      console.error('[Auth] Sign in exception:', err);
+      return { error: err instanceof Error ? err : new Error('Unknown error during sign in') };
+    }
   };
 
   const signUp = async (email: string, password: string, metadata?: Record<string, unknown>) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: metadata }
-    });
-    return { error, user: data.user };
+    try {
+      console.log('[Auth] Attempting sign up with:', email);
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: metadata }
+      });
+      if (error) {
+        console.error('[Auth] Sign up error:', error.message);
+      } else {
+        console.log('[Auth] Sign up successful, user:', data.user?.id);
+      }
+      return { error, user: data.user };
+    } catch (err) {
+      console.error('[Auth] Sign up exception:', err);
+      return { error: err instanceof Error ? err : new Error('Unknown error during sign up'), user: null };
+    }
   };
 
   const signOut = async () => {
@@ -105,13 +128,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signInWithOAuth = async (provider: 'google' | 'github') => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`
+    try {
+      console.log('[Auth] Initiating OAuth sign in with:', provider);
+      const redirectTo = `${window.location.origin}/auth/callback`;
+      console.log('[Auth] OAuth redirect URL:', redirectTo);
+      
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo }
+      });
+      
+      if (error) {
+        console.error('[Auth] OAuth error:', error.message);
+      } else {
+        console.log('[Auth] OAuth initiated successfully');
       }
-    });
-    return { error };
+      
+      return { error };
+    } catch (err) {
+      console.error('[Auth] OAuth exception:', err);
+      return { error: err instanceof Error ? err : new Error('Unknown error during OAuth') };
+    }
   };
 
   const resetPassword = async (email: string) => {
