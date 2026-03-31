@@ -260,6 +260,126 @@ export interface Database {
           updated_at?: string;
         };
       };
+      ai_response_cache: {
+        Row: {
+          id: string;
+          prompt_hash: string;
+          response: string;
+          provider: string;
+          model: string;
+          access_count: number;
+          created_at: string;
+          last_accessed: string;
+        };
+        Insert: {
+          id?: string;
+          prompt_hash: string;
+          response: string;
+          provider: string;
+          model: string;
+          access_count?: number;
+          created_at?: string;
+          last_accessed?: string;
+        };
+        Update: {
+          id?: string;
+          prompt_hash?: string;
+          response?: string;
+          provider?: string;
+          model?: string;
+          access_count?: number;
+          created_at?: string;
+          last_accessed?: string;
+        };
+      };
+      plans: {
+        Row: {
+          id: string;
+          user_id: string;
+          title: string;
+          business_idea: string;
+          archetype: string;
+          canvas: Json;
+          market_analysis: Json;
+          gtm_strategy: Json;
+          financial_projections: Json;
+          action_items: Json;
+          ai_provider: string | null;
+          generation_time_ms: number | null;
+          version: string;
+          status: 'draft' | 'published' | 'archived';
+          is_favorite: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          title: string;
+          business_idea: string;
+          archetype: string;
+          canvas?: Json;
+          market_analysis?: Json;
+          gtm_strategy?: Json;
+          financial_projections?: Json;
+          action_items?: Json;
+          ai_provider?: string | null;
+          generation_time_ms?: number | null;
+          version?: string;
+          status?: 'draft' | 'published' | 'archived';
+          is_favorite?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          title?: string;
+          business_idea?: string;
+          archetype?: string;
+          canvas?: Json;
+          market_analysis?: Json;
+          gtm_strategy?: Json;
+          financial_projections?: Json;
+          action_items?: Json;
+          ai_provider?: string | null;
+          generation_time_ms?: number | null;
+          version?: string;
+          status?: 'draft' | 'published' | 'archived';
+          is_favorite?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      user_opportunities: {
+        Row: {
+          id: string;
+          user_id: string;
+          opportunity_id: string;
+          status: 'saved' | 'in_progress' | 'completed' | 'dismissed';
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          opportunity_id: string;
+          status?: 'saved' | 'in_progress' | 'completed' | 'dismissed';
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          opportunity_id?: string;
+          status?: 'saved' | 'in_progress' | 'completed' | 'dismissed';
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
     };
     Views: {
       [_ in never]: never;
