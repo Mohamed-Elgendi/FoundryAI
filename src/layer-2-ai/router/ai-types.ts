@@ -36,7 +36,8 @@ export interface AIRequest {
 }
 
 export interface AIResponse {
-  text: string;
+  text?: string;
+  error?: string;
   provider: AIProvider;
   model: string;
   usage?: {
@@ -46,6 +47,10 @@ export interface AIResponse {
   };
   cost?: number;
   latency: number;
+  rateLimitError?: boolean;
+  quotaExceeded?: boolean;
+  fallbackUsed?: boolean;
+  suggestedAction?: string;
 }
 
 export const PROVIDER_INFO: ProviderInfo[] = [

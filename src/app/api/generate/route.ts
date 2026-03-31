@@ -26,16 +26,16 @@ export async function POST(request: Request) {
     const prompt = buildMasterPrompt(userInput) + patternHints;
     console.log('[Generate API] Prompt length:', prompt.length);
     
-    const aiResponse = await processWithAI({ prompt, preferredProvider: selectedProvider });
+    const aiResponse = await processWithAI({ prompt, provider: selectedProvider });
     console.log('[Generate API] AI response:', { 
-      hasContent: !!aiResponse.content, 
+      hasContent: !!aiResponse.text, 
       hasError: !!aiResponse.error,
       provider: aiResponse.provider,
       fallbackUsed: aiResponse.fallbackUsed,
-      contentLength: aiResponse.content?.length
+      contentLength: aiResponse.text?.length
     });
 
-    if (aiResponse.error || !aiResponse.content) {
+    if (aiResponse.error || !aiResponse.text) {
       console.error('[Generate API] AI error:', aiResponse.error);
       return errors.aiError(
         aiResponse.error || 'Failed to generate output',

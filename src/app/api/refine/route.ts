@@ -27,9 +27,9 @@ export async function POST(request: Request) {
     
     // Use selected provider or default for refinement
     const selectedProvider = provider || getDefaultProvider();
-    const aiResponse = await processWithAI({ prompt, preferredProvider: selectedProvider });
+    const aiResponse = await processWithAI({ prompt, provider: selectedProvider });
 
-    if (aiResponse.error || !aiResponse.content) {
+    if (aiResponse.error || !aiResponse.text) {
       return errors.aiError(
         aiResponse.error || 'Failed to refine output',
         aiResponse.suggestedAction,
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const refinedOutput = parseRefinementResponse(aiResponse.content);
+    const refinedOutput = parseRefinementResponse(aiResponse.text);
 
     if (!refinedOutput) {
       return errors.internal('Failed to parse refined output', 'The AI refinement response was malformed. Please try again.');
