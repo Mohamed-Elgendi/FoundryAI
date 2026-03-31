@@ -206,13 +206,19 @@ const customerId = typeof session.customer === 'string'
   : null;
 ```
 
-2. **Use `as any` for Supabase updates:**
+2. **Use `as const` for Supabase updates (FINAL FIX):**
 ```typescript
 await createSupabaseClient()
   .from('users')
-  .update({ /* ... */ } as any)
+  .update({
+    subscription_tier: tier,
+    subscription_status: 'active',
+    // ... other fields
+  } as const)  // ← Use 'as const' not 'as any'
   .eq('id', userId);
 ```
+
+**Key Insight:** The `as const` assertion tells TypeScript to treat objects as immutable constants with specific literal types, which helps Supabase's type system properly validate column names and types. This is more type-safe than `as any`.
 
 3. **Add UserUpdate interface (later removed in favor of inline objects):**
 ```typescript
