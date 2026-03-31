@@ -2,6 +2,14 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
 import { createSupabaseClient } from '@/layer-3-data/storage/supabase-client';
 
+type UserUpdate = {
+  subscription_tier?: string;
+  subscription_status?: string;
+  stripe_customer_id?: string;
+  subscription_period_start?: string;
+  updated_at?: string;
+};
+
 export async function POST(request: Request) {
   if (!stripe) {
     return NextResponse.json(
@@ -40,15 +48,17 @@ export async function POST(request: Request) {
             : null;
 
           if (customerId) {
+            const updateData: UserUpdate = {
+              subscription_tier: tier,
+              subscription_status: 'active',
+              stripe_customer_id: customerId,
+              subscription_period_start: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            };
+
             await createSupabaseClient()
               .from('users')
-              .update({
-                subscription_tier: tier,
-                subscription_status: 'active',
-                stripe_customer_id: customerId,
-                subscription_period_start: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-              })
+              .update(updateData)
               .eq('id', userId);
           }
         }
@@ -60,12 +70,14 @@ export async function POST(request: Request) {
         const customerId = invoice.customer as string;
         
         if (createSupabaseClient()) {
+          const updateData: UserUpdate = {
+            subscription_status: 'active',
+            updated_at: new Date().toISOString(),
+          };
+
           await createSupabaseClient()
             .from('users')
-            .update({
-              subscription_status: 'active',
-              updated_at: new Date().toISOString(),
-            })
+            .update(updateData)
             .eq('stripe_customer_id', customerId);
         }
         break;
@@ -76,13 +88,15 @@ export async function POST(request: Request) {
         const customerId = subscription.customer as string;
 
         if (createSupabaseClient()) {
+          const updateData: UserUpdate = {
+            subscription_tier: 'free',
+            subscription_status: 'canceled',
+            updated_at: new Date().toISOString(),
+          };
+
           await createSupabaseClient()
             .from('users')
-            .update({
-              subscription_tier: 'free',
-              subscription_status: 'canceled',
-              updated_at: new Date().toISOString(),
-            })
+            .update(updateData)
             .eq('stripe_customer_id', customerId);
         }
         break;

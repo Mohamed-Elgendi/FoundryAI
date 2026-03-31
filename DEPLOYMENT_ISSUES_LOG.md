@@ -206,22 +206,32 @@ const customerId = typeof session.customer === 'string'
   : null;
 ```
 
-2. **Remove type casts from Supabase updates (FINAL FIX):**
+2. **Use typed updateData objects (FINAL FIX):**
 ```typescript
+type UserUpdate = {
+  subscription_tier?: string;
+  subscription_status?: string;
+  stripe_customer_id?: string;
+  subscription_period_start?: string;
+  updated_at?: string;
+};
+
+// Create typed update data before passing to .update()
+const updateData: UserUpdate = {
+  subscription_tier: tier,
+  subscription_status: 'active',
+  stripe_customer_id: customerId,
+  subscription_period_start: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+};
+
 await createSupabaseClient()
   .from('users')
-  .update({
-    subscription_tier: tier,
-    subscription_status: 'active',
-    // ... other fields
-  })  // ← No cast needed, let Supabase infer types
+  .update(updateData)
   .eq('id', userId);
 ```
 
-**Key Insight:** Neither `as any` nor `as const` work reliably with Supabase's type system. The best approach is to:
-1. Define the `users` table properly in `database.types.ts`
-2. Pass update objects without any type casts
-3. Let TypeScript infer types from the Database interface
+**Key Insight:** Creating a properly typed intermediate variable (`updateData: UserUpdate`) gives TypeScript the type information it needs to validate the update operation against the Supabase schema.
 
 3. **Add UserUpdate interface (later removed in favor of inline objects):**
 ```typescript
