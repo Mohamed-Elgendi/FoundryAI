@@ -35,16 +35,22 @@ export async function POST(request: Request) {
         const tier = session.metadata?.tier;
 
         if (userId && createSupabaseClient()) {
-          // Update user's subscription in database
-          await createSupabaseClient()
-            .from('users')
-            .update({
-              subscription_tier: tier,
-              subscription_status: 'active',
-              stripe_customer_id: session.customer,
-              subscription_period_start: new Date().toISOString(),
-            })
-            .eq('id', userId);
+          // Extract customer ID - ensure it's a string
+          const customerId = typeof session.customer === 'string' 
+            ? session.customer 
+            : null;
+
+          if (customerId && tier) {
+            await createSupabaseClient()
+              .from('users')
+              .update({
+                subscription_tier: tier,
+                subscription_status: 'active',
+                stripe_customer_id: customerId,
+                subscription_period_start: new Date().toISOString(),
+              })
+              .eq('id', userId);
+          }
         }
         break;
       }
