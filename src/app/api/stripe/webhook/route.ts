@@ -36,13 +36,15 @@ export async function POST(request: Request) {
   }
 
   try {
+    const client = createSupabaseClient();
+    
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
         const userId = session.metadata?.userId as string | undefined;
         const tier = session.metadata?.tier as string | undefined;
 
-        if (userId && tier && createSupabaseClient()) {
+        if (userId && tier && client) {
           const customerId = typeof session.customer === 'string' 
             ? session.customer 
             : null;
@@ -56,9 +58,9 @@ export async function POST(request: Request) {
               updated_at: new Date().toISOString(),
             };
 
-            await createSupabaseClient()
+            await client
               .from('users')
-              .update(updateData)
+              .update(updateData as Record<string, unknown>)
               .eq('id', userId);
           }
         }
@@ -69,15 +71,15 @@ export async function POST(request: Request) {
         const invoice = event.data.object;
         const customerId = invoice.customer as string;
         
-        if (createSupabaseClient()) {
+        if (client) {
           const updateData: UserUpdate = {
             subscription_status: 'active',
             updated_at: new Date().toISOString(),
           };
 
-          await createSupabaseClient()
+          await client
             .from('users')
-            .update(updateData)
+            .update(updateData as Record<string, unknown>)
             .eq('stripe_customer_id', customerId);
         }
         break;
@@ -87,16 +89,16 @@ export async function POST(request: Request) {
         const subscription = event.data.object;
         const customerId = subscription.customer as string;
 
-        if (createSupabaseClient()) {
+        if (client) {
           const updateData: UserUpdate = {
             subscription_tier: 'free',
             subscription_status: 'canceled',
             updated_at: new Date().toISOString(),
           };
 
-          await createSupabaseClient()
+          await client
             .from('users')
-            .update(updateData)
+            .update(updateData as Record<string, unknown>)
             .eq('stripe_customer_id', customerId);
         }
         break;
