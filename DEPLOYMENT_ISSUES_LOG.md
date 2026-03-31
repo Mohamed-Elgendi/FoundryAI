@@ -206,7 +206,7 @@ const customerId = typeof session.customer === 'string'
   : null;
 ```
 
-2. **Use `as const` for Supabase updates (FINAL FIX):**
+2. **Remove type casts from Supabase updates (FINAL FIX):**
 ```typescript
 await createSupabaseClient()
   .from('users')
@@ -214,11 +214,14 @@ await createSupabaseClient()
     subscription_tier: tier,
     subscription_status: 'active',
     // ... other fields
-  } as const)  // ← Use 'as const' not 'as any'
+  })  // ← No cast needed, let Supabase infer types
   .eq('id', userId);
 ```
 
-**Key Insight:** The `as const` assertion tells TypeScript to treat objects as immutable constants with specific literal types, which helps Supabase's type system properly validate column names and types. This is more type-safe than `as any`.
+**Key Insight:** Neither `as any` nor `as const` work reliably with Supabase's type system. The best approach is to:
+1. Define the `users` table properly in `database.types.ts`
+2. Pass update objects without any type casts
+3. Let TypeScript infer types from the Database interface
 
 3. **Add UserUpdate interface (later removed in favor of inline objects):**
 ```typescript
