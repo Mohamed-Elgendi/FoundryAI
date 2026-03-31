@@ -2,6 +2,13 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
 import { createSupabaseClient } from '@/layer-3-data/storage/supabase-client';
 
+interface UserUpdate {
+  subscription_tier?: string;
+  subscription_status?: string;
+  stripe_customer_id?: string;
+  subscription_period_start?: string;
+}
+
 export async function POST(request: Request) {
   if (!stripe) {
     return NextResponse.json(
@@ -41,14 +48,16 @@ export async function POST(request: Request) {
             : null;
 
           if (customerId && tier) {
+            const updateData: UserUpdate = {
+              subscription_tier: tier,
+              subscription_status: 'active',
+              stripe_customer_id: customerId,
+              subscription_period_start: new Date().toISOString(),
+            };
+            
             await createSupabaseClient()
               .from('users')
-              .update({
-                subscription_tier: tier,
-                subscription_status: 'active',
-                stripe_customer_id: customerId,
-                subscription_period_start: new Date().toISOString(),
-              } as any)
+              .update(updateData)
               .eq('id', userId);
           }
         }
@@ -60,12 +69,13 @@ export async function POST(request: Request) {
         const customerId = invoice.customer as string;
         
         if (createSupabaseClient()) {
-          // Update subscription status
+          const updateData: UserUpdate = {
+            subscription_status: 'active',
+          };
+          
           await createSupabaseClient()
             .from('users')
-            .update({
-              subscription_status: 'active',
-            } as any)
+            .update(updateData)
             .eq('stripe_customer_id', customerId);
         }
         break;
@@ -76,13 +86,14 @@ export async function POST(request: Request) {
         const customerId = subscription.customer as string;
 
         if (createSupabaseClient()) {
-          // Downgrade to free tier
+          const updateData: UserUpdate = {
+            subscription_tier: 'free',
+            subscription_status: 'canceled',
+          };
+          
           await createSupabaseClient()
             .from('users')
-            .update({
-              subscription_tier: 'free',
-              subscription_status: 'canceled',
-            } as any)
+            .update(updateData)
             .eq('stripe_customer_id', customerId);
         }
         break;
