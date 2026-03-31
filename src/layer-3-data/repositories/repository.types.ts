@@ -13,7 +13,7 @@ export interface Repository<T extends keyof Tables> {
   
   // Read operations
   findById(id: string): Promise<Tables[T]['Row'] | null>;
-  findAll(options?: QueryOptions<T>): Promise<Tables[T]['Row'][]>
+  findAll(options?: QueryOptions<T>): Promise<Tables[T]['Row'][]>;
   findOne(options: QueryOptions<T>): Promise<Tables[T]['Row'] | null>;
   
   // Write operations
@@ -42,7 +42,7 @@ export interface QueryOptions<T extends keyof Tables> {
 export class RepositoryError extends Error {
   constructor(
     message: string,
-    public code: 'NOT_FOUND' | 'CONFLICT' | 'VALIDATION' | 'DATABASE' | 'UNKNOWN',
+    public code: 'NOT_FOUND' | 'CONFLICT' | 'VALIDATION' | 'DATABASE' | 'UNKNOWN' | 'UNAUTHORIZED',
     public originalError?: unknown
   ) {
     super(message);

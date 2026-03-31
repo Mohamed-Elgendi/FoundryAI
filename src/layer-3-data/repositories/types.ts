@@ -16,7 +16,7 @@ export interface QueryOptions<T> {
 export class RepositoryError extends Error {
   constructor(
     message: string,
-    public code: 'NOT_FOUND' | 'CONFLICT' | 'VALIDATION' | 'DATABASE' | 'UNAUTHORIZED',
+    public code: 'NOT_FOUND' | 'CONFLICT' | 'VALIDATION' | 'DATABASE' | 'UNKNOWN' | 'UNAUTHORIZED',
     public originalError?: PostgrestError | unknown
   ) {
     super(message);
