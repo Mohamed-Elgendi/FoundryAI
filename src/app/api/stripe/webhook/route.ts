@@ -31,16 +31,15 @@ export async function POST(request: Request) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object;
-        const userId = session.metadata?.userId;
-        const tier = session.metadata?.tier;
+        const userId = session.metadata?.userId as string | undefined;
+        const tier = session.metadata?.tier as string | undefined;
 
-        if (userId && createSupabaseClient()) {
-          // Extract customer ID - ensure it's a string
+        if (userId && tier && createSupabaseClient()) {
           const customerId = typeof session.customer === 'string' 
             ? session.customer 
             : null;
 
-          if (customerId && tier) {
+          if (customerId) {
             await createSupabaseClient()
               .from('users')
               .update({
@@ -49,7 +48,7 @@ export async function POST(request: Request) {
                 stripe_customer_id: customerId,
                 subscription_period_start: new Date().toISOString(),
                 updated_at: new Date().toISOString(),
-              } as any)
+              })
               .eq('id', userId);
           }
         }
@@ -66,7 +65,7 @@ export async function POST(request: Request) {
             .update({
               subscription_status: 'active',
               updated_at: new Date().toISOString(),
-            } as any)
+            })
             .eq('stripe_customer_id', customerId);
         }
         break;
@@ -83,7 +82,7 @@ export async function POST(request: Request) {
               subscription_tier: 'free',
               subscription_status: 'canceled',
               updated_at: new Date().toISOString(),
-            } as any)
+            })
             .eq('stripe_customer_id', customerId);
         }
         break;
