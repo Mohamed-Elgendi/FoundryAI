@@ -48,7 +48,7 @@ export async function POST(request: Request) {
                 subscription_status: 'active',
                 stripe_customer_id: customerId,
                 subscription_period_start: new Date().toISOString(),
-              })
+              } as any)
               .eq('id', userId);
           }
         }
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
             .from('users')
             .update({
               subscription_status: 'active',
-            })
+            } as any)
             .eq('stripe_customer_id', customerId);
         }
         break;
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
             .update({
               subscription_tier: 'free',
               subscription_status: 'canceled',
-            })
+            } as any)
             .eq('stripe_customer_id', customerId);
         }
         break;
