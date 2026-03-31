@@ -56,8 +56,7 @@ export async function POST(request: Request) {
               updated_at: new Date().toISOString(),
             };
 
-            const supabase = createSupabaseClient() as any;
-            await supabase
+            await createSupabaseClient()
               .from('users')
               .update(updateData)
               .eq('id', userId);
@@ -76,8 +75,7 @@ export async function POST(request: Request) {
             updated_at: new Date().toISOString(),
           };
 
-          const supabase = createSupabaseClient() as any;
-          await supabase
+          await createSupabaseClient()
             .from('users')
             .update(updateData)
             .eq('stripe_customer_id', customerId);
@@ -96,8 +94,7 @@ export async function POST(request: Request) {
             updated_at: new Date().toISOString(),
           };
 
-          const supabase = createSupabaseClient() as any;
-          await supabase
+          await createSupabaseClient()
             .from('users')
             .update(updateData)
             .eq('stripe_customer_id', customerId);
