@@ -47,11 +47,11 @@ export abstract class BaseRepository<T extends keyof Tables> implements Reposito
   }
 
   async findById(id: string): Promise<Tables[T]['Row'] | null> {
-    const { data, error } = await this.client
-      .from(this.table)
+    const { data, error } = await (this.client
+      .from(this.table as string)
       .select('*')
       .eq('id', id)
-      .single();
+      .single() as any);
 
     if (error && error.code !== 'PGRST116') {
       this.handleError(error, 'findById');
@@ -61,7 +61,7 @@ export abstract class BaseRepository<T extends keyof Tables> implements Reposito
   }
 
   async findAll(options?: QueryOptions<T>): Promise<Tables[T]['Row'][]> {
-    let query = this.client.from(this.table).select('*');
+    let query = (this.client.from(this.table as string).select('*') as any);
 
     if (options?.filter) {
       Object.entries(options.filter).forEach(([key, value]) => {
@@ -100,11 +100,11 @@ export abstract class BaseRepository<T extends keyof Tables> implements Reposito
   }
 
   async create(data: Tables[T]['Insert']): Promise<Tables[T]['Row']> {
-    const { data: result, error } = await this.client
-      .from(this.table)
+    const { data: result, error } = await (this.client
+      .from(this.table as string)
       .insert(data as Record<string, unknown>)
       .select()
-      .single();
+      .single() as any);
 
     if (error) {
       this.handleError(error, 'create');
@@ -121,12 +121,12 @@ export abstract class BaseRepository<T extends keyof Tables> implements Reposito
   }
 
   async update(id: string, data: Tables[T]['Update']): Promise<Tables[T]['Row']> {
-    const { data: result, error } = await this.client
-      .from(this.table)
+    const { data: result, error } = await (this.client
+      .from(this.table as string)
       .update(data as Record<string, unknown>)
       .eq('id', id)
       .select()
-      .single();
+      .single() as any);
 
     if (error) {
       this.handleError(error, 'update');
@@ -143,10 +143,10 @@ export abstract class BaseRepository<T extends keyof Tables> implements Reposito
   }
 
   async delete(id: string): Promise<void> {
-    const { error } = await this.client
-      .from(this.table)
+    const { error } = await (this.client
+      .from(this.table as string)
       .delete()
-      .eq('id', id);
+      .eq('id', id) as any);
 
     if (error) {
       this.handleError(error, 'delete');
@@ -154,7 +154,7 @@ export abstract class BaseRepository<T extends keyof Tables> implements Reposito
   }
 
   async count(options?: QueryOptions<T>): Promise<number> {
-    let query = this.client.from(this.table).select('*', { count: 'exact', head: true });
+    let query = (this.client.from(this.table as string).select('*', { count: 'exact', head: true }) as any);
 
     if (options?.filter) {
       Object.entries(options.filter).forEach(([key, value]) => {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-// import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
+import { DashboardProvider, DashboardShell } from '@/components/dashboard';
 import { useAuth } from '@/layer-1-security/auth';
 import { getSupabaseBrowserClient } from '@/layer-3-data/storage/supabase-client';
 import { FoundryAIOutput } from '@/types';

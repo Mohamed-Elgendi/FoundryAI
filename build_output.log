@@ -1,0 +1,24 @@
+
+> my-app@0.1.0 build
+> next build
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 38.5s
+  Running TypeScript ...
+Failed to type check.
+
+./src/app/api/stripe/webhook/route.ts:63:23
+Type error: Argument of type 'Record<string, unknown>' is not assignable to parameter of type 'never'.
+
+  [90m61 |[0m             [36mawait[0m client
+  [90m62 |[0m               .[36mfrom[0m([32m'users'[0m)
+[31m[1m>[0m [90m63 |[0m               .update(updateData [36mas[0m [33mRecord[0m<string, unknown>)
+  [90m   |[0m                       [31m[1m^[0m
+  [90m64 |[0m               .eq([32m'id'[0m, userId);
+  [90m65 |[0m           }
+  [90m66 |[0m         }
+Next.js build worker exited with code: 1 and signal: null

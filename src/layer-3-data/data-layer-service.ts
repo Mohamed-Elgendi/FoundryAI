@@ -1,10 +1,10 @@
-import { createSupabaseClient, createServiceClient, getSupabaseBrowserClient } from '../storage/supabase-client';
-import { ProfileRepository } from '../repositories/profile-repository';
-import { UserJourneyRepository } from '../repositories/user-journey-repository';
-import { OpportunityRepository } from '../repositories/opportunity-repository';
-import { RevenueRepository } from '../repositories/revenue-repository';
-import { TemplateRepository } from '../repositories/template-repository';
-import { cacheManager } from '../cache/cache-manager';
+import { createSupabaseClient, createServiceClient, getSupabaseBrowserClient } from './storage/supabase-client';
+import { ProfileRepository } from './repositories/profile-repository';
+import { UserJourneyRepository } from './repositories/user-journey-repository';
+import { OpportunityRepository } from './repositories/opportunity-repository';
+import { RevenueRepository } from './repositories/revenue-repository';
+import { TemplateRepository } from './repositories/template-repository';
+import { cacheManager } from './cache/cache-manager';
 
 /**
  * Data Layer Service

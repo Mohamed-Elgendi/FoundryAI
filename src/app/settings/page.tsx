@@ -18,6 +18,12 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+interface UserData {
+  subscription_tier?: string;
+  subscription_status?: string;
+  created_at?: string;
+}
+
 interface UserProfile {
   email: string;
   subscriptionTier: string;
@@ -59,7 +65,7 @@ function SettingsContent() {
     const loadProfile = async () => {
       try {
         // Get user profile from Supabase
-        let userData = null;
+        let userData: UserData | null = null;
         let queryError = null;
 
         if (getSupabaseBrowserClient()) {
@@ -70,7 +76,7 @@ function SettingsContent() {
             .single();
           
           if (result) {
-            userData = result.data;
+            userData = result.data as UserData | null;
             queryError = result.error;
           }
         }

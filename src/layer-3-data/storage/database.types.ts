@@ -272,3 +272,6 @@ export interface Database {
     };
   };
 }
+
+// Helper type for table access
+export type Tables = Database['public']['Tables'];

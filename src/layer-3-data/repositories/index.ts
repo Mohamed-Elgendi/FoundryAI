@@ -1,8 +1,4 @@
 // Repository pattern
-export * from './types';
-export * from './base';
-export * from './profile';
-export * from './user-journey';
 export * from './repository.types';
 export * from './base-repository';
 export * from './profile-repository';
