@@ -7,6 +7,7 @@ interface UserUpdate {
   subscription_status?: string;
   stripe_customer_id?: string;
   subscription_period_start?: string;
+  updated_at?: string;
 }
 
 export async function POST(request: Request) {
@@ -53,6 +54,7 @@ export async function POST(request: Request) {
               subscription_status: 'active',
               stripe_customer_id: customerId,
               subscription_period_start: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
             };
             
             await createSupabaseClient()
@@ -71,6 +73,7 @@ export async function POST(request: Request) {
         if (createSupabaseClient()) {
           const updateData: UserUpdate = {
             subscription_status: 'active',
+            updated_at: new Date().toISOString(),
           };
           
           await createSupabaseClient()
@@ -89,6 +92,7 @@ export async function POST(request: Request) {
           const updateData: UserUpdate = {
             subscription_tier: 'free',
             subscription_status: 'canceled',
+            updated_at: new Date().toISOString(),
           };
           
           await createSupabaseClient()
