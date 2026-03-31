@@ -6,7 +6,7 @@ import { POST as submitFeedback } from '@/app/api/feedback/route';
 // Mock dependencies
 jest.mock('@/layer-2-ai/router/ai-router', () => ({
   processWithAI: jest.fn(),
-  getDefaultProvider: jest.fn().mockReturnValue('groq'),
+  getDefaultProvider: jest.fn().mockReturnValue('groq-llama-3-3'),
   AIProvider: jest.fn(),
 }));
 
@@ -50,7 +50,7 @@ describe('API Routes - Integration Tests', () => {
 
       mockedProcessWithAI.mockResolvedValueOnce({
         text: JSON.stringify(mockOutput),
-        provider: 'groq',
+        provider: 'groq-llama-3-3',
         latencyMs: 1000,
       });
 
@@ -61,7 +61,7 @@ describe('API Routes - Integration Tests', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userInput: 'I want to start a test business',
-          provider: 'groq',
+          provider: 'groq-llama-3-3',
         }),
       });
 
@@ -71,7 +71,7 @@ describe('API Routes - Integration Tests', () => {
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
       expect(data.output).toEqual(mockOutput);
-      expect(data.provider).toBe('groq');
+      expect(data.provider).toBe('groq-llama-3-3');
     });
 
     it('should return 400 for invalid input', async () => {
@@ -93,7 +93,7 @@ describe('API Routes - Integration Tests', () => {
     it('should handle AI service errors', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
         text: '',
-        provider: 'groq',
+        provider: 'groq-llama-3-3',
         error: 'Service unavailable',
         suggestedAction: 'Please try again later',
       });
@@ -117,7 +117,7 @@ describe('API Routes - Integration Tests', () => {
     it('should handle malformed AI response', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
         text: 'Invalid JSON response',
-        provider: 'groq',
+        provider: 'groq-llama-3-3',
         latencyMs: 500,
       });
 
@@ -141,7 +141,7 @@ describe('API Routes - Integration Tests', () => {
     it('should handle rate limit errors', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
         text: '',
-        provider: 'groq',
+        provider: 'groq-llama-3-3',
         error: 'Rate limit exceeded',
         rateLimitError: true,
         suggestedAction: 'Please wait and try again',
@@ -165,7 +165,7 @@ describe('API Routes - Integration Tests', () => {
     it('should handle quota exceeded errors', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
         text: '',
-        provider: 'groq',
+        provider: 'groq-llama-3-3',
         error: 'Quota exceeded',
         quotaExceeded: true,
       });
@@ -200,7 +200,7 @@ describe('API Routes - Integration Tests', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userInput: 'Test business idea',
-          provider: 'groq',
+          provider: 'groq-llama-3-3',
         }),
       });
 
@@ -242,7 +242,7 @@ describe('API Routes - Integration Tests', () => {
 
       mockedProcessWithAI.mockResolvedValueOnce({
         text: JSON.stringify(mockRefinedOutput),
-        provider: 'groq',
+        provider: 'groq-llama-3-3',
         latencyMs: 800,
       });
 
@@ -255,7 +255,7 @@ describe('API Routes - Integration Tests', () => {
           originalIdea: 'Original business idea',
           currentPlan: { businessName: 'Original' },
           feedback: 'Make it more specific',
-          provider: 'groq',
+          provider: 'groq-llama-3-3',
         }),
       });
 
