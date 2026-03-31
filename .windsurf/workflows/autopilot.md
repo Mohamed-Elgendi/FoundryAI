@@ -86,7 +86,70 @@ Then ask: "Do you want to continue to the next step or stop?"
 2. Push to GitHub
 3. Document any pending work
 
-## Step 5: Deployment Verification
+## Step 5: Pre-Deployment Build Verification (MANDATORY)
+
+**BEFORE deploying, you MUST complete a full local build test:**
+
+### 5.1 Full Production Build Test
+```bash
+# Clean previous builds
+rm -rf .next/
+
+# Run full production build
+npm run build 2>&1
+```
+
+**Success Criteria:**
+- [ ] Build completes without errors
+- [ ] No TypeScript errors (exit code 0)
+- [ ] No ESLint errors
+- [ ] All routes compile successfully
+- [ ] Static generation completes
+- [ ] Image optimization succeeds
+
+### 5.2 Error Resolution Protocol
+**If build fails:**
+1. **Capture all errors** - Save full build output to log
+2. **Categorize errors:**
+   - TypeScript type errors → Fix types first
+   - Module not found → Check exports/imports
+   - Missing environment variables → Add to .env.local
+   - Runtime errors → Add error boundaries
+3. **Fix ALL errors** - Do not deploy with any build errors
+4. **Re-run build** - Verify clean build before proceeding
+
+### 5.3 Local Smoke Test
+```bash
+# Start production build locally
+npm run start
+
+# In another terminal, test key routes:
+curl -s http://localhost:3000 | head -20
+curl -s http://localhost:3000/login | head -20
+curl -s http://localhost:3000/dashboard | head -20
+```
+
+**Verify:**
+- [ ] Home page loads without errors
+- [ ] Login page renders correctly
+- [ ] Dashboard loads (check for client-side errors in console)
+- [ ] No 500 errors on any route
+
+### 5.4 Build Documentation
+**Before deploying, update:**
+- `DEPLOYMENT_ISSUES_LOG.md` - Document any new errors encountered
+- Add fix patterns for future prevention
+- Note any workarounds applied
+
+**ONLY proceed to deployment after:**
+- ✅ Clean build (0 errors)
+- ✅ Local smoke test passes
+- ✅ All changes committed
+- ✅ DEPLOYMENT_ISSUES_LOG.md updated
+
+---
+
+## Step 6: Deployment Verification
 
 **After pushing, verify:**
 1. Check deployment status in GitHub Actions or Vercel
@@ -105,9 +168,11 @@ Then ask: "Do you want to continue to the next step or stop?"
 3. Do NOT proceed without a plan
 
 **If deployment keeps failing:**
-1. Document each new error in DEPLOYMENT_ISSUES_LOG.md
-2. Apply fixes systematically
-3. Ask user if they want to continue or reassess approach
+1. Run local build test (Step 5) to catch errors early
+2. Document each new error in DEPLOYMENT_ISSUES_LOG.md
+3. Apply fixes systematically
+4. Re-run build verification until clean
+5. Ask user if they want to continue or reassess approach
 
 ## Key Files to Monitor
 
