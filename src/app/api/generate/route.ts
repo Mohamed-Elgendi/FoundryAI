@@ -47,11 +47,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const parsedOutput = parseAIResponse(aiResponse.content);
+    const parsedOutput = parseAIResponse(aiResponse.text);
     console.log('[Generate API] Parsed output:', { hasOutput: !!parsedOutput });
 
     if (!parsedOutput) {
-      console.error('[Generate API] Parse failed. Raw content preview:', aiResponse.content?.substring(0, 500));
+      console.error('[Generate API] Parse failed. Raw content preview:', aiResponse.text?.substring(0, 500));
       return errors.internal('Failed to parse AI output', 'The AI response was malformed. Please try again.');
     }
 
