@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/layer-1-security/auth';
 import Link from 'next/link';
-import { Eye, EyeOff, Mail, Lock, Crown, Loader2, User } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Loader2, User } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function SignupPage() {
@@ -118,7 +118,7 @@ export default function SignupPage() {
         {/* Logo - Clickable */}
         <Link href="/" className="block text-center mb-8 group">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-200 mb-4 group-hover:shadow-violet-300 transition-shadow">
-            <Crown className="h-6 w-6 text-white" />
+            <span className="text-white font-bold text-xl">F</span>
           </div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">FoundryAI</h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">Start generating business plans with AI</p>

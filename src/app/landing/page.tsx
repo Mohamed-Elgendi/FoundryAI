@@ -311,12 +311,13 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-12 px-4 border-t border-slate-800">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
+          {/* Logo - Clickable */}
+          <Link href="/" className="flex items-center gap-2 group">
             <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-purple-600 rounded-lg flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
-            <span className="text-white font-bold text-xl">FoundryAI</span>
-          </div>
+            <span className="text-white font-bold text-xl group-hover:text-violet-400 transition-colors">FoundryAI</span>
+          </Link>
           <p className="text-slate-500 text-sm">
             © 2024 FoundryAI. Transforming lives through entrepreneurship.
           </p>
