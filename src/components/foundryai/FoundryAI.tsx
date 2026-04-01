@@ -11,6 +11,7 @@ import { TemplateGallery } from './TemplateGallery';
 import { Confetti } from '@/components/ui/confetti';
 import { AlertCircle, History, Sparkles } from 'lucide-react';
 import { AIProvider, getDefaultProvider } from '@/layer-2-ai/router/ai-types';
+import { QuotaExceededModal } from './QuotaExceededModal';
 
 interface SavedPlan {
   id: string;
@@ -308,6 +309,19 @@ export function FoundryAI({ initialIdea }: FoundryAIProps = {}) {
           refinementState={refinementState}
         />
       )}
+      {/* Quota Exceeded Modal */}
+      <QuotaExceededModal
+        isOpen={error?.quotaExceeded || false}
+        onClose={() => setError(null)}
+        currentProvider={selectedProvider}
+        onSelectProvider={(provider) => {
+          setSelectedProvider(provider);
+          // Retry generation with new provider if we have input
+          if (userInput) {
+            handleGenerate(userInput, provider);
+          }
+        }}
+      />
     </div>
   );
 }

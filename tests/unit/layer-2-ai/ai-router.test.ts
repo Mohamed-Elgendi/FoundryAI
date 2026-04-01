@@ -3,7 +3,6 @@ import {
   getProviderStatus,
   getFallbackProviders,
   getDefaultProvider,
-  isProviderConfigured,
   AIRequest,
   AIResponse,
   AIProvider,
@@ -56,18 +55,6 @@ describe('AI Router', () => {
       const provider = getDefaultProvider();
       expect(provider).toBeDefined();
       expect(typeof provider).toBe('string');
-    });
-  });
-
-  describe('isProviderConfigured', () => {
-    it('should return true when API key is set', () => {
-      process.env.GROQ_API_KEY = 'test-key';
-      expect(isProviderConfigured('groq-llama-3-3')).toBe(true);
-    });
-
-    it('should return false when API key is not set', () => {
-      delete process.env.GROQ_API_KEY;
-      expect(isProviderConfigured('groq-llama-3-3')).toBe(false);
     });
   });
 

@@ -18,7 +18,7 @@ const testimonials = [
   {
     name: 'Jennifer L.',
     role: 'Business Consultant',
-    content: "I use FoundryAI for all my clients now. It's like having a team of analysts working 24/7.",
+    content: &quot;I use FoundryAI for all my clients now. It&apos;s like having a team of analysts working 24/7.&quot;,
     image: 'https://images.unsplash.com/photo-1612116144300-1714b6fa528a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGNvbnN1bHRhbnR8ZW58MXx8fHwxNzc0ODI4NDE5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
   },
 ];
@@ -62,7 +62,7 @@ export function Testimonials() {
               </div>
               
               <p className="text-slate-700 dark:text-slate-300 mb-6 text-lg">
-                "{testimonial.content}"
+                &quot;{testimonial.content}&quot;
               </p>
               
               <div className="flex items-center gap-4">

@@ -1,0 +1,7 @@
+When I type /auto you go and check the readme.md file first and read if fully and understand the whole file and all the info written about the whole wntire project, then go and do the same with the whole project entire docs, read all of them get deep and proufound understanding of each single file, then find what has been already accomplished and what should to be accomplished, then you go autonously accomplished all the unaccomplished tasks and finish all of them until the very end non-stop.
+Once you do all the tasks, go and revamp the whole representation layer with all related facy ux and ui designs that polish the whole thing and take it to the next level which grap the user's attention and keep his mind and thoughts very engaged with the platform in a very lovely way.
+After you totally finished excuting the tasks, go and run full complete comperhensive build.
+Then you go and check all the errors and the issues, and you go smartly and effeciently fix all of them.
+once you finish the fix of all the issue, run the full complete comperhensive build error-free new version.
+Once you build the full complete comperhensive error-free new version, go commit the buid to github and push it.
+Then once it the new error-free build is committed and pushed to github, you go and check about the health of the deployment and detect if there is any kind of issues or errors, then fix all the deployment  errors and issues.

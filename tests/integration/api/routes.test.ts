@@ -2,12 +2,12 @@ import { POST as generatePlan } from '@/app/api/generate/route';
 import { POST as refinePlan } from '@/app/api/refine/route';
 import { GET as getProviders } from '@/app/api/providers/route';
 import { POST as submitFeedback } from '@/app/api/feedback/route';
+import { FoundryAIOutput } from '@/types';
 
 // Mock dependencies
 jest.mock('@/layer-2-ai/router/ai-router', () => ({
   processWithAI: jest.fn(),
   getDefaultProvider: jest.fn().mockReturnValue('groq-llama-3-3'),
-  AIProvider: jest.fn(),
 }));
 
 jest.mock('@/layer-3-data/storage/supabase-client', () => ({
@@ -33,19 +33,44 @@ describe('API Routes - Integration Tests', () => {
 
   describe('POST /api/generate', () => {
     it('should successfully generate a plan', async () => {
-      const mockOutput = {
-        businessName: 'Test Business',
-        tagline: 'A test tagline',
-        painPoint: 'Test pain point',
-        solution: 'Test solution',
-        uniqueAdvantage: 'Test advantage',
-        targetCustomers: 'Test customers',
-        mvp: 'Test MVP',
-        firstSteps: ['Step 1', 'Step 2'],
-        timeToFirstSale: '1 week',
-        initialPricing: '$50',
-        totalFounderTime: '2 weeks',
-        startupCosts: '$100',
+      const mockOutput: FoundryAIOutput = {
+        ideaName: 'Test Business',
+        targetAudience: {
+          description: 'Test users with their core struggle',
+          painLevel: 8
+        },
+        problemStatement: {
+          coreProblem: 'Test pain point',
+          quantifiedCost: '$1000/month',
+          negativeConsequences: ['Consequence 1', 'Consequence 2'],
+          alternatives: ['Alternative 1', 'Alternative 2'],
+          reasonsTheyFail: ['Reason 1', 'Reason 2'],
+          coreSolution: 'Test solution',
+          keyBenefits: ['Benefit 1', 'Benefit 2'],
+          fullStatement: 'Full problem statement'
+        },
+        marketResearch: {
+          tam: '$10B (2024)',
+          sam: '$100M',
+          som: '$10M initial target',
+          marketGrowthRate: '15% YoY',
+          keyTrends: ['Trend 1', 'Trend 2', 'Trend 3'],
+          competitorAnalysis: [
+            { name: 'Competitor 1', strengths: 'Strong brand', weaknesses: 'High price', marketShare: '30%', pricing: '$50/month' }
+          ],
+          targetDemographics: 'Test demographics',
+          userPainPoints: ['Pain 1', 'Pain 2'],
+          marketGaps: ['Gap 1', 'Gap 2']
+        },
+        mvpFeatures: ['Feature 1', 'Feature 2'],
+        techStack: [{ category: 'Frontend', tool: 'Next.js', purpose: 'React framework', isFree: true }],
+        buildPlan: [{ step: 1, title: 'Setup', description: 'Initialize project', estimatedTime: '1 week' }],
+        monetizationStrategy: {
+          model: 'Freemium',
+          pricing: 'Free tier + Pro subscription',
+          firstUserTactics: ['Product Hunt launch', 'Social media'],
+          revenueEstimate: '$1K-5K MRR within 6 months'
+        }
       };
 
       mockedProcessWithAI.mockResolvedValueOnce({
@@ -187,13 +212,13 @@ describe('API Routes - Integration Tests', () => {
 
     it('should use fallback provider when preferred fails', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
-        text: JSON.stringify({ businessName: 'Test' }),
-        provider: 'openai',
+        content: JSON.stringify({ ideaName: 'Test' }),
+        provider: 'gpt-4o',
         fallbackUsed: true,
         latencyMs: 1500,
       });
 
-      mockedParseAIResponse.mockReturnValueOnce({ businessName: 'Test' });
+      mockedParseAIResponse.mockReturnValueOnce({ ideaName: 'Test' } as FoundryAIOutput);
 
       const request = new Request('http://localhost:3000/api/generate', {
         method: 'POST',
@@ -225,19 +250,44 @@ describe('API Routes - Integration Tests', () => {
 
   describe('POST /api/refine', () => {
     it('should successfully refine a plan', async () => {
-      const mockRefinedOutput = {
-        businessName: 'Refined Business',
-        tagline: 'A refined tagline',
-        painPoint: 'Refined pain point',
-        solution: 'Refined solution',
-        uniqueAdvantage: 'Refined advantage',
-        targetCustomers: 'Refined customers',
-        mvp: 'Refined MVP',
-        firstSteps: ['Refined Step 1', 'Refined Step 2'],
-        timeToFirstSale: '2 weeks',
-        initialPricing: '$100',
-        totalFounderTime: '3 weeks',
-        startupCosts: '$200',
+      const mockRefinedOutput: FoundryAIOutput = {
+        ideaName: 'Refined Business',
+        targetAudience: {
+          description: 'Refined users with their core struggle',
+          painLevel: 9
+        },
+        problemStatement: {
+          coreProblem: 'Refined pain point',
+          quantifiedCost: '$2000/month',
+          negativeConsequences: ['Consequence 1', 'Consequence 2'],
+          alternatives: ['Alternative 1', 'Alternative 2'],
+          reasonsTheyFail: ['Reason 1', 'Reason 2'],
+          coreSolution: 'Refined solution',
+          keyBenefits: ['Benefit 1', 'Benefit 2'],
+          fullStatement: 'Full problem statement'
+        },
+        marketResearch: {
+          tam: '$20B (2024)',
+          sam: '$200M',
+          som: '$20M initial target',
+          marketGrowthRate: '20% YoY',
+          keyTrends: ['Trend 1', 'Trend 2', 'Trend 3'],
+          competitorAnalysis: [
+            { name: 'Competitor 1', strengths: 'Strong brand', weaknesses: 'High price', marketShare: '25%', pricing: '$100/month' }
+          ],
+          targetDemographics: 'Refined demographics',
+          userPainPoints: ['Pain 1', 'Pain 2'],
+          marketGaps: ['Gap 1', 'Gap 2']
+        },
+        mvpFeatures: ['Refined Feature 1', 'Refined Feature 2'],
+        techStack: [{ category: 'Frontend', tool: 'Next.js', purpose: 'React framework', isFree: true }],
+        buildPlan: [{ step: 1, title: 'Refined Setup', description: 'Initialize project', estimatedTime: '2 weeks' }],
+        monetizationStrategy: {
+          model: 'Freemium',
+          pricing: 'Free tier + Pro subscription',
+          firstUserTactics: ['Product Hunt launch', 'Social media'],
+          revenueEstimate: '$2K-10K MRR within 6 months'
+        }
       };
 
       mockedProcessWithAI.mockResolvedValueOnce({
@@ -284,11 +334,7 @@ describe('API Routes - Integration Tests', () => {
 
   describe('GET /api/providers', () => {
     it('should return available providers', async () => {
-      const request = new Request('http://localhost:3000/api/providers', {
-        method: 'GET',
-      });
-
-      const response = await getProviders(request);
+      const response = await getProviders();
       const data = await response.json();
 
       expect(response.status).toBe(200);
@@ -298,11 +344,7 @@ describe('API Routes - Integration Tests', () => {
     });
 
     it('should include provider metadata', async () => {
-      const request = new Request('http://localhost:3000/api/providers', {
-        method: 'GET',
-      });
-
-      const response = await getProviders(request);
+      const response = await getProviders();
       const data = await response.json();
 
       if (data.providers.length > 0) {

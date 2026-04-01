@@ -18,7 +18,7 @@ const AUTH_ROUTES = [
   '/forgot-password',
 ];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,

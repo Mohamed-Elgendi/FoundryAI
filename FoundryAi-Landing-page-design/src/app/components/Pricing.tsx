@@ -66,7 +66,7 @@ export function Pricing() {
             Simple, Transparent Pricing
           </h2>
           <p className="text-xl text-slate-600 dark:text-slate-400 mb-8">
-            Start free, upgrade when you're ready to scale
+            Start free, upgrade when you&apos;re ready to scale
           </p>
 
           <div className="flex items-center justify-center gap-4 mb-4">

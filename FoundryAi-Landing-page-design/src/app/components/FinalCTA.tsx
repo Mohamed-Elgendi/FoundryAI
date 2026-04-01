@@ -13,11 +13,14 @@ export function FinalCTA() {
           className="space-y-8"
         >
           <div className="space-y-4">
+            <p className="text-xl text-slate-600 dark:text-slate-400 mb-8">
+              Start free, upgrade when you're ready to scale
+            </p>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
               Ready to Build Your Business?
             </h2>
             <p className="text-xl text-violet-100">
-              Join thousands of entrepreneurs who've turned ideas into reality
+              Join thousands of entrepreneurs who&apos;ve turned ideas into reality
             </p>
           </div>
 

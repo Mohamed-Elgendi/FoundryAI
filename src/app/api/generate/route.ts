@@ -28,14 +28,14 @@ export async function POST(request: Request) {
     
     const aiResponse = await processWithAI({ prompt, provider: selectedProvider });
     console.log('[Generate API] AI response:', { 
-      hasContent: !!aiResponse.text, 
+      hasContent: !!aiResponse.content, 
       hasError: !!aiResponse.error,
       provider: aiResponse.provider,
       fallbackUsed: aiResponse.fallbackUsed,
-      contentLength: aiResponse.text?.length
+      contentLength: aiResponse.content?.length
     });
 
-    if (aiResponse.error || !aiResponse.text) {
+    if (aiResponse.error || !aiResponse.content) {
       console.error('[Generate API] AI error:', aiResponse.error);
       return errors.aiError(
         aiResponse.error || 'Failed to generate output',
@@ -47,11 +47,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const parsedOutput = parseAIResponse(aiResponse.text);
+    const parsedOutput = parseAIResponse(aiResponse.content);
     console.log('[Generate API] Parsed output:', { hasOutput: !!parsedOutput });
 
     if (!parsedOutput) {
-      console.error('[Generate API] Parse failed. Raw content preview:', aiResponse.text?.substring(0, 500));
+      console.error('[Generate API] Parse failed. Raw content preview:', aiResponse.content?.substring(0, 500));
       return errors.internal('Failed to parse AI output', 'The AI response was malformed. Please try again.');
     }
 
