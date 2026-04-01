@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DashboardProvider, DashboardShell } from '@/components/dashboard';
 import { useAuth } from '@/layer-1-security/auth';
 import { getSupabaseBrowserClient } from '@/layer-3-data/storage/supabase-client';
@@ -53,7 +54,8 @@ function AnalyticsCard({
   trend,
   trendLabel,
   icon: Icon,
-  color = 'violet'
+  color = 'violet',
+  index = 0
 }: {
   title: string;
   value: string | number;
@@ -61,6 +63,7 @@ function AnalyticsCard({
   trendLabel?: string;
   icon: React.ElementType;
   color?: 'violet' | 'emerald' | 'amber' | 'blue';
+  index?: number;
 }) {
   const colors = {
     violet: 'bg-violet-50 text-violet-600 border-violet-100',
@@ -70,7 +73,13 @@ function AnalyticsCard({
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(0,0,0,0.08)' }}
+      className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all"
+    >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
           <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${colors[color]}`}>
@@ -89,7 +98,7 @@ function AnalyticsCard({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -104,14 +113,20 @@ function ActivityChart({ data }: { data: { date: string; plans: number; views: n
         {data.map((day, i) => (
           <div key={i} className="flex-1 flex flex-col items-center gap-2">
             <div className="w-full flex gap-1 items-end justify-center h-32">
-              <div
+              <motion.div
+                initial={{ height: 0 }}
+                animate={{ height: `${(day.plans / maxPlans) * 100}%` }}
+                transition={{ duration: 0.8, delay: i * 0.1 }}
                 className="w-full bg-violet-500 rounded-t transition-all hover:bg-violet-600"
-                style={{ height: `${(day.plans / maxPlans) * 100}%`, maxHeight: '100%' }}
+                style={{ maxHeight: '100%' }}
                 title={`${day.plans} plans`}
               />
-              <div
+              <motion.div
+                initial={{ height: 0 }}
+                animate={{ height: `${(day.views / maxViews) * 80}%` }}
+                transition={{ duration: 0.8, delay: i * 0.1 + 0.05 }}
                 className="w-full bg-violet-200 rounded-t transition-all hover:bg-violet-300"
-                style={{ height: `${(day.views / maxViews) * 80}%`, maxHeight: '80%' }}
+                style={{ maxHeight: '80%' }}
                 title={`${day.views} views`}
               />
             </div>
@@ -401,6 +416,7 @@ function DashboardContent() {
           trendLabel="vs last month"
           icon={FileText}
           color="violet"
+          index={0}
         />
         <AnalyticsCard
           title="Opportunities"
@@ -409,6 +425,7 @@ function DashboardContent() {
           trendLabel="vs last month"
           icon={Target}
           color="emerald"
+          index={1}
         />
         <AnalyticsCard
           title="Avg. Score"
@@ -417,12 +434,14 @@ function DashboardContent() {
           trendLabel="vs last month"
           icon={Activity}
           color="amber"
+          index={2}
         />
         <AnalyticsCard
           title="Last Active"
           value={stats.lastActive}
           icon={Clock}
           color="blue"
+          index={3}
         />
       </div>
 
