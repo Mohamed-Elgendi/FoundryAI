@@ -10,7 +10,18 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ className, variant = 'default' }: ThemeToggleProps) {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, mounted } = useTheme();
+
+  // Prevent hydration mismatch - render placeholder until mounted
+  if (!mounted) {
+    return (
+      <div className={cn(
+        'w-10 h-10 rounded-lg',
+        variant === 'default' ? 'bg-slate-100' : '',
+        className
+      )} />
+    );
+  }
 
   return (
     <button
