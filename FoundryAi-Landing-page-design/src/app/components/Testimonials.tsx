@@ -4,29 +4,29 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 
 const testimonials = [
   {
-    name: 'Sarah K.',
-    role: 'Tech Startup Founder',
-    content: 'Created my investor deck and business plan in 2 hours instead of 2 weeks. Raised $500K seed round.',
-    image: 'https://images.unsplash.com/photo-1762341114803-a797c44649f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGVudHJlcHJlbmV1cnxlbnwxfHx8fDE3NzQ3MDY4ODV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-  },
-  {
-    name: 'Michael R.',
-    role: 'Small Business Owner',
-    content: 'The financial projections were spot-on. Saved me thousands in consultant fees.',
+    name: 'Marcus T.',
+    role: 'SaaS Founder Archetype',
+    content: 'Started with $0 and zero coding skills. Within 90 days, launched my first SaaS product using the AI Build Assistant. Now at $12K MRR and growing. The foundation systems changed everything — I actually finish what I start.',
     image: 'https://images.unsplash.com/photo-1769636930047-4478f12cf430?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBtYW4lMjBidXNpbmVzcyUyMG93bmVyfGVufDF8fHx8MTc3NDgyODQxOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
   },
   {
+    name: 'Sarah K.',
+    role: 'AI Agency Archetype',
+    content: 'Went from overthinking to executing. The Opportunity Radar showed me AI automation services were in demand. Landed my first $3K client in week 2. Now running a 6-figure agency with 3 virtual assistants.',
+    image: 'https://images.unsplash.com/photo-1762341114803-a797c44649f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGVudHJlcHJlbmV1cnxlbnwxfHx8fDE3NzQ3MDY4ODV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+  },
+  {
     name: 'Jennifer L.',
-    role: 'Business Consultant',
-    content: &quot;I use FoundryAI for all my clients now. It&apos;s like having a team of analysts working 24/7.&quot;,
+    role: 'Content Creator Archetype',
+    content: "The mindset systems alone are worth 10x the investment. I went from 'I can\'t' to launching a faceless YouTube empire. 4 channels, 500K+ subscribers, $40K/month in ad revenue. FoundryAI forged my entrepreneur identity.",
     image: 'https://images.unsplash.com/photo-1612116144300-1714b6fa528a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjB3b21hbiUyMGNvbnN1bHRhbnR8ZW58MXx8fHwxNzc0ODI4NDE5fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
   },
 ];
 
 const stats = [
-  { value: '10,000+', label: 'Plans Created' },
-  { value: '$50M+', label: 'Funding Raised' },
-  { value: '4.9/5', label: 'Rating' },
+  { value: '10,000+', label: 'Entrepreneurs Forged' },
+  { value: '$50M+', label: 'Revenue Generated' },
+  { value: '12', label: 'Business Archetypes' },
 ];
 
 export function Testimonials() {
@@ -41,8 +41,12 @@ export function Testimonials() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Loved by Entrepreneurs Worldwide
+            Real Transformations. Real Revenue. Real Results.
           </h2>
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+            Join thousands who went from $0 to thriving digital entrepreneurs 
+            across all 12 business archetypes.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">

@@ -4,18 +4,18 @@ import { Clock, FileQuestion, TrendingDown } from 'lucide-react';
 const painPoints = [
   {
     icon: Clock,
-    title: 'Spending weeks on research?',
-    description: 'Traditional planning takes 40+ hours of research and writing',
+    title: 'Stuck at $0 with no clear path?',
+    description: 'You\'ve tried courses, watched videos, read books — but still haven\'t made your first dollar online. No momentum, no revenue, no confidence.',
   },
   {
     icon: FileQuestion,
-    title: 'Staring at a blank page?',
-    description: "Writer's block kills momentum before you even start",
+    title: 'Overwhelmed by endless options?',
+    description: 'SaaS? YouTube? Affiliate marketing? Agency? With 1000+ ways to make money online, you freeze. Analysis paralysis keeps you from starting.',
   },
   {
     icon: TrendingDown,
-    title: 'Unsure about your numbers?',
-    description: 'Financial projections feel like guesswork without expert help',
+    title: 'Building alone without support?',
+    description: 'Every time you hit a wall — technical issue, marketing confusion, self-doubt — there\'s no one to help. You quit before you see results.',
   },
 ];
 
@@ -31,8 +31,13 @@ export function ProblemSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Stop Struggling with Business Planning
+            The Brutal Truth Most "Gurus" Won't Tell You
           </h2>
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+            Knowledge without execution is worthless. Tactics without foundation crumble. 
+            90% of aspiring entrepreneurs fail because they skip the most critical step: 
+            building the capacity to build.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8">

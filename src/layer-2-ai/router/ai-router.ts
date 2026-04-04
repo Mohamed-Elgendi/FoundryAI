@@ -281,7 +281,7 @@ export async function processWithAI(request: AIRequest): Promise<AIResponse> {
         };
       }
       
-      if (!lastError || result.quotaExceeded) {
+      if (!lastError || result.quotaExceeded || result.rateLimitError) {
         lastError = result;
       }
     } catch (error: any) {
@@ -387,8 +387,7 @@ async function tryProvider(
     const isQuotaError = errorMessage.includes('quota') || 
                          errorMessage.includes('insufficient_quota') ||
                          errorMessage.includes('billing') ||
-                         errorMessage.includes('credit') ||
-                         error?.statusCode === 429;
+                         errorMessage.includes('credit');
     
     const isRateLimit = error?.statusCode === 429 || 
                         errorMessage.includes('rate limit') ||

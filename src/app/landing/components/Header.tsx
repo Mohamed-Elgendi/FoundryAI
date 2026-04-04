@@ -28,13 +28,18 @@ export function Header() {
               </div>
               <span className="font-bold text-xl text-slate-900">FoundryAI</span>
             </a>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10" /> {/* Placeholder for theme toggle */}
+            <div className="flex items-center gap-3">
+              <Link 
+                href="/login"
+                className="px-5 py-2 rounded-full text-slate-600 dark:text-slate-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors font-medium text-sm"
+              >
+                Sign In
+              </Link>
               <Link 
                 href="/signup"
-                className="px-6 py-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white"
+                className="px-5 py-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg hover:scale-105 transition-all text-sm font-medium"
               >
-                Get Started Free
+                Start for Free
               </Link>
             </div>
           </div>
@@ -60,7 +65,7 @@ export function Header() {
             <a href="#faq" className="text-slate-600 dark:text-slate-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">FAQ</a>
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -75,7 +80,7 @@ export function Header() {
             {isAuthenticated ? (
               <Link 
                 href="/dashboard"
-                className="px-6 py-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg hover:scale-105 transition-all"
+                className="px-5 py-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg hover:scale-105 transition-all text-sm font-medium"
               >
                 Dashboard
               </Link>
@@ -83,15 +88,15 @@ export function Header() {
               <>
                 <Link 
                   href="/login"
-                  className="px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors font-medium"
+                  className="px-5 py-2 rounded-full text-slate-600 dark:text-slate-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors font-medium text-sm"
                 >
                   Sign In
                 </Link>
                 <Link 
                   href="/signup"
-                  className="px-6 py-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg hover:scale-105 transition-all"
+                  className="px-5 py-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg hover:scale-105 transition-all text-sm font-medium"
                 >
-                  Get Started Free
+                  Start for Free
                 </Link>
               </>
             )}

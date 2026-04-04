@@ -32,16 +32,12 @@ export function Hero() {
               >
                 Get Started Free
               </Link>
-              <button 
-                onClick={() => {
-                  const demoSection = document.getElementById('demo');
-                  demoSection?.scrollIntoView({ behavior: 'smooth' });
-                }}
+              <Link 
+                href="/login"
                 className="px-8 py-4 rounded-full border-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-lg font-semibold hover:border-violet-600 dark:hover:border-violet-500 transition-all flex items-center justify-center gap-2"
               >
-                <Play className="w-5 h-5" />
-                Watch Demo
-              </button>
+                Sign In
+              </Link>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">

@@ -13,42 +13,46 @@ export function FinalCTA() {
           className="space-y-8"
         >
           <div className="space-y-4">
-            <p className="text-xl text-slate-600 dark:text-slate-400 mb-8">
-              Start free, upgrade when you're ready to scale
+            <p className="text-xl text-violet-100 mb-4">
+              Every day you wait is a day your future self loses.
             </p>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white">
-              Ready to Build Your Business?
+              Start With $0. Build to 7 Figures.
             </h2>
             <p className="text-xl text-violet-100">
-              Join thousands of entrepreneurs who&apos;ve turned ideas into reality
+              Join the transformation. 10,000+ entrepreneurs forged. $50M+ revenue generated. 
+              Your journey from $0 to masterful entrepreneur starts now.
             </p>
           </div>
 
           <div>
-            <button className="px-10 py-4 rounded-full bg-white text-violet-600 text-lg font-bold hover:shadow-2xl hover:scale-105 transition-all">
-              Create Your Free Plan
-            </button>
+            <a 
+              href="/auth/signup"
+              className="px-10 py-4 rounded-full bg-white text-violet-600 text-lg font-bold hover:shadow-2xl hover:scale-105 transition-all inline-block"
+            >
+              Forge Your Future — Start Free
+            </a>
             <p className="mt-4 text-violet-100">
-              Takes less than 2 minutes • No credit card required
+              No credit card • No prior skills needed • First revenue in 14 days
             </p>
           </div>
 
           <div className="inline-block px-6 py-2 rounded-full bg-amber-500 text-white font-semibold">
-            🎉 Limited time: Get 50% off Pro plan
+            🔥 Limited: 50% off Pro plan for founding members
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-8">
             <div className="flex items-center gap-3 text-white">
               <Shield className="w-6 h-6" />
-              <span>Secure</span>
+              <span>Zero-Risk Start</span>
             </div>
             <div className="flex items-center gap-3 text-white">
               <Headphones className="w-6 h-6" />
-              <span>24/7 Support</span>
+              <span>24/7 AI Support</span>
             </div>
             <div className="flex items-center gap-3 text-white">
               <Infinity className="w-6 h-6" />
-              <span>Free Forever</span>
+              <span>Free Forever Tier</span>
             </div>
           </div>
         </motion.div>

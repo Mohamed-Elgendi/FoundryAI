@@ -1,36 +1,36 @@
 import { motion } from 'motion/react';
-import { FileText, Globe, TrendingUp, Radar, Download, Sparkles } from 'lucide-react';
+import { Brain, Radar, Zap, Bot, TrendingUp, Sparkles } from 'lucide-react';
 
 const features = [
   {
-    icon: FileText,
-    title: 'AI Business Plan Generator',
-    description: 'Complete executive summaries, market analysis, and financial projections',
-  },
-  {
-    icon: Globe,
-    title: 'Real-Time Market Research',
-    description: 'Automated competitor analysis and industry insights',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Financial Modeling',
-    description: 'Revenue forecasts, cost analysis, and break-even calculations',
+    icon: Brain,
+    title: '8-System Core Foundation',
+    description: 'Before you build a business, build the capacity to build. Belief Architecture, Distractions Killer, Brain Dump, Emotion Controller, Momentum Builder, and more — all working 24/7.',
   },
   {
     icon: Radar,
-    title: 'Opportunity Radar',
-    description: 'Discover trending markets and untapped opportunities',
+    title: '12 Business Archetypes',
+    description: 'From SaaS to YouTube to Agencies to Digital Products — every viable online income methodology covered with the complete 4-Pillar Success System.',
   },
   {
-    icon: Download,
-    title: 'Export & Share',
-    description: 'PDF, Markdown, and JSON exports for investors and teams',
+    icon: Zap,
+    title: 'AI-Powered Opportunity Radar',
+    description: 'Stop chasing shiny objects. Our AI scans real-time market data to find validated opportunities with demand, feasibility, and monetization potential.',
+  },
+  {
+    icon: Bot,
+    title: '24/7 AI Build Assistant',
+    description: 'Your always-on technical co-founder. From code generation to error resolution to architecture decisions — never build alone again.',
+  },
+  {
+    icon: TrendingUp,
+    title: '7-Dimensional Momentum Engine',
+    description: 'Track progress across Financial, Social, Physical, Mental, Educational, Professional, and Spiritual dimensions. Compound growth in all areas.',
   },
   {
     icon: Sparkles,
-    title: 'Plan Refinement',
-    description: 'Iterate and improve your plan with AI assistance',
+    title: '$0 → 7 Figures Roadmap',
+    description: 'Clear pathway: First revenue within 14 days, then scale through $1 → $100 → $1K → $10K → $100K → $1M+ per month with systematic execution.',
   },
 ];
 
@@ -46,8 +46,12 @@ export function FeaturesGrid() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Everything You Need to Launch Successfully
+            The Universal Money Making Machine
           </h2>
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+            Not a course. Not just a tool. A complete transformation operating system 
+            that forges entrepreneurs while simultaneously building their businesses.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

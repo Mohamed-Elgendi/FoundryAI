@@ -24,6 +24,12 @@ export function Header({ darkMode, setDarkMode }: HeaderProps) {
           </nav>
 
           <div className="flex items-center gap-4">
+            <a 
+              href="/auth/signin"
+              className="text-slate-600 dark:text-slate-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors font-medium"
+            >
+              Sign In
+            </a>
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -35,9 +41,12 @@ export function Header({ darkMode, setDarkMode }: HeaderProps) {
                 <Moon className="w-5 h-5 text-slate-600" />
               )}
             </button>
-            <button className="px-6 py-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg hover:scale-105 transition-all">
-              Start Free
-            </button>
+            <a 
+              href="/auth/signup"
+              className="px-6 py-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:shadow-lg hover:scale-105 transition-all font-medium"
+            >
+              Get Started for Free
+            </a>
           </div>
         </div>
       </div>

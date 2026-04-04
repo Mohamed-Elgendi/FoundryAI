@@ -4,21 +4,21 @@ import { Lightbulb, Zap, CheckCircle } from 'lucide-react';
 const steps = [
   {
     icon: Lightbulb,
-    title: 'Describe Your Idea',
-    description: 'Tell us about your business concept in plain English',
-    detail: 'Input field with natural language',
+    title: 'Forge Your Foundation',
+    description: 'Before building a business, you build the capacity to build. Our 8-system Core Foundation Layer optimizes your psychology, focus, emotions, and momentum.',
+    detail: 'Belief Architecture → Distractions Killer → Brain Dump → Emotion Controller',
   },
   {
     icon: Zap,
-    title: 'AI Analyzes & Builds',
-    description: 'Our AI researches markets, competitors, and creates your custom plan',
-    detail: 'Processing animation, data flowing',
+    title: 'Discover & Validate',
+    description: 'Stop guessing. The Opportunity Radar scans 12 proven business archetypes to find validated gaps with real demand — SaaS, YouTube, Agencies, Digital Products, and more.',
+    detail: 'AI-validated opportunities with market size, competition, and revenue potential',
   },
   {
     icon: CheckCircle,
-    title: 'Get Your Blueprint',
-    description: 'Receive a complete, professional business plan in minutes',
-    detail: 'Generated document preview',
+    title: 'Execute & Earn',
+    description: 'Not theory. Real execution. The AI Build Assistant guides you step-by-step to launch your first revenue stream within 14 days, then scales you to 7 figures.',
+    detail: 'From $0 → $1 → $100 → $1K → $10K → $100K → $1M+ per month',
   },
 ];
 
@@ -34,8 +34,12 @@ export function SolutionSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            From Idea to Plan in 3 Simple Steps
+            The FoundryAI Transformation Journey
           </h2>
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+            We don't teach entrepreneurship. We forge entrepreneurs. 
+            Every session produces tangible progress — from mindset mastery to revenue generation.
+          </p>
         </motion.div>
 
         <div className="relative">

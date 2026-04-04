@@ -27,7 +27,7 @@ export class RepositoryError extends Error {
 export interface Repository<T> {
   findById(id: string): Promise<T | null>;
   findAll(options?: QueryOptions<T>): Promise<T[]>;
-  create(data: Omit<T, 'id' | 'created_at'>): Promise<T>;
+  create(data: Omit<T, 'id' | 'createdAt' | 'updated_at'>): Promise<T>;
   update(id: string, data: Partial<T>): Promise<T>;
   delete(id: string): Promise<void>;
 }

@@ -4,28 +4,28 @@ import { ChevronDown } from 'lucide-react';
 
 const faqs = [
   {
-    question: 'How does the AI create business plans?',
-    answer: 'FoundryAI uses advanced GPT technology combined with real-time market data and industry-specific templates. Our AI analyzes your business concept, researches competitors, evaluates market opportunities, and generates comprehensive business plans tailored to your industry.',
+    question: 'I have $0, no skills, and no experience. Can I really do this?',
+    answer: 'Absolutely. FoundryAI was specifically engineered for individuals starting from absolute zero. Our Core Foundation Layer builds your psychology, focus, and momentum before you touch business tactics. The AI Build Assistant handles technical complexity for you. Many of our most successful members started exactly where you are — with nothing but the willingness to transform.',
   },
   {
-    question: 'Is my business idea kept confidential?',
-    answer: 'Absolutely. We take privacy seriously. All your data is encrypted end-to-end, and we never share your business ideas with third parties. Your intellectual property is completely secure and confidential.',
+    question: 'How is this different from courses, coaches, or other platforms?',
+    answer: 'We don\'t teach — we forge. Traditional education gives you information and leaves you to figure out execution. FoundryAI is a complete transformation operating system: the 8-system Core Foundation Layer runs continuously, the Opportunity Radar finds validated gaps (not theory), and the AI Build Assistant guides you step-by-step to real revenue. Every session produces tangible progress, not just knowledge.',
   },
   {
-    question: 'Can I export and edit the generated plans?',
-    answer: 'Yes! You can export your business plans in multiple formats including PDF, Word, and Markdown. This allows you to easily edit, customize, and share your plans with investors, partners, or team members.',
+    question: 'Which business archetype should I start with?',
+    answer: 'It depends on your starting position. $0, no skills, limited time? → Faceless YouTube or Digital Products. Some technical skills? → SaaS or API Services. Marketing background? → AI Agency or Online Brand. The Opportunity Radar will analyze your specific situation and recommend the optimal archetype based on market demand and your profile.',
   },
   {
-    question: 'What if I\'m not satisfied?',
-    answer: 'We offer a 30-day money-back guarantee on all paid plans. If you\'re not completely satisfied with FoundryAI, simply contact our support team for a full refund, no questions asked.',
+    question: 'How quickly can I make my first dollar?',
+    answer: 'Our systematic 14-Day Launch Protocol is designed to get you to first revenue fast. Digital Products and AI Agencies often see first sales within 7-14 days. SaaS products typically take 14-30 days to launch and get beta users. The key is following the execution framework — not getting stuck in analysis paralysis.',
   },
   {
-    question: 'Do I need business experience to use this?',
-    answer: 'Not at all! FoundryAI is designed to be beginner-friendly. Our guided process walks you through each step, and the AI helps you understand complex business concepts. Whether you\'re a first-time entrepreneur or seasoned business owner, FoundryAI adapts to your level.',
+    question: 'What if I don\'t know what business to start?',
+    answer: 'Perfect. The Opportunity Radar continuously scans 12 proven business archetypes to find validated opportunities with real market demand. You don\'t need to come up with ideas — you just need to pick from AI-validated opportunities that match your profile. Plus, the Idea Extraction Engine can transform vague concepts into concrete, validated business models.',
   },
   {
-    question: 'How accurate are the financial projections?',
-    answer: 'Our AI uses industry benchmarks, market data, and proven financial models to generate realistic projections. While no projection can guarantee future results, our estimates are based on actual market data and are comparable to what professional consultants would provide.',
+    question: 'Is this really free to start? What\'s the catch?',
+    answer: 'No catch. We believe in zero-cost entry — start with absolutely nothing and only invest once you\'re generating revenue. The free tier includes the Core Foundation Layer, Opportunity Radar scans, and basic AI assistance. When you start earning, our tier-based recommendations ensure you reinvest at optimal ROI. We win when you win.',
   },
 ];
 
@@ -43,8 +43,11 @@ export function FAQ() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            Frequently Asked Questions
+            Your Questions, Answered
           </h2>
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+            Everything you need to know about starting your transformation from $0 to masterful entrepreneur.
+          </p>
         </motion.div>
 
         <div className="space-y-4">
