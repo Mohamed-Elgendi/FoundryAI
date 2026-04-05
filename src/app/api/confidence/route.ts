@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { data: quotients, error } = await supabase
-      .from('confidence_quotients')
+      .from('confidence_quotients' as any)
       .select('*')
       .eq('user_id', user.id)
       .order('cq_score', { ascending: false });
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error;
 
     const overallCQ = quotients?.length > 0
-      ? Math.round(quotients.reduce((acc, q) => acc + (q.cq_score || 0), 0) / quotients.length)
+      ? Math.round((quotients as any[]).reduce((acc, q) => acc + (q.cq_score || 0), 0) / quotients.length)
       : 50;
 
     return NextResponse.json({ domains: quotients || [], overallCQ });

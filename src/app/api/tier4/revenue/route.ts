@@ -4,12 +4,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@/layer-1-security/auth/route-handler';
+import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-handler';
 
 // GET /api/tier4/revenue/dashboard
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createRouteHandlerClient();
+    const supabase = createRouteHandlerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {

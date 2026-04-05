@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     ] = await Promise.all([
       // Belief score
       supabase
-        .from('foundryai_belief_scores')
+        .from('foundryai_belief_scores' as any)
         .select('*')
         .eq('user_id', user.id)
         .order('calibration_date', { ascending: false })
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
       
       // Confidence quotients
       supabase
-        .from('foundryai_confidence_quotients')
+        .from('foundryai_confidence_quotients' as any)
         .select('*')
         .eq('user_id', user.id)
         .order('calculated_at', { ascending: false })
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
       
       // Emotion check-ins
       supabase
-        .from('foundryai_emotion_checkins')
+        .from('foundryai_emotion_checkins' as any)
         .select('*')
         .eq('user_id', user.id)
         .gte('checked_in_at', today)
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
       
       // Momentum dimensions
       supabase
-        .from('foundryai_momentum_dimensions')
+        .from('foundryai_momentum_dimensions' as any)
         .select('*')
         .eq('user_id', user.id)
         .gte('calculated_at', today)
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
       
       // Focus sessions
       supabase
-        .from('foundryai_focus_sessions')
+        .from('foundryai_focus_sessions' as any)
         .select('*')
         .eq('user_id', user.id)
         .gte('started_at', today)
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       
       // Brain dumps
       supabase
-        .from('foundryai_brain_dumps')
+        .from('foundryai_brain_dumps' as any)
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
       
       // Cognitive load
       supabase
-        .from('foundryai_cognitive_load_readings')
+        .from('foundryai_cognitive_load_readings' as any)
         .select('*')
         .eq('user_id', user.id)
         .order('recorded_at', { ascending: false })
@@ -87,13 +87,13 @@ export async function GET(request: NextRequest) {
     ]);
 
     // Calculate overall foundation health score
-    const beliefStrength = beliefScore.data?.belief_strength || 50;
-    const avgConfidence = confidenceData.data?.length 
-      ? confidenceData.data.reduce((acc: number, c: { cq_score: number }) => acc + c.cq_score, 0) / confidenceData.data.length 
+    const beliefStrength = (beliefScore.data as any)?.belief_strength || 50;
+    const avgConfidence = (confidenceData.data as any[])?.length 
+      ? (confidenceData.data as any[]).reduce((acc: number, c: any) => acc + (c.cq_score || 0), 0) / (confidenceData.data as any[]).length 
       : 50;
-    const cognitiveLoadValue = cognitiveLoad.data?.load_percentage || 50;
-    const focusScore = focusData.data?.length 
-      ? focusData.data.reduce((acc: number, f: { focus_score: number }) => acc + (f.focus_score || 70), 0) / focusData.data.length 
+    const cognitiveLoadValue = (cognitiveLoad.data as any)?.load_percentage || 50;
+    const focusScore = (focusData.data as any[])?.length 
+      ? (focusData.data as any[]).reduce((acc: number, f: any) => acc + (f.focus_score || 70), 0) / (focusData.data as any[]).length 
       : 70;
 
     // Foundation health: weighted average
@@ -108,16 +108,16 @@ export async function GET(request: NextRequest) {
       foundationHealth,
       belief: {
         score: beliefStrength,
-        level: beliefScore.data?.identity_level || 1,
-        intention: beliefScore.data?.morning_intention || '',
+        level: (beliefScore.data as any)?.identity_level || 1,
+        intention: (beliefScore.data as any)?.morning_intention || '',
       },
       confidence: {
         overall: Math.round(avgConfidence),
         domains: confidenceData.data || [],
       },
       emotion: {
-        currentState: emotionData.data?.current_state || 'neutral',
-        intensity: emotionData.data?.intensity || 5,
+        currentState: (emotionData.data as any)?.current_state || 'neutral',
+        intensity: (emotionData.data as any)?.intensity || 5,
       },
       momentum: {
         dimensions: momentumData.data || [],
@@ -125,7 +125,7 @@ export async function GET(request: NextRequest) {
       focus: {
         sessionsToday: focusData.data?.length || 0,
         averageScore: Math.round(focusScore),
-        activeSession: focusData.data?.find((f: { ended_at: string | null }) => !f.ended_at) || null,
+        activeSession: (focusData.data as any[])?.find((f: any) => !f.ended_at) || null,
       },
       brainDump: {
         lastDump: brainDumpData.data || null,

@@ -30,16 +30,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { entry_type, content, mood_rating, affirmations_used } = body;
 
+    const insertData = {
+      user_id: user.id,
+      entry_type,
+      content,
+      mood_rating,
+      affirmations_used,
+      created_at: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
-      .from('journal_entries')
-      .insert({
-        user_id: user.id,
-        entry_type,
-        content,
-        mood_rating,
-        affirmations_used,
-        created_at: new Date().toISOString()
-      })
+      .from('journal_entries' as any)
+      .insert(insertData as any)
       .select()
       .single();
 

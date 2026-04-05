@@ -16,12 +16,12 @@ export async function GET(request: NextRequest) {
     if (error) throw error;
 
     // Calculate completion stats for each workflow
-    const workflowsWithStats = workflows?.map(w => ({
+    const workflowsWithStats = (workflows as any[])?.map(w => ({
       ...w,
       totalTasks: w.workflow_tasks?.length || 0,
-      completedTasks: w.workflow_tasks?.filter((t: { completed: boolean }) => t.completed).length || 0,
+      completedTasks: w.workflow_tasks?.filter((t: any) => t.completed).length || 0,
       completionRate: w.workflow_tasks?.length > 0
-        ? Math.round((w.workflow_tasks.filter((t: { completed: boolean }) => t.completed).length / w.workflow_tasks.length) * 100)
+        ? Math.round((w.workflow_tasks.filter((t: any) => t.completed).length / w.workflow_tasks.length) * 100)
         : 0
     })) || [];
 
@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
     const { workflow_name, target_completion_date } = body;
 
     // Create 14-day launch workflow
-    const { data: workflow, error } = await supabase
+    const client = supabase as any;
+    const { data: workflow, error } = await client
       .from('launch_workflows')
       .insert({
         user_id: user.id,
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
       completed: false
     }));
 
-    await supabase.from('workflow_tasks').insert(tasksWithWorkflowId);
+    await (supabase.from('workflow_tasks' as any).insert(tasksWithWorkflowId) as any);
 
     return NextResponse.json({ data: workflow });
   } catch (error) {

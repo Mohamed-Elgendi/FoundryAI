@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { data: beliefs, error } = await supabase
-      .from('belief_scores')
+      .from('belief_scores' as any)
       .select('*, evidence_stack(*)')
       .eq('user_id', user.id)
       .order('updated_at', { ascending: false });
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error;
 
     const avgCrystallization = beliefs?.length > 0
-      ? Math.round(beliefs.reduce((acc, b) => acc + (b.identity_crystallization || 0), 0) / beliefs.length)
+      ? Math.round((beliefs as any[]).reduce((acc, b) => acc + (b.identity_crystallization || 0), 0) / beliefs.length)
       : 0;
 
     return NextResponse.json({

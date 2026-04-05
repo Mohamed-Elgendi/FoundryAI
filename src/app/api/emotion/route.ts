@@ -39,16 +39,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { current_state, intensity, trigger, transition_target } = body;
 
+    const insertData = {
+      user_id: user.id,
+      current_state,
+      intensity,
+      trigger,
+      transition_target,
+      created_at: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
-      .from('emotion_checkins')
-      .insert({
-        user_id: user.id,
-        current_state,
-        intensity,
-        trigger,
-        transition_target,
-        created_at: new Date().toISOString()
-      })
+      .from('emotion_checkins' as any)
+      .insert(insertData as any)
       .select()
       .single();
 

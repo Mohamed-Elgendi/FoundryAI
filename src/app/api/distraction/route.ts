@@ -10,12 +10,12 @@ export async function GET(request: NextRequest) {
     const today = new Date().toISOString().split('T')[0];
     
     const [{ data: logs }, { data: fortress }] = await Promise.all([
-      supabase.from('distraction_logs')
+      supabase.from('distraction_logs' as any)
         .select('*')
         .eq('user_id', user.id)
         .gte('created_at', today)
         .order('created_at', { ascending: false }),
-      supabase.from('digital_fortress_settings')
+      supabase.from('digital_fortress_settings' as any)
         .select('*')
         .eq('user_id', user.id)
         .single()
@@ -23,13 +23,13 @@ export async function GET(request: NextRequest) {
 
     const stats = {
       attemptsToday: logs?.length || 0,
-      blockedCount: logs?.filter(l => l.blocked).length || 0,
+      blockedCount: (logs as any[] | null)?.filter(l => l.blocked).length || 0,
       byLayer: {
-        1: logs?.filter(l => l.defense_layer === 1).length || 0,
-        2: logs?.filter(l => l.defense_layer === 2).length || 0,
-        3: logs?.filter(l => l.defense_layer === 3).length || 0,
-        4: logs?.filter(l => l.defense_layer === 4).length || 0,
-        5: logs?.filter(l => l.defense_layer === 5).length || 0
+        1: (logs as any[] | null)?.filter(l => l.defense_layer === 1).length || 0,
+        2: (logs as any[] | null)?.filter(l => l.defense_layer === 2).length || 0,
+        3: (logs as any[] | null)?.filter(l => l.defense_layer === 3).length || 0,
+        4: (logs as any[] | null)?.filter(l => l.defense_layer === 4).length || 0,
+        5: (logs as any[] | null)?.filter(l => l.defense_layer === 5).length || 0
       }
     };
 
@@ -48,17 +48,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { distraction_type, source, intensity, blocked, defense_layer } = body;
 
+    const insertData = {
+      user_id: user.id,
+      distraction_type,
+      source,
+      intensity,
+      blocked,
+      defense_layer,
+      created_at: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
-      .from('distraction_logs')
-      .insert({
-        user_id: user.id,
-        distraction_type,
-        source,
-        intensity,
-        blocked,
-        defense_layer,
-        created_at: new Date().toISOString()
-      })
+      .from('distraction_logs' as any)
+      .insert(insertData as any)
       .select()
       .single();
 
@@ -78,17 +80,17 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { website_blocklist, app_blocklist, notification_settings } = body;
 
-    const { data, error } = await supabase
-      .from('digital_fortress_settings')
+    const { data, error } = await (supabase
+      .from('digital_fortress_settings' as any)
       .upsert({
         user_id: user.id,
         website_blocklist,
         app_blocklist,
         notification_settings,
         last_updated: new Date().toISOString()
-      }, { onConflict: 'user_id' })
+      } as any, { onConflict: 'user_id' })
       .select()
-      .single();
+      .single() as any);
 
     if (error) throw error;
     return NextResponse.json({ data });

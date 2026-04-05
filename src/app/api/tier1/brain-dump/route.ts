@@ -82,7 +82,8 @@ export async function POST(request: NextRequest) {
       cognitiveLoadBefore: body.cognitiveLoadBefore,
       cognitiveLoadAfter: body.cognitiveLoadAfter,
       dumpDate: today,
-    });
+      createdAt: new Date().toISOString(),
+    } as any);
 
     if (!dump) {
       throw new Error('Failed to create brain dump');
@@ -102,7 +103,9 @@ export async function POST(request: NextRequest) {
           scheduledDate: item.scheduledDate,
           aiSuggestedAction: item.aiSuggestedAction,
           completed: false,
-        });
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        } as any);
         if (createdItem) items.push(createdItem);
       }
     }

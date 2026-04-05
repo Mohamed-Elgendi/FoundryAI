@@ -14,7 +14,7 @@ import {
 // ============================================
 
 // GET /api/tier1/belief - Get user's belief score
-export async function GETBeliefScore(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const supabase = createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -37,7 +37,7 @@ export async function GETBeliefScore(request: NextRequest) {
 }
 
 // POST /api/tier1/belief/evidence - Add belief evidence
-export async function POSTBeliefEvidence(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const supabase = createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -54,7 +54,8 @@ export async function POSTBeliefEvidence(request: NextRequest) {
       impactScore: body.impactScore,
       relatedBelief: body.relatedBelief,
       dateRecorded: new Date().toISOString().split('T')[0],
-    });
+      createdAt: new Date().toISOString(),
+    } as any);
 
     // Update belief score counts
     const currentScore = await tier1Repositories.beliefScore.getOrCreate(user.id);

@@ -1,4 +1,4 @@
-import { Card, CardContent } from '@/components/ui/Card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Sparkles, Layers, Zap, Target, TrendingUp, Gem } from 'lucide-react';
 
 interface RefinementLoadingStateProps {

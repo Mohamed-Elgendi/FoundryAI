@@ -2,8 +2,8 @@
 
 import { useAuth } from '@/layer-1-security/auth';
 import { DashboardShell } from '@/components/dashboard/DashboardShell';
-import { WorkflowEngine } from '@/components/tier3/WorkflowEngine';
-import { ToolRecommender } from '@/components/tier3/ToolRecommender';
+import WorkflowEngine from '@/components/tier3/WorkflowEngine';
+import ToolRecommender from '@/components/tier3/ToolRecommender';
 
 export default function Tier3Page() {
   const { user, signOut } = useAuth();

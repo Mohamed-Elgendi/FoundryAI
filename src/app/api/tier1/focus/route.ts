@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const settings = await tier1Repositories.digitalFortress.getOrCreate(user.id);
     const score = await tier1Repositories.focusScore.getOrCreate(user.id);
 
-    let sessions = [];
+    let sessions: any[] = [];
     if (includeSessions) {
       sessions = await tier1Repositories.focusSession.getTodaySessions(user.id);
     }
@@ -81,7 +81,8 @@ export async function POST(request: NextRequest) {
         distractionsBlocked: 0,
         layersActive: activeLayers,
         notes: body.notes,
-      });
+        createdAt: new Date().toISOString(),
+      } as any);
 
       return NextResponse.json({ session, success: true });
     } else if (body.action === 'end') {

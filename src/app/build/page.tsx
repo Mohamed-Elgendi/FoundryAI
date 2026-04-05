@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useWorkflow, FOURTEEN_DAY_PROTOCOL, BRAIN_DUMP_CATEGORIES } from '@/layer-4-logic/workflows/14-day-launch';
-import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { 
   Clock, 
   CheckCircle2, 

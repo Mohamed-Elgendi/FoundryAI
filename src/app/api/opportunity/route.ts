@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseClient } from '@/layer-3-data/storage/supabase-client';
+import type { Database } from '@/layer-3-data/storage/database.types';
+
+type OpportunityRadarUpdate = Database['public']['Tables']['opportunity_radar']['Update'];
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,15 +27,15 @@ export async function GET(request: NextRequest) {
 
     // Calculate stats
     const stats = {
-      total: opportunities?.length || 0,
-      discovered: opportunities?.filter(o => o.status === 'discovered').length || 0,
-      validated: opportunities?.filter(o => o.status === 'validated').length || 0,
-      avgFitScore: opportunities?.length > 0
-        ? Math.round(opportunities.reduce((acc, o) => acc + (o.archetype_fit_score || 0), 0) / opportunities.length)
+      total: (opportunities as any[])?.length || 0,
+      discovered: (opportunities as any[])?.filter((o: any) => o.status === 'discovered').length || 0,
+      validated: (opportunities as any[])?.filter((o: any) => o.status === 'validated').length || 0,
+      avgFitScore: (opportunities as any[])?.length > 0
+        ? Math.round((opportunities as any[]).reduce((acc: number, o: any) => acc + (o.archetype_fit_score || 0), 0) / (opportunities as any[]).length)
         : 0
     };
 
-    return NextResponse.json({ opportunities: opportunities || [], stats });
+    return NextResponse.json({ opportunities: (opportunities as any[]) || [], stats });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch opportunities' }, { status: 500 });
   }
@@ -56,8 +59,8 @@ export async function POST(request: NextRequest) {
       source
     } = body;
 
-    const { data, error } = await supabase
-      .from('opportunity_radar')
+    const { data, error } = await (supabase
+      .from('opportunity_radar' as any)
       .insert({
         user_id: user.id,
         opportunity_title,
@@ -71,9 +74,9 @@ export async function POST(request: NextRequest) {
         status: 'discovered',
         is_validated: false,
         created_at: new Date().toISOString()
-      })
+      } as any)
       .select()
-      .single();
+      .single() as any);
 
     if (error) throw error;
     return NextResponse.json({ data });
@@ -91,13 +94,19 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     const { id, status, is_validated } = body;
 
-    const { data, error } = await supabase
+    const updateData: OpportunityRadarUpdate = { 
+      status, 
+      is_validated, 
+      updated_at: new Date().toISOString() 
+    };
+
+    const { data, error } = await ((supabase as any)
       .from('opportunity_radar')
-      .update({ status, is_validated, updated_at: new Date().toISOString() })
+      .update(updateData)
       .eq('id', id)
       .eq('user_id', user.id)
       .select()
-      .single();
+      .single());
 
     if (error) throw error;
     return NextResponse.json({ data });

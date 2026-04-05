@@ -9,8 +9,9 @@ import { opportunityRepository, radarService } from '@/layer-3-data/services/rad
 // GET /api/tier2/opportunities/[id] - Get opportunity details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const supabase = createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -19,13 +20,13 @@ export async function GET(
   }
 
   try {
-    const opportunity = await opportunityRepository.getOpportunityById(params.id);
+    const opportunity = await opportunityRepository.getOpportunityById(id);
 
     if (!opportunity) {
       return NextResponse.json({ error: 'Opportunity not found' }, { status: 404 });
     }
 
-    const validation = await radarService.validateOpportunity(params.id);
+    const validation = await radarService.validateOpportunity(id);
 
     return NextResponse.json({
       opportunity,

@@ -42,15 +42,17 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { primary_archetype, secondary_archetype, archetype_score } = body;
 
+    const upsertData = {
+      user_id: user.id,
+      primary_archetype,
+      secondary_archetype,
+      archetype_score,
+      discovered_at: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
-      .from('archetype_profiles')
-      .upsert({
-        user_id: user.id,
-        primary_archetype,
-        secondary_archetype,
-        archetype_score,
-        discovered_at: new Date().toISOString()
-      }, { onConflict: 'user_id' })
+      .from('archetype_profiles' as any)
+      .upsert(upsertData as any, { onConflict: 'user_id' })
       .select()
       .single();
 

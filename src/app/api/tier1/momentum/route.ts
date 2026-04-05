@@ -65,7 +65,8 @@ export async function POST(request: NextRequest) {
       description: body.description,
       impactScore: body.impactScore || 5,
       activityDate: new Date().toISOString().split('T')[0],
-    });
+      createdAt: new Date().toISOString(),
+    } as any);
 
     // Update dimension score
     const dimension = await tier1Repositories.momentumDimension.getByDimensionName(

@@ -15,15 +15,15 @@ export async function GET(request: NextRequest) {
     }
 
     // Get all momentum dimensions for user
-    const { data: dimensions, error } = await supabase
-      .from('momentum_dimensions')
+    const { data: dimensions, error } = await (supabase
+      .from('momentum_dimensions' as any)
       .select('*')
-      .eq('user_id', user.id);
+      .eq('user_id', user.id) as any);
 
     if (error) throw error;
 
     // Initialize missing dimensions
-    const existingDims = new Set(dimensions?.map(d => d.dimension) || []);
+    const existingDims = new Set((dimensions as any[])?.map((d: any) => d.dimension) || []);
     const missingDims = MOMENTUM_DIMENSIONS.filter(d => !existingDims.has(d));
     
     if (missingDims.length > 0) {
@@ -34,11 +34,11 @@ export async function GET(request: NextRequest) {
         momentum_score: 0
       }));
       
-      await supabase.from('momentum_dimensions').insert(newDims);
+      await supabase.from('momentum_dimensions' as any).insert(newDims as any);
     }
 
     // Calculate overall momentum
-    const allDims = [...(dimensions || []), ...missingDims.map(d => ({ dimension: d, current_level: 1, momentum_score: 0 }))];
+    const allDims = [...(dimensions as any[] || []), ...missingDims.map(d => ({ dimension: d, current_level: 1, momentum_score: 0 }))];
     const overallMomentum = Math.round(
       allDims.reduce((acc, d) => acc + (d.momentum_score || 0), 0) / 7
     );
@@ -65,17 +65,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { dimension, momentum_score, current_level } = body;
 
-    const { data, error } = await supabase
-      .from('momentum_dimensions')
-      .upsert({
-        user_id: user.id,
-        dimension,
-        momentum_score,
-        current_level,
-        last_calculated: new Date().toISOString()
-      }, { onConflict: 'user_id,dimension' })
+    const upsertData = {
+      user_id: user.id,
+      dimension,
+      momentum_score,
+      current_level,
+      last_calculated: new Date().toISOString()
+    };
+
+    const { data, error } = await (supabase
+      .from('momentum_dimensions' as any)
+      .upsert(upsertData as any, { onConflict: 'user_id,dimension' })
       .select()
-      .single();
+      .single() as any);
 
     if (error) throw error;
 

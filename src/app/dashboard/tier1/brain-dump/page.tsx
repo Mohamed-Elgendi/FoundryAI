@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/layer-1-security/auth';
 import { DashboardShell } from '@/components/dashboard/DashboardShell';
-import { BrainDumpSystem } from '@/components/tier1/BrainDumpSystem';
+import BrainDumpSystem from '@/components/tier1/BrainDumpSystem';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';

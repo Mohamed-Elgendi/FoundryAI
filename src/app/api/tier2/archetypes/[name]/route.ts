@@ -10,8 +10,9 @@ import { radarService } from '@/layer-3-data/services/radar-service';
 // GET /api/tier2/archetypes/[name] - Get archetype analysis
 export async function GET(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
+  const { name } = await params;
   const supabase = createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -20,7 +21,7 @@ export async function GET(
   }
 
   try {
-    const analysis = await radarService.getArchetypeAnalysis(params.name);
+    const analysis = await radarService.getArchetypeAnalysis(name);
     return NextResponse.json(analysis);
   } catch (error) {
     console.error('Error fetching archetype analysis:', error);

@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       wasSuccessful: body.wasSuccessful,
       notes: body.notes,
       checkinDate: new Date().toISOString(),
-    });
+    } as any);
 
     // Record emotion pattern if successful transition
     if (body.wasSuccessful && body.targetState) {
@@ -122,7 +122,8 @@ export async function POSTFlow(request: NextRequest) {
         entryMethod: body.entryMethod || 'direct_entry',
         workType: body.workType,
         interruptions: 0,
-      });
+        createdAt: new Date().toISOString(),
+      } as any);
 
       return NextResponse.json({ session, success: true });
     } else if (body.action === 'end') {

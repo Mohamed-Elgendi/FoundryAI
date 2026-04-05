@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/layer-1-security/auth';
 import { DashboardShell } from '@/components/dashboard/DashboardShell';
-import { MomentumBuilder } from '@/components/tier1/MomentumBuilder';
+import MomentumBuilder from '@/components/tier1/MomentumBuilder';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';

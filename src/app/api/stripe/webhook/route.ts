@@ -2,14 +2,6 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
 import { createSupabaseClient } from '@/layer-3-data/storage/supabase-client';
 
-type UserUpdate = {
-  subscription_tier?: string;
-  subscription_status?: string;
-  stripe_customer_id?: string;
-  subscription_period_start?: string;
-  updated_at?: string;
-};
-
 export async function POST(request: Request) {
   if (!stripe) {
     return NextResponse.json(

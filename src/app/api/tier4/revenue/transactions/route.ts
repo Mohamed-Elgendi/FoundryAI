@@ -5,11 +5,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@/layer-1-security/auth/route-handler';
+import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-handler';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createRouteHandlerClient();
+    const supabase = await createRouteHandlerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createRouteHandlerClient();
+    const supabase = await createRouteHandlerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {

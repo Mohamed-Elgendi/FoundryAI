@@ -95,8 +95,8 @@ export async function POSTRedeem(request: NextRequest) {
     await supabase
       .from('foundry_coins')
       .update({
-        balance: coins.balance - body.coinsToSpend,
-        lifetime_spent: (coins.lifetime_spent || 0) + body.coinsToSpend,
+        balance: (coins as any).balance - body.coinsToSpend,
+        lifetime_spent: ((coins as any).lifetime_spent || 0) + body.coinsToSpend,
         updated_at: new Date().toISOString(),
       })
       .eq('user_id', user.id);

@@ -50,7 +50,8 @@ export async function POST(request: NextRequest) {
       domain: body.domain,
       impactRating: body.impactRating,
       dateRecorded: new Date().toISOString().split('T')[0],
-    });
+      createdAt: new Date().toISOString(),
+    } as any);
 
     // Recalculate domain-specific CQ scores
     const allEvidence = await tier1Repositories.confidenceEvidence.getByUserIdAndLayer(user.id);

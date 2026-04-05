@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { FoundryAIOutput, RefinementState } from '@/types';
 import { 
   Target, Users, Wrench, Layers, Hammer, DollarSign, 

@@ -66,7 +66,8 @@ export async function POST(request: NextRequest) {
       bodyAlignmentScore: body.bodyAlignmentScore,
       soulAlignmentScore: body.soulAlignmentScore,
       entryDate: today,
-    });
+      createdAt: new Date().toISOString(),
+    } as any);
 
     // Update streak
     const streak = await tier1Repositories.journalStreak.getOrCreate(user.id);
@@ -124,7 +125,8 @@ export async function POSTAffirmation(request: NextRequest) {
       evidenceReference: body.evidenceReference,
       usageCount: 0,
       isActive: true,
-    });
+      createdAt: new Date().toISOString(),
+    } as any);
 
     return NextResponse.json({ affirmation, success: true });
   } catch (error) {

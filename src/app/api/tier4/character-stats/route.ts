@@ -41,8 +41,8 @@ export async function GET(request: NextRequest) {
       .limit(10);
 
     // Get all achievements count by rarity
-    const { data: achievementStats } = await supabase
-      .from('achievements')
+    const { data: achievementStats } = await (supabase
+      .from('achievements') as any)
       .select('rarity, count')
       .eq('user_id', user.id)
       .group('rarity');

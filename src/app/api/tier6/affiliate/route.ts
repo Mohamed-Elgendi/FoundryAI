@@ -135,6 +135,7 @@ export async function POSTRegister(request: NextRequest) {
 
 // POST /api/tier6/affiliate/track-click - Track affiliate click
 export async function POSTTrackClick(request: NextRequest) {
+  const supabase = createRouteHandlerSupabaseClient();
   try {
     const body = await request.json();
 

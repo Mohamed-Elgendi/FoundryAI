@@ -512,6 +512,10 @@ export class FlowSessionRepository extends BaseRepository<FlowSession> {
 // 8. MOMENTUM BUILDER REPOSITORY
 // ============================================
 
+export class MomentumActivityRepository extends BaseRepository<MomentumActivity> {
+  protected tableName = 'momentum_activities';
+}
+
 export class MomentumDimensionRepository extends BaseRepository<MomentumDimension> {
   protected tableName = 'momentum_dimensions';
 
@@ -616,6 +620,7 @@ export const tier1Repositories = {
   flowSession: new FlowSessionRepository(),
 
   // Momentum Builder
+  momentumActivity: new MomentumActivityRepository(),
   momentumDimension: new MomentumDimensionRepository(),
   momentumFlywheel: new MomentumFlywheelRepository(),
 };
