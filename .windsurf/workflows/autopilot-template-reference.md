@@ -1,9 +1,40 @@
 ---
-description: Universal Autopilot Template - Self-improving iterative deployment for ANY project type (SaaS, PaaS, Platform, App, etc.)
+description: ⚠️ REFERENCE BACKUP - Universal Autopilot Template - Use this to restore /autopilot workflow if damaged
 ---
 
-# 🚀 UNIVERSAL AUTOPILOT TEMPLATE
+# 🛡️ AUTOPILOT TEMPLATE - REFERENCE BACKUP
+## ⚠️ DO NOT MODIFY - This is the Master Reference Version
+
+**Purpose:** This file serves as the **immutable reference backup** for the Universal Autopilot Template.
+
+**When to Use:**
+- If `/autopilot` workflow becomes damaged or corrupted
+- If you need to reset to the original template
+- If you want to create a fresh project template
+- As a reference for understanding the full template structure
+
+**How to Restore:**
+```bash
+# Restore to a project
+cp /home/mo/CascadeProjects/FoundryAI/.windsurf/workflows/autopilot-template-reference.md \
+   /path/to/your/project/.windsurf/workflows/autopilot.md
+
+# Or copy to .windsurf directory for immediate use
+cp /home/mo/CascadeProjects/FoundryAI/.windsurf/workflows/autopilot-template-reference.md \
+   /home/mo/CascadeProjects/FoundryAI/.windsurf/workflows/autopilot.md
+```
+
+---
+
+# 🚀 UNIVERSAL AUTOPILOT TEMPLATE (MASTER REFERENCE)
 ## Self-Improving Iterative Development & Deployment for ANY Project
+
+**Version:** 2.0 - Universal Edition  
+**Backup Date:** April 25, 2026  
+**Status:** ✅ REFERENCE - DO NOT MODIFY  
+**Last Verified:** Working and tested
+
+---
 
 **PRINCIPLE:** When `/autopilot` is typed, execute COMPLETELY WITHOUT STOPPING through iterative cycles until project is 1000% complete, rich-content, working, live, safe, secured, and stable.
 
@@ -865,6 +896,32 @@ This runs multiple cycles:
 
 ---
 
+## 🛡️ BACKUP & RESTORE
+
+### This is Your Master Reference
+This file (`autopilot-template-reference.md`) is the **immutable backup**. 
+
+**To restore the workflow:**
+```bash
+# Option 1: Restore to current project
+cp .windsurf/workflows/autopilot-template-reference.md \
+   .windsurf/workflows/autopilot.md
+
+# Option 2: Copy to new project
+cp .windsurf/workflows/autopilot-template-reference.md \
+   /path/to/new/project/.windsurf/workflows/autopilot.md
+
+# Option 3: Create fresh copy for modification
+cp .windsurf/workflows/autopilot-template-reference.md \
+   .windsurf/workflows/autopilot-fresh.md
+```
+
+### Version History
+- **v2.0** (April 25, 2026) - Universal Edition with Beast Mode
+- **v1.0** (April 25, 2026) - Initial Universal Template
+
+---
+
 **MANTRA:** *"We don't stop. We don't ask. We research. We understand. We build. We test. We fix. We deploy. We improve. We scale. We evolve. Forever."*
 
 ---
@@ -872,10 +929,24 @@ This runs multiple cycles:
 ## 📄 VERSION
 
 **Template Version:** 2.0 - Universal Edition  
-**Created:** April 25, 2026  
+**Backup Date:** April 25, 2026  
+**Status:** ✅ MASTER REFERENCE - DO NOT MODIFY  
 **Compatibility:** Any project, any stack, any platform  
 **License:** Use freely for any project
 
 ---
 
 **🚀 Ready to build anything. Just type `/autopilot`.**
+
+---
+
+## 📞 EMERGENCY CONTACT
+
+**If you lose this file:**
+1. Check `.windsurf/workflows/` directory
+2. Look for `autopilot-template.md` (working copy)
+3. This reference file is your backup
+4. Never delete this reference file
+5. Copy from reference to create new working versions
+
+**⚠️ WARNING:** Do not modify this reference file. Always create a copy first.
