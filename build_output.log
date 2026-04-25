@@ -3,21 +3,21 @@
 > next build
 
 ▲ Next.js 16.2.1 (Turbopack)
-- Environments: .env.local
+- Environments: .env.local, .env.production
 - Experiments (use with caution):
   · optimizePackageImports
 
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
   Creating an optimized production build ...
-✓ Compiled successfully in 62s
+✓ Compiled successfully in 111s
   Running TypeScript ...
-  Finished TypeScript in 31.7s ...
+  Finished TypeScript in 2.5min ...
   Collecting page data using 3 workers ...
   Generating static pages using 3 workers (0/92) ...
   Generating static pages using 3 workers (23/92) 
   Generating static pages using 3 workers (46/92) 
   Generating static pages using 3 workers (69/92) 
-✓ Generating static pages using 3 workers (92/92) in 3.9s
+✓ Generating static pages using 3 workers (92/92) in 19.2s
   Finalizing page optimization ...
 
 Route (app)

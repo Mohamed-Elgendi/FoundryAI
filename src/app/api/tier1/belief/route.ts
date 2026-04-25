@@ -92,6 +92,7 @@ export async function POST(request: NextRequest) {
     updateData.level = Math.min(5, Math.floor(updateData.overallScore / 20) + 1);
 
     // @ts-ignore
+    // @ts-ignore
     await tier1Repositories.beliefScore.update(currentScore.id, updateData);
 
     return NextResponse.json({ evidence, success: true });

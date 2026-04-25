@@ -248,6 +248,7 @@ export async function POSTResolveError(request: NextRequest) {
       await supabase
         .from('build_tasks')
     // @ts-ignore
+    // @ts-ignore
         .update({
           error_log: body.error,
           solution_notes: resolution.solution,

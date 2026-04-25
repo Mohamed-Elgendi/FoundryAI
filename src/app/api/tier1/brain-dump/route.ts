@@ -146,6 +146,7 @@ export async function PATCH(request: NextRequest) {
     const { itemId, ...updates } = body;
 
     // @ts-ignore
+    // @ts-ignore
     const updated = await tier1Repositories.brainDumpItem.update(itemId, updates);
 
     return NextResponse.json({ item: updated, success: true });

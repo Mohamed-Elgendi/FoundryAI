@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
           : 1;
 
     // @ts-ignore
+    // @ts-ignore
         await tier1Repositories.mindsetPillar.update(pillar.id, {
           currentScore: newScore,
           practiceStreak: newStreak,
@@ -111,6 +112,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Pillar not found' }, { status: 404 });
     }
 
+    // @ts-ignore
     // @ts-ignore
     const updated = await tier1Repositories.mindsetPillar.update(pillar.id, {
       targetScore: body.targetScore,

@@ -1,0 +1,368 @@
+
+> my-app@0.1.0 test
+> jest --passWithNoTests --silent
+
+jest-haste-map: Haste module naming collision: my-app
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>/package.json
+    * <rootDir>/.next/standalone/package.json
+
+FAIL tests/integration/api/routes.test.ts (7.231 s)
+  ● API Routes - Integration Tests › POST /api/generate › should successfully generate a plan
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      94 |       const data = await response.json();
+      95 |
+    > 96 |       expect(response.status).toBe(200);
+         |                               ^
+      97 |       expect(data.success).toBe(true);
+      98 |       expect(data.output).toEqual(mockOutput);
+      99 |       expect(data.provider).toBe('groq-llama-3-3');
+
+      at Object.toBe (tests/integration/api/routes.test.ts:96:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should return 400 for invalid input
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: undefined
+
+      112 |       const data = await response.json();
+      113 |
+    > 114 |       expect(response.status).toBe(400);
+          |                               ^
+      115 |       expect(data.error).toBeDefined();
+      116 |     });
+      117 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:114:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle AI service errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 502
+    Received: undefined
+
+      135 |       const data = await response.json();
+      136 |
+    > 137 |       expect(response.status).toBe(502);
+          |                               ^
+      138 |       expect(data.error).toBeDefined();
+      139 |       expect(data.suggestedAction).toBe('Please try again later');
+      140 |     });
+
+      at Object.toBe (tests/integration/api/routes.test.ts:137:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle malformed AI response
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: undefined
+
+      160 |       const data = await response.json();
+      161 |
+    > 162 |       expect(response.status).toBe(500);
+          |                               ^
+      163 |       expect(data.error).toContain('parse');
+      164 |     });
+      165 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:162:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle rate limit errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 502
+    Received: undefined
+
+      184 |       const data = await response.json();
+      185 |
+    > 186 |       expect(response.status).toBe(502);
+          |                               ^
+      187 |       expect(data.rateLimitError).toBe(true);
+      188 |     });
+      189 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:186:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle quota exceeded errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 502
+    Received: undefined
+
+      207 |       const data = await response.json();
+      208 |
+    > 209 |       expect(response.status).toBe(502);
+          |                               ^
+      210 |       expect(data.quotaExceeded).toBe(true);
+      211 |     });
+      212 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:209:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should use fallback provider when preferred fails
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      233 |       const data = await response.json();
+      234 |
+    > 235 |       expect(response.status).toBe(200);
+          |                               ^
+      236 |       expect(data.fallbackUsed).toBe(true);
+      237 |     });
+      238 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:235:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle JSON parsing errors gracefully
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: undefined
+
+      245 |
+      246 |       const response = await generatePlan(request);
+    > 247 |       expect(response.status).toBe(500);
+          |                               ^
+      248 |     });
+      249 |   });
+      250 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:247:31)
+
+  ● API Routes - Integration Tests › POST /api/refine › should successfully refine a plan
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      313 |       const data = await response.json();
+      314 |
+    > 315 |       expect(response.status).toBe(200);
+          |                               ^
+      316 |       expect(data.success).toBe(true);
+      317 |       expect(data.output).toEqual(mockRefinedOutput);
+      318 |     });
+
+      at Object.toBe (tests/integration/api/routes.test.ts:315:31)
+
+  ● API Routes - Integration Tests › POST /api/refine › should return 400 for missing required fields
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: undefined
+
+      329 |
+      330 |       const response = await refinePlan(request);
+    > 331 |       expect(response.status).toBe(400);
+          |                               ^
+      332 |     });
+      333 |   });
+      334 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:331:31)
+
+  ● API Routes - Integration Tests › GET /api/providers › should return available providers
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      338 |       const data = await response.json();
+      339 |
+    > 340 |       expect(response.status).toBe(200);
+          |                               ^
+      341 |       expect(data.providers).toBeDefined();
+      342 |       expect(Array.isArray(data.providers)).toBe(true);
+      343 |       expect(data.defaultProvider).toBeDefined();
+
+      at Object.toBe (tests/integration/api/routes.test.ts:340:31)
+
+  ● API Routes - Integration Tests › GET /api/providers › should include provider metadata
+
+    TypeError: Cannot read properties of undefined (reading 'length')
+
+      348 |       const data = await response.json();
+      349 |
+    > 350 |       if (data.providers.length > 0) {
+          |                          ^
+      351 |         const provider = data.providers[0];
+      352 |         expect(provider).toHaveProperty('id');
+      353 |         expect(provider).toHaveProperty('name');
+
+      at Object.length (tests/integration/api/routes.test.ts:350:26)
+
+  ● API Routes - Integration Tests › POST /api/feedback › should successfully submit feedback
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      373 |       const data = await response.json();
+      374 |
+    > 375 |       expect(response.status).toBe(200);
+          |                               ^
+      376 |       expect(data.success).toBe(true);
+      377 |     });
+      378 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:375:31)
+
+  ● API Routes - Integration Tests › POST /api/feedback › should handle missing required fields
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: undefined
+
+      387 |
+      388 |       const response = await submitFeedback(request);
+    > 389 |       expect(response.status).toBe(400);
+          |                               ^
+      390 |     });
+      391 |
+      392 |     it('should validate rating range', async () => {
+
+      at Object.toBe (tests/integration/api/routes.test.ts:389:31)
+
+  ● API Routes - Integration Tests › POST /api/feedback › should validate rating range
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: undefined
+
+      402 |
+      403 |       const response = await submitFeedback(request);
+    > 404 |       expect(response.status).toBe(400);
+          |                               ^
+      405 |     });
+      406 |   });
+      407 | });
+
+      at Object.toBe (tests/integration/api/routes.test.ts:404:31)
+
+FAIL tests/unit/layer-2-ai/ai-router.test.ts (10.885 s)
+  ● AI Router › processWithAI › should return fallback response when using fallback provider
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      90 |       expect(result.content).toBeDefined();
+      91 |       expect(result.provider).toBeDefined();
+    > 92 |       expect(result.latencyMs).toBeDefined();
+         |                                ^
+      93 |       expect(typeof result.latencyMs).toBe('number');
+      94 |     });
+      95 |
+
+      at Object.toBeDefined (tests/unit/layer-2-ai/ai-router.test.ts:92:32)
+
+  ● AI Router › processWithAI › should handle missing API key gracefully
+
+    expect(received).toContain(expected) // indexOf
+
+    Matcher error: received value must not be null nor undefined
+
+    Received has value: undefined
+
+      103 |
+      104 |       expect(result).toBeDefined();
+    > 105 |       expect(result.error).toContain('API key not configured');
+          |                            ^
+      106 |     });
+      107 |
+      108 |     it('should successfully process with available provider', async () => {
+
+      at Object.toContain (tests/unit/layer-2-ai/ai-router.test.ts:105:28)
+
+  ● AI Router › processWithAI › should return error when all providers fail
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      161 |
+      162 |       expect(result).toBeDefined();
+    > 163 |       expect(result.error).toBeDefined();
+          |                            ^
+      164 |     });
+      165 |
+      166 |     it('should handle quota exceeded errors', async () => {
+
+      at Object.toBeDefined (tests/unit/layer-2-ai/ai-router.test.ts:163:28)
+
+  ● AI Router › Error Classification › should detect rate limit errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: undefined
+
+      246 |       });
+      247 |
+    > 248 |       expect(result.rateLimitError).toBe(true);
+          |                                     ^
+      249 |     });
+      250 |
+      251 |     it('should detect quota exceeded errors', async () => {
+
+      at Object.toBe (tests/unit/layer-2-ai/ai-router.test.ts:248:37)
+
+  ● AI Router › Error Classification › should detect quota exceeded errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: undefined
+
+      260 |       });
+      261 |
+    > 262 |       expect(result.quotaExceeded).toBe(true);
+          |                                    ^
+      263 |     });
+      264 |
+      265 |     it('should detect billing errors', async () => {
+
+      at Object.toBe (tests/unit/layer-2-ai/ai-router.test.ts:262:36)
+
+  ● AI Router › Error Classification › should detect billing errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: undefined
+
+      274 |       });
+      275 |
+    > 276 |       expect(result.quotaExceeded).toBe(true);
+          |                                    ^
+      277 |     });
+      278 |   });
+      279 | });
+
+      at Object.toBe (tests/unit/layer-2-ai/ai-router.test.ts:276:36)
+
+Test Suites: 2 failed, 2 total
+Tests:       21 failed, 11 passed, 32 total
+Snapshots:   0 total
+Time:        29.312 s
