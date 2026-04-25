@@ -1,7 +1,8 @@
 // @ts-nocheck
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useAffiliate } from '@/hooks/useAffiliate';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,104 +16,64 @@ import {
   Share2,
   Award,
   Link,
-  BarChart3
+  BarChart3,
+  Loader2
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-interface AffiliateStats {
-  totalClicks: number;
-  totalConversions: number;
-  totalEarnings: number;
-  pendingEarnings: number;
-  paidEarnings: number;
-  conversionRate: number;
-  currentTier: number;
-  affiliateCode: string;
-  referralLink: string;
+interface AffiliateDashboardProps {
+  userId: string;
 }
 
-interface Conversion {
-  id: string;
-  customerEmail: string;
-  orderValue: number;
-  commissionAmount: number;
-  status: string;
-  convertedAt: string;
-}
-
-export default function AffiliateDashboard() {
+export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
-  const [stats, setStats] = useState<AffiliateStats | null>(null);
-  const [conversions, setConversions] = useState<Conversion[]>([]);
-  const [chartData, setChartData] = useState([]);
   const [copied, setCopied] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    loadAffiliateData();
-  }, []);
-
-  const loadAffiliateData = async () => {
-    try {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 700));
-      
-      setStats({
-        totalClicks: 342,
-        totalConversions: 18,
-        totalEarnings: 1560,
-        pendingEarnings: 420,
-        paidEarnings: 1140,
-        conversionRate: 5.26,
-        currentTier: 2,
-        affiliateCode: 'FA7X9K2M',
-        referralLink: 'https://foundryai.com/signup?ref=FA7X9K2M',
-      });
-
-      setConversions([
-        { id: '1', customerEmail: 'user1@example.com', orderValue: 79, commissionAmount: 23.70, status: 'approved', convertedAt: '2024-01-15' },
-        { id: '2', customerEmail: 'user2@example.com', orderValue: 199, commissionAmount: 59.70, status: 'pending', convertedAt: '2024-01-14' },
-        { id: '3', customerEmail: 'user3@example.com', orderValue: 29, commissionAmount: 8.70, status: 'approved', convertedAt: '2024-01-12' },
-        { id: '4', customerEmail: 'user4@example.com', orderValue: 79, commissionAmount: 23.70, status: 'paid', convertedAt: '2024-01-10' },
-      ]);
-
-      setChartData([
-        { date: 'Week 1', clicks: 45, conversions: 2, earnings: 60 },
-        { date: 'Week 2', clicks: 52, conversions: 3, earnings: 90 },
-        { date: 'Week 3', clicks: 48, conversions: 4, earnings: 120 },
-        { date: 'Week 4', clicks: 61, conversions: 5, earnings: 150 },
-        { date: 'Week 5', clicks: 58, conversions: 2, earnings: 60 },
-        { date: 'Week 6', clicks: 78, conversions: 2, earnings: 60 },
-      ]);
-    } catch (error) {
-      console.error('Error loading affiliate data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { affiliate, dashboard, links, payouts, loading, error, createLink, requestPayout } = useAffiliate(userId);
 
   const copyLink = () => {
-    if (stats?.referralLink) {
-      navigator.clipboard.writeText(stats.referralLink);
+    if (affiliate?.referral_code) {
+      const link = `${process.env.NEXT_PUBLIC_APP_URL || 'https://foundryai-seven.vercel.app'}/signup?ref=${affiliate.referral_code}`;
+      navigator.clipboard.writeText(link);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
   };
 
-  const getTierName = (tier: number) => {
-    const tiers = ['Starter', 'Pro', 'Elite', 'Legendary'];
-    return tiers[tier - 1] || 'Starter';
+  const getTierName = (tier: string) => {
+    const tiers: Record<string, string> = {
+      'bronze': 'Bronze Partner',
+      'silver': 'Silver Partner', 
+      'gold': 'Gold Partner',
+      'platinum': 'Platinum Partner'
+    };
+    return tiers[tier] || 'Bronze Partner';
   };
 
-  const getTierCommission = (tier: number) => {
-    const rates = [30, 35, 40, 50];
-    return rates[tier - 1] || 30;
+  const getTierCommission = (rate: number) => {
+    return rate || 10;
   };
 
-  if (isLoading) {
+  const stats = dashboard?.stats;
+  const conversions = dashboard?.recentConversions || [];
+  const chartData = dashboard?.monthlyEarnings?.map((m: any) => ({
+    date: m.month,
+    clicks: m.clicks,
+    conversions: m.conversions,
+    earnings: m.earnings
+  })) || [];
+
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full" />
+        <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <p className="text-red-600">Error loading affiliate data: {error}</p>
       </div>
     );
   }
@@ -126,7 +87,7 @@ export default function AffiliateDashboard() {
           Affiliate Program
         </h1>
         <p className="text-slate-600 max-w-2xl mx-auto">
-          Refer others to FoundryAI and earn {getTierCommission(stats?.currentTier || 1)}% commission on their subscriptions.
+          Refer others to FoundryAI and earn {getTierCommission(affiliate?.commission_rate || 10)}% commission on their subscriptions.
         </p>
       </div>
 
