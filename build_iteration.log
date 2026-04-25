@@ -1,0 +1,88 @@
+
+> my-app@0.1.0 build
+> next build
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local, .env.production
+- Experiments (use with caution):
+  · optimizePackageImports
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 2 errors:
+./src/layer-3-data/services/billing-service.ts:4:1
+Module not found: Can't resolve '@/lib/supabase'
+  [90m2 |[0m [90m// Beast Mode - Real Working Code[0m
+  [90m3 |[0m
+[31m[1m>[0m [90m4 |[0m [36mimport[0m { supabase } [36mfrom[0m [32m'@/lib/supabase'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m [36mtype[0m {
+  [90m6 |[0m   [33mUserCredits[0m,
+  [90m7 |[0m   [33mCreditTransaction[0m,
+
+Import map: aliased to relative './src/lib/supabase' inside of [project]/
+
+
+Import traces:
+  App Route:
+    ./src/layer-3-data/services/billing-service.ts
+    ./src/app/api/tier6/credits/usage/route.ts
+
+  Client Component Browser:
+    ./src/layer-3-data/services/billing-service.ts [Client Component Browser]
+    ./src/hooks/useCredits.ts [Client Component Browser]
+    ./src/components/tier6/CreditDashboard.tsx [Client Component Browser]
+    ./src/components/tier6/CreditDashboard.tsx [Server Component]
+    ./src/app/dashboard/tier6/credits/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/layer-3-data/services/billing-service.ts [Client Component SSR]
+    ./src/hooks/useCredits.ts [Client Component SSR]
+    ./src/components/tier6/CreditDashboard.tsx [Client Component SSR]
+    ./src/components/tier6/CreditDashboard.tsx [Server Component]
+    ./src/app/dashboard/tier6/credits/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/layer-3-data/services/gamification-service.ts:4:1
+Module not found: Can't resolve '@/lib/supabase'
+  [90m2 |[0m [90m// Beast Mode - Real Working Code[0m
+  [90m3 |[0m
+[31m[1m>[0m [90m4 |[0m [36mimport[0m { supabase } [36mfrom[0m [32m'@/lib/supabase'[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m [36mtype[0m {
+  [90m6 |[0m   [33mUserPoints[0m,
+  [90m7 |[0m   [33mBadge[0m,
+
+Import map: aliased to relative './src/lib/supabase' inside of [project]/
+
+
+Import traces:
+  App Route:
+    ./src/layer-3-data/services/gamification-service.ts
+    ./src/app/api/tier5/gamification/streaks/route.ts
+
+  Client Component Browser:
+    ./src/layer-3-data/services/gamification-service.ts [Client Component Browser]
+    ./src/hooks/useGamification.ts [Client Component Browser]
+    ./src/components/tier5/GamificationDashboard.tsx [Client Component Browser]
+    ./src/components/tier5/GamificationDashboard.tsx [Server Component]
+    ./src/app/dashboard/tier5/gamification/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/layer-3-data/services/gamification-service.ts [Client Component SSR]
+    ./src/hooks/useGamification.ts [Client Component SSR]
+    ./src/components/tier5/GamificationDashboard.tsx [Client Component SSR]
+    ./src/components/tier5/GamificationDashboard.tsx [Server Component]
+    ./src/app/dashboard/tier5/gamification/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./src/layer-3-data/services/billing-service.ts:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/layer-3-data/services/gamification-service.ts:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
