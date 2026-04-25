@@ -1,7 +1,7 @@
 // AI Curriculum Engine Service - ACTUAL IMPLEMENTATION
 // Beast Mode - Production Ready
 
-import { supabase } from '@/lib/supabase';
+import { createBrowserSupabaseClient } from '@/layer-3-data/supabase/client';
 import type {
   UserLearningProfile,
   Curriculum,

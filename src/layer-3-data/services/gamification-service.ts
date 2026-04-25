@@ -1,7 +1,7 @@
 // Gamification Service - ACTUAL IMPLEMENTATION
 // Beast Mode - Real Working Code
 
-import { supabase } from '@/lib/supabase';
+import { createBrowserSupabaseClient } from '@/layer-3-data/supabase/client';
 import type {
   UserPoints,
   Badge,
