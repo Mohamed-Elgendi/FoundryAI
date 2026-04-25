@@ -122,10 +122,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setSession(null);
-    setProfile(null);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      // Clear state
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      
+      // Redirect to login page
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Force redirect even if there's an error
+      window.location.href = '/login';
+    }
   };
 
   const signInWithOAuth = async (provider: 'google' | 'github') => {
