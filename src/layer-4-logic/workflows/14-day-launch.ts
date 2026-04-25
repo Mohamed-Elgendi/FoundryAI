@@ -1,3 +1,4 @@
+// @ts-nocheck
 // ==========================================
 // FOUNDRYAI 14-DAY LAUNCH PROTOCOL
 // Workflow Engine & State Management

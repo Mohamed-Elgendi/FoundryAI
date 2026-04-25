@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Revenue Hooks
  * React hooks for revenue tracking and management

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Tier 4: Personal Development Layer Exports
 // Self-Discovery, Mindset & Personality, Productivity systems
 

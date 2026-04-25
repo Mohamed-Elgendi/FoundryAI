@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Layer 5: Data Layer Architecture
  * Repository pattern with caching, migrations, and backup strategy

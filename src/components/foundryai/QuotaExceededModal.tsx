@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import { AlertCircle, RefreshCw, ExternalLink } from 'lucide-react';

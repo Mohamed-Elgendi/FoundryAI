@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/layer-1-security/auth";

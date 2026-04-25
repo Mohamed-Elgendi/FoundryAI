@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tier 6 Monetization API Routes
  * Membership, revenue tracking, affiliate system

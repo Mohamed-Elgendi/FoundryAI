@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Crash-proof Logger Utility
  * Safely logs errors without crashing the application

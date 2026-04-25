@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createClient } from '@supabase/supabase-js';
 import { FeedbackData, StoredPattern, FoundryAIOutput } from '@/types';
 

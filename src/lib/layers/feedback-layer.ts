@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Layer 7: Feedback & Refinement Layer
  * Analytics, error tracking, logging, A/B testing

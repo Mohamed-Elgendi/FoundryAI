@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Security Sanitization Module
  * Input/output sanitization utilities

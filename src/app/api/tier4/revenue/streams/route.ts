@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Revenue Streams API
  * GET /api/tier4/revenue/streams

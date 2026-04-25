@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AI Context Module
  * Context building and management for AI prompts

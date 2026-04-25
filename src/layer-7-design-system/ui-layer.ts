@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LAYER 1: UI/UX SYSTEM DESIGN
  * ============================

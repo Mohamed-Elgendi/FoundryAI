@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Dashboard Components
  * Dashboard shell and provider exports

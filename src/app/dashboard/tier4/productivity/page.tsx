@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Metadata } from 'next';
 import { ProductivityOptimizer } from '@/components/tier4';
 

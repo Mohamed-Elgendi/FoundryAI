@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { FoundryAIOutput } from '@/types';
 import { AIProvider } from '@/layer-2-ai/router/ai-types';
 

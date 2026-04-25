@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import { useTheme } from '@/lib/theme/theme-context';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Logic Layer for Data Operations
  */

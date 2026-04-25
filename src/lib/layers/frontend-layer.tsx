@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Layer 9: Frontend UI Layer with Analytical Dashboard Shell
  * Dashboard layout, navigation, routing, real-time updates

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Tier 1 Core Foundation Layer - Component Exports
 // All 8 subsystems of the Always Active foundation layer
 

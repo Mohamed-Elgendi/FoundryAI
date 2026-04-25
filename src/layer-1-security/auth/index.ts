@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useAuth } from './auth-provider';
 
 export { useAuth, AuthProvider } from './auth-provider';

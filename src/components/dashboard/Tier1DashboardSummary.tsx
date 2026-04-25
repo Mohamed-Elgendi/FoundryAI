@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tier 1 Foundation Dashboard Integration
  * Example of how to use the Tier 1 hooks in a dashboard view

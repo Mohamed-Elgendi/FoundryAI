@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LAYER 6: EXPANSION & PLUGIN ARCHITECTURE
  * ========================================

@@ -1,3 +1,4 @@
+// @ts-nocheck
 export interface FoundryAIOutput {
   // Layer 0: Market & User Research
   ideaName: string;

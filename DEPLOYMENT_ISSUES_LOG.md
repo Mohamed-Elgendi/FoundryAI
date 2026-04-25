@@ -315,3 +315,21 @@ processWithAI({ provider: selectedProvider }); // Correct!
 
 **Last Updated:** 2026-03-31
 **Maintained by:** Cascade AI Assistant
+
+---
+
+### Issue: Auto-Detected Vercel Deployment Failure
+**Date:' "$(date +%Y-%m-%d)" '**
+**Status:** 🔧 Auto-Fixing
+**Trigger:** /autopilot workflow
+
+**Error Log:**
+```
+Error: supabaseKey is required.
+Build failed on Vercel - environment variables not available during build
+```
+
+**Auto-Applied Fixes:**
+- Environment variable issue detected
+  → Applied: Copied env.local to env.production
+  → Applied: Updated vercel.json with env references

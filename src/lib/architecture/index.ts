@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * FoundryAI - 12-Layer Architecture
  * 

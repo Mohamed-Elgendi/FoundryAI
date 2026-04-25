@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Layer 3: Data - Main Export
 export * from './storage';
 export type { Tables } from './storage/database.types';

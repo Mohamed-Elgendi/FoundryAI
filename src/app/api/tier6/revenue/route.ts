@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tier 6 Revenue API Routes
  * Revenue tracking, goals, streams

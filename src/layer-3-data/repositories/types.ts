@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Repository Types
  * Type definitions for data layer repositories

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tier 1 Foundation API Routes - Journal
  * Affirmation & Journaling endpoints

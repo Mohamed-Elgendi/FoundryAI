@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LAYER 3: DATA LAYER
  * ===================

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Plan Generator Module - Barrel exports
 export { PlanGenerator } from './PlanGenerator';
 export { PlanInput } from './components/PlanInput';

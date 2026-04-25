@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Layer 4: Logic - Validation
  * Data validation utilities

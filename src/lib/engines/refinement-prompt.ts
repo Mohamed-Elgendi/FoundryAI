@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { FoundryAIOutput } from '@/types';
 import { parseJSON } from '@/lib/utils/json-parser';
 

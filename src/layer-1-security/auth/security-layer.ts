@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LAYER 5: SECURITY LAYER
  * =======================

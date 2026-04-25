@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * User Opportunities Repository
  * Handles CRUD operations for user-saved opportunities

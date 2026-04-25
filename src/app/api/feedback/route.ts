@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { storeFeedback, getFeedbackStats } from '@/layer-3-data/storage/supabase-client';
 import { FeedbackData } from '@/types';

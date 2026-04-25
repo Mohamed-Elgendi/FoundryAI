@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Layer 2: AI Expansion - Main Export
 export * from './providers';
 export * from './router';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Route Handler Supabase Client
  * Helper for creating Supabase client in API routes

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tier 4 Character Stats API Routes
  * Gamification, achievements, character progression

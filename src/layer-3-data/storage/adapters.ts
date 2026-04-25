@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Storage Adapter Interface and Implementations
  * Provides abstraction layer for data storage

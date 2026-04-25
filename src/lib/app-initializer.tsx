@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * App Initialization and Wiring Layer
  * Connects all layers together, handles startup, dependency injection

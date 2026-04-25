@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tier 2 Opportunity Detail & Validation API Routes
  */

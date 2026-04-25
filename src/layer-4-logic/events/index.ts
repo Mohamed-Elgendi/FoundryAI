@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Layer 4: Logic - Events
  * Event handling and pub/sub

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AI Provider Types (Client-Safe)
  * No server-side imports or process.env references

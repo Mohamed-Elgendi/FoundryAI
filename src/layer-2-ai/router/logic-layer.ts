@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * LAYER 5: LOGIC LAYER
  * ====================

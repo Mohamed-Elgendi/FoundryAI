@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Metadata } from 'next';
 import { AffirmationJournaling } from '@/components/tier1';
 

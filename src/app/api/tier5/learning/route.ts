@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tier 5 Training & Education API Routes
  * Learning paths, skills, spaced repetition

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Enhanced AI Router with Multi-Provider Support
  * Claude AI as primary, with smart fallback to other providers

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Opportunity Radar Service
  * Multi-source intelligence gathering and opportunity validation

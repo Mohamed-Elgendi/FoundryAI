@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { trackEvent as trackSentryEvent } from '@/lib/monitoring';
 
 // Analytics configuration

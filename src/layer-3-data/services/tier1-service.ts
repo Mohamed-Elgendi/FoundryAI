@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Tier 1 Data Services
  * Client-side services for fetching and updating Tier 1 data

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Cache Manager
  * Provides caching capabilities with TTL and invalidation

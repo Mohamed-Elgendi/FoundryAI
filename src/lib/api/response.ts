@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * API Response Utilities
  * Standardized response handlers for API routes

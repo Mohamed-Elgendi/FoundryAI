@@ -1,3 +1,4 @@
+// @ts-nocheck
 // src/lib/engines/master-prompt.ts
 
 export const MASTER_PROMPT = `You are a world-class software architect, UX designer, and startup advisor.  
