@@ -5,7 +5,20 @@ description: Autopilot - NON-STOP iterative deployment of FoundryAI. Deep resear
 # FoundryAI /autopilot Workflow
 ## 🚀 ITERATIVE AUTONOMOUS DEVELOPMENT & DEPLOYMENT
 
-**PRINCIPLE:** When `/autopilot` is typed, execute COMPLETELY WITHOUT STOPPING through iterative cycles of research, implementation, testing, and deployment until the platform is 100% rich-content,COMPLETE, WORKING, FUNCTIONIN, LIVE, SAFE SECURED AND STABLE.
+**PRINCIPLE:** When `/autopilot` is typed, execute COMPLETELY WITHOUT STOPPING through iterative cycles of research, implementation, testing, and deployment until the platform is 100% rich-content, COMPLETE, WORKING, FUNCTIONING, LIVE, SAFE, SECURED AND STABLE.
+
+**CONTENT MANDATE - 1000% COMPLETE DOCUMENTATION:**
+Every time `/autopilot` runs, it MUST create the **1000% complete full comprehensive rich content** of the entire platform. This includes:
+- **Deep technical specifications** for every module, feature, and component
+- **Complete API documentation** with examples and use cases
+- **Comprehensive architecture documentation** covering all tiers and layers
+- **Detailed implementation guides** for all systems (Gamification, Billing, Curriculum, Affiliate, etc.)
+- **Rich business documentation** covering revenue models, user flows, and monetization strategies
+- **Complete database schemas** with explanations and relationships
+- **Exhaustive README updates** reflecting current platform state
+- **Content must be publication-ready** - professional, detailed, and immediately usable
+
+The documentation is NOT a side task - it is a PRIMARY DELIVERABLE equal to code implementation.
 
 **MANDATE:** 
 - BUILD THE MOST POWERFUL, SMART, PROFITABLE PLATFORM
