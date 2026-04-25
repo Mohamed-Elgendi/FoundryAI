@@ -2,6 +2,9 @@
 // Beast Mode - Real Working Code
 
 import { createBrowserSupabaseClient } from '@/layer-3-data/supabase/client';
+
+const supabase = createBrowserSupabaseClient();
+
 import type {
   UserPoints,
   Badge,

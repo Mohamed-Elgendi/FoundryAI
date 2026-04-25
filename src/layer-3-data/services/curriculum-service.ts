@@ -2,6 +2,9 @@
 // Beast Mode - Production Ready
 
 import { createBrowserSupabaseClient } from '@/layer-3-data/supabase/client';
+
+const supabase = createBrowserSupabaseClient();
+
 import type {
   UserLearningProfile,
   Curriculum,
