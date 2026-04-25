@@ -1,0 +1,61 @@
+#!/bin/bash
+# OAuth Fix Script for FoundryAI
+# This script helps diagnose and fix Google OAuth issues
+
+echo "=========================================="
+echo "  FoundryAI OAuth Fix Tool"
+echo "=========================================="
+echo ""
+
+# Check current environment
+echo "📋 Current Environment:"
+echo "  APP_URL: $(grep NEXT_PUBLIC_APP_URL .env.local | cut -d'=' -f2)"
+echo "  Supabase URL: $(grep NEXT_PUBLIC_SUPABASE_URL .env.local | cut -d'=' -f2)"
+echo ""
+
+# Display required Google Cloud Console settings
+echo "🔧 Required Google Cloud Console Settings:"
+echo "=========================================="
+echo ""
+echo "1. Go to: https://console.cloud.google.com/apis/credentials"
+echo ""
+echo "2. Find your OAuth 2.0 Client ID and click Edit"
+echo ""
+echo "3. Add these Authorized Redirect URIs:"
+echo "   (Copy and paste these EXACTLY)"
+echo ""
+echo "   https://foundryai-seven.vercel.app/auth/callback"
+echo "   https://foundryai-seven.vercel.app/auth/callback?"
+echo "   https://foundryai-seven.vercel.app/login"
+echo ""
+echo "4. Save changes and wait 2-3 minutes"
+echo ""
+
+# Display Supabase settings
+echo "🔧 Required Supabase Settings:"
+echo "=========================================="
+echo ""
+echo "1. Go to: https://supabase.com/dashboard"
+echo ""
+echo "2. Navigate to: Authentication > URL Configuration"
+echo ""
+echo "3. Set Site URL to:"
+echo "   https://foundryai-seven.vercel.app"
+echo ""
+echo "4. Add Redirect URLs:"
+echo "   https://foundryai-seven.vercel.app/**"
+echo "   https://foundryai-seven.vercel.app/auth/callback"
+echo ""
+
+echo "=========================================="
+echo "  Troubleshooting Tips"
+echo "=========================================="
+echo ""
+echo "• Make sure URLs use HTTPS (not HTTP)"
+echo "• No trailing slashes in the callback URL"
+echo "• Wait 2-3 minutes after saving changes"
+echo "• Clear browser cache and cookies"
+echo "• Check browser console for exact redirect URL"
+echo ""
+echo "For more help, see: docs/OAUTH_FIX_GUIDE.md"
+echo ""
