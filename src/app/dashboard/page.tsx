@@ -1,594 +1,265 @@
-// @ts-nocheck
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { DashboardProvider, DashboardShell } from '@/components/dashboard';
-import { useAuth } from '@/layer-1-security/auth';
-import { getSupabaseBrowserClient } from '@/layer-3-data/storage/supabase-client';
-import { FoundryAIOutput } from '@/types';
+import Link from 'next/link';
+import { useAuth } from '@/layer-1-security/auth/auth-provider';
 import {
-  TrendingUp,
-  FileText,
-  Clock,
-  ArrowRight,
-  Sparkles,
+  Brain,
   Target,
   Zap,
-  Activity,
-  BarChart3,
-  PieChart,
-  ChevronUp,
-  ChevronDown,
-  MoreHorizontal,
-  Calendar,
-  Users,
-  DollarSign
+  TrendingUp,
+  GraduationCap,
+  DollarSign,
+  ArrowRight,
+  Sparkles,
+  FileText,
+  Clock,
 } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-interface SavedPlan {
-  id: string;
-  userInput: string;
-  output: FoundryAIOutput;
-  createdAt: string;
-}
+// Tier data for dashboard display
+const tiers = [
+  {
+    id: 'tier1',
+    name: 'Foundation',
+    description: 'Build unshakeable confidence and belief systems',
+    icon: Brain,
+    color: 'from-blue-500 to-cyan-500',
+    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+    link: '/dashboard/tier1/belief',
+    stats: { progress: 45, items: 3 },
+  },
+  {
+    id: 'tier2',
+    name: 'Intelligence',
+    description: 'Market research, opportunities, and archetypes',
+    icon: Target,
+    color: 'from-emerald-500 to-teal-500',
+    bgColor: 'bg-emerald-50 dark:bg-emerald-900/20',
+    link: '/dashboard/tier2/opportunities',
+    stats: { progress: 20, items: 3 },
+  },
+  {
+    id: 'tier3',
+    name: 'Product Factory',
+    description: 'Build and launch your MVP',
+    icon: Zap,
+    color: 'from-amber-500 to-orange-500',
+    bgColor: 'bg-amber-50 dark:bg-amber-900/20',
+    link: '/dashboard/tier3/build',
+    stats: { progress: 0, items: 1 },
+  },
+  {
+    id: 'tier4',
+    name: 'Growth Engine',
+    description: 'Productivity and performance tracking',
+    icon: TrendingUp,
+    color: 'from-purple-500 to-pink-500',
+    bgColor: 'bg-purple-50 dark:bg-purple-900/20',
+    link: '/dashboard/tier4/character-stats',
+    stats: { progress: 10, items: 2 },
+  },
+  {
+    id: 'tier5',
+    name: 'Academy',
+    description: 'Learn, certify, and gamify your journey',
+    icon: GraduationCap,
+    color: 'from-pink-500 to-rose-500',
+    bgColor: 'bg-pink-50 dark:bg-pink-900/20',
+    link: '/dashboard/tier5/curriculum',
+    stats: { progress: 5, items: 3 },
+  },
+  {
+    id: 'tier6',
+    name: 'Monetization',
+    description: 'Revenue streams and affiliate programs',
+    icon: DollarSign,
+    color: 'from-orange-500 to-red-500',
+    bgColor: 'bg-orange-50 dark:bg-orange-900/20',
+    link: '/dashboard/tier6/affiliate',
+    stats: { progress: 0, items: 3 },
+  },
+];
 
-interface DashboardStats {
-  totalPlans: number;
-  totalOpportunities: number;
-  lastActive: string;
-  recentPlans: SavedPlan[];
-  monthlyGrowth: number;
-  avgPlanScore: number;
-  topCategories: { name: string; count: number; percentage: number }[];
-  activityData: { date: string; plans: number; views: number }[];
-}
-
-// Analytics Card Component
-function AnalyticsCard({
-  title,
-  value,
-  trend,
-  trendLabel,
-  icon: Icon,
-  color = 'violet',
-  index = 0
-}: {
-  title: string;
-  value: string | number;
-  trend?: number;
-  trendLabel?: string;
-  icon: React.ElementType;
-  color?: 'violet' | 'emerald' | 'amber' | 'blue';
-  index?: number;
-}) {
-  const colors = {
-    violet: 'bg-violet-50 text-violet-600 border-violet-100',
-    emerald: 'bg-emerald-50 text-emerald-600 border-emerald-100',
-    amber: 'bg-amber-50 text-amber-600 border-amber-100',
-    blue: 'bg-blue-50 text-blue-600 border-blue-100'
-  };
-
-  return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ y: -4, boxShadow: '0 12px 24px rgba(0,0,0,0.08)' }}
-      className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm transition-all"
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${colors[color]}`}>
-            <Icon className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-sm text-slate-500">{title}</p>
-            <p className="text-2xl font-bold text-slate-900">{value}</p>
-            {trend !== undefined && (
-              <div className={`flex items-center gap-1 text-sm mt-1 ${trend >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                {trend >= 0 ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                <span>{Math.abs(trend)}%</span>
-                {trendLabel && <span className="text-slate-400">{trendLabel}</span>}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// Mini Bar Chart
-function ActivityChart({ data }: { data: { date: string; plans: number; views: number }[] }) {
-  const maxPlans = Math.max(...data.map(d => d.plans), 1);
-  const maxViews = Math.max(...data.map(d => d.views), 1);
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-end justify-between gap-3 h-40">
-        {data.map((day, i) => (
-          <div key={i} className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-full flex gap-1 items-end justify-center h-32">
-              <motion.div
-                initial={{ height: 0 }}
-                animate={{ height: `${(day.plans / maxPlans) * 100}%` }}
-                transition={{ duration: 0.8, delay: i * 0.1 }}
-                className="w-full bg-violet-500 rounded-t transition-all hover:bg-violet-600"
-                style={{ maxHeight: '100%' }}
-                title={`${day.plans} plans`}
-              />
-              <motion.div
-                initial={{ height: 0 }}
-                animate={{ height: `${(day.views / maxViews) * 80}%` }}
-                transition={{ duration: 0.8, delay: i * 0.1 + 0.05 }}
-                className="w-full bg-violet-200 rounded-t transition-all hover:bg-violet-300"
-                style={{ maxHeight: '80%' }}
-                title={`${day.views} views`}
-              />
-            </div>
-            <span className="text-xs text-slate-500 font-medium">{day.date}</span>
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center gap-6 pt-2 border-t border-slate-100">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-violet-500 rounded" />
-          <span className="text-sm text-slate-600">Plans</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-violet-200 rounded" />
-          <span className="text-sm text-slate-600">Views</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Progress Bar for Categories
-function CategoryProgress({ category }: { category: { name: string; count: number; percentage: number } }) {
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between text-sm">
-        <span className="font-medium text-slate-700">{category.name}</span>
-        <div className="flex items-center gap-2">
-          <span className="text-slate-500">{category.count}</span>
-          <span className="text-slate-400 text-xs">({category.percentage}%)</span>
-        </div>
-      </div>
-      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-gradient-to-r from-violet-500 to-violet-600 rounded-full transition-all duration-500"
-          style={{ width: `${category.percentage}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-// Plan List Item
-function PlanListItem({ plan }: { plan: SavedPlan }) {
-  // Safe access to plan output with fallbacks
-  const planOutput = plan?.output || {};
-  const planName = planOutput.ideaName || planOutput.toolIdea || 'Untitled Plan';
-  const initial = planName.charAt(0).toUpperCase();
-
-  return (
-    <div className="flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:shadow-sm transition-all group">
-      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-violet-100 to-violet-200 flex items-center justify-center flex-shrink-0">
-        <span className="text-violet-700 font-bold text-lg">{initial}</span>
-      </div>
-      <div className="flex-1 min-w-0">
-        <h4 className="font-medium text-slate-900 truncate">{planName}</h4>
-        <div className="flex items-center gap-3 mt-1 flex-wrap">
-          <span className="text-sm text-slate-500">
-            {plan?.createdAt ? new Date(plan.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Unknown date'}
-          </span>
-          <Badge variant="success">Active</Badge>
-        </div>
-      </div>
-      <Link href={`/plan?id=${plan?.id || ''}`}>
-        <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100 transition-opacity">
-          View
-        </Button>
-      </Link>
-    </div>
-  );
-}
-
-function DashboardContent() {
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
-  const router = useRouter();
-  const [stats, setStats] = useState<DashboardStats>({
+export default function DashboardPage() {
+  const { user } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  const [stats, setStats] = useState({
     totalPlans: 0,
-    totalOpportunities: 0,
+    recentActivity: 0,
     lastActive: 'Never',
-    recentPlans: [],
-    monthlyGrowth: 0,
-    avgPlanScore: 0,
-    topCategories: [],
-    activityData: []
   });
-  const [isLoading, setIsLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
 
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push('/login');
-    }
-  }, [authLoading, isAuthenticated, router]);
-
-  useEffect(() => {
-    if (!user) return;
-
-    const loadData = async () => {
-      try {
-        setIsLoading(true);
-        let savedPlans: SavedPlan[] = [];
-        let opportunitiesCount = 0;
-
-        const client = getSupabaseBrowserClient();
-        if (client) {
-          try {
-            // Try to fetch plans from Supabase
-            const { data: plans, error: plansError } = await client
-              .from('plans')
-              .select('*')
-              .eq('user_id', user.id)
-              .order('created_at', { ascending: false });
-
-            if (plansError) {
-              console.warn('Plans table not available, using localStorage fallback');
-            } else if (plans) {
-              savedPlans = plans.map((plan: { id: string; user_input?: string; content: unknown; created_at: string }) => ({
-                id: plan.id,
-                userInput: plan.user_input || '',
-                output: plan.content as FoundryAIOutput,
-                createdAt: plan.created_at
-              }));
-            }
-          } catch (e) {
-            console.warn('Supabase plans fetch failed, using localStorage');
-          }
-
-          try {
-            // Try to fetch opportunities count
-            const { count: oppCount, error: oppError } = await client
-              .from('opportunities')
-              .select('*', { count: 'exact', head: true });
-
-            if (!oppError) {
-              opportunitiesCount = oppCount || 0;
-            }
-          } catch (e) {
-            console.warn('Supabase opportunities fetch failed');
-          }
-        }
-        
-        // Fallback to localStorage if no data from Supabase
-        if (savedPlans.length === 0) {
-          const savedPlansJson = localStorage.getItem('foundryai-plans');
-          savedPlans = savedPlansJson ? JSON.parse(savedPlansJson) : [];
-          const radarData = localStorage.getItem('radar-opportunities');
-          opportunitiesCount = radarData ? JSON.parse(radarData).length : 0;
-        }
-
-        const lastPlan = savedPlans[0];
-        const lastActive = lastPlan ? new Date(lastPlan.createdAt).toLocaleDateString() : 'Never';
-
-        // Calculate real activity data from plan creation dates
-        const now = new Date();
-        const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
-        const activityData = Array.from({ length: 7 }, (_, i) => {
-          const date = new Date(now.getTime() - (6 - i) * 24 * 60 * 60 * 1000);
-          const dateStr = date.toLocaleDateString('en', { weekday: 'short' });
-          
-          // Count plans created on this date
-          const plansCount = savedPlans.filter(plan => {
-            const planDate = new Date(plan.createdAt);
-            return planDate.toDateString() === date.toDateString();
-          }).length;
-          
-          return {
-            date: dateStr,
-            plans: plansCount,
-            views: Math.floor(Math.random() * 5) // Views are still simulated since we don't track them
-          };
-        });
-
-        // Calculate real top categories from plan data
-        const categoryCounts: Record<string, number> = {};
-        savedPlans.forEach(plan => {
-          const output = plan.output || {};
-          // Try to extract category from various fields
-          let category = 'Other';
-          if (output.marketResearch?.targetDemographics) {
-            const demo = output.marketResearch.targetDemographics.toLowerCase();
-            if (demo.includes('saas') || demo.includes('software')) category = 'SaaS';
-            else if (demo.includes('mobile') || demo.includes('app')) category = 'Mobile App';
-            else if (demo.includes('ai') || demo.includes('ml')) category = 'AI Tool';
-            else if (demo.includes('e-commerce') || demo.includes('shop')) category = 'E-commerce';
-            else if (demo.includes('marketplace')) category = 'Marketplace';
-          }
-          categoryCounts[category] = (categoryCounts[category] || 0) + 1;
-        });
-
-        // Convert to array and calculate percentages
-        const totalPlansForCategories = savedPlans.length || 1;
-        const topCategories = Object.entries(categoryCounts)
-          .map(([name, count]) => ({
-            name,
-            count,
-            percentage: Math.round((count / totalPlansForCategories) * 100)
-          }))
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 4);
-
-        // Calculate real monthly growth
-        const thisMonth = new Date().getMonth();
-        const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
-        const thisYear = new Date().getFullYear();
-        const lastMonthYear = thisMonth === 0 ? thisYear - 1 : thisYear;
-
-        const thisMonthPlans = savedPlans.filter(plan => {
-          const planDate = new Date(plan.createdAt);
-          return planDate.getMonth() === thisMonth && planDate.getFullYear() === thisYear;
-        }).length;
-
-        const lastMonthPlans = savedPlans.filter(plan => {
-          const planDate = new Date(plan.createdAt);
-          return planDate.getMonth() === lastMonth && planDate.getFullYear() === lastMonthYear;
-        }).length;
-
-        const monthlyGrowth = lastMonthPlans === 0 
-          ? (thisMonthPlans > 0 ? 100 : 0)
-          : Math.round(((thisMonthPlans - lastMonthPlans) / lastMonthPlans) * 100);
-
-        // Calculate average plan score based on plan completeness
-        const avgPlanScore = savedPlans.length > 0
-          ? Math.round(savedPlans.reduce((acc, plan) => {
-              const output = plan.output || {};
-              let score = 70; // Base score
-              if (output.marketResearch) score += 10;
-              if (output.mvpFeatures && output.mvpFeatures.length > 0) score += 10;
-              if (output.techStack && output.techStack.length > 0) score += 5;
-              if (output.monetizationStrategy) score += 5;
-              return acc + Math.min(score, 100);
-            }, 0) / savedPlans.length)
-          : 0;
-
+    setMounted(true);
+    // Load stats from localStorage as fallback
+    try {
+      const savedPlans = localStorage.getItem('foundryai_plans');
+      if (savedPlans) {
+        const plans = JSON.parse(savedPlans);
         setStats({
-          totalPlans: savedPlans.length,
-          totalOpportunities: opportunitiesCount,
-          lastActive,
-          recentPlans: savedPlans.slice(0, 5),
-          monthlyGrowth,
-          avgPlanScore,
-          topCategories: topCategories.length > 0 ? topCategories : [
-            { name: 'No data yet', count: 0, percentage: 0 }
-          ],
-          activityData
+          totalPlans: plans.length || 0,
+          recentActivity: plans.length || 0,
+          lastActive: plans.length > 0 ? 'Recently' : 'Never',
         });
-      } catch (error) {
-        console.error('Failed to load dashboard data:', error);
-      } finally {
-        setIsLoading(false);
       }
-    };
+    } catch {
+      // Ignore errors
+    }
+  }, []);
 
-    loadData();
-  }, [user, timeRange]);
-
-  if (authLoading || isLoading) {
+  if (!mounted) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-600" />
+      <div className="space-y-8">
+        <div className="animate-pulse">
+          <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-1/4 mb-4"></div>
+          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="h-48 bg-slate-200 dark:bg-slate-700 rounded-xl animate-pulse"></div>
+          ))}
+        </div>
       </div>
     );
   }
 
-  if (!isAuthenticated) return null;
-
   return (
     <div className="space-y-8">
-      {/* Header Section */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-slate-600 mt-1">
-            Welcome back! Here&apos;s what&apos;s happening with your business ideas
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            Welcome back, {user?.user_metadata?.name || 'Founder'}
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">
+            Your entrepreneurial journey is just getting started
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex bg-slate-100 rounded-lg p-1">
-            {(['7d', '30d', '90d'] as const).map((range) => (
-              <button
-                key={range}
-                onClick={() => setTimeRange(range)}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
-                  timeRange === range
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+        <Link href="/input">
+          <Button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700">
+            <Sparkles className="w-4 h-4 mr-2" />
+            Generate Plan
+          </Button>
+        </Link>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">
+              Total Plans
+            </CardTitle>
+            <FileText className="w-4 h-4 text-slate-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-slate-900 dark:text-white">
+              {stats.totalPlans}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">
+              Recent Activity
+            </CardTitle>
+            <Clock className="w-4 h-4 text-slate-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-slate-900 dark:text-white">
+              {stats.recentActivity}
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">
+              Last Active
+            </CardTitle>
+            <Sparkles className="w-4 h-4 text-slate-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-slate-900 dark:text-white">
+              {stats.lastActive}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tiers Grid */}
+      <div>
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
+          Platform Tiers
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tiers.map((tier) => {
+            const Icon = tier.icon;
+            return (
+              <Link
+                key={tier.id}
+                href={tier.link}
+                className="group block"
               >
-                {range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : '90 Days'}
-              </button>
-            ))}
-          </div>
-          <Link href="/plan">
-            <Button icon={<Sparkles className="w-4 h-4" />}>New Plan</Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <AnalyticsCard
-          title="Total Plans"
-          value={stats.totalPlans}
-          trend={stats.monthlyGrowth}
-          trendLabel="vs last month"
-          icon={FileText}
-          color="violet"
-          index={0}
-        />
-        <AnalyticsCard
-          title="Opportunities"
-          value={stats.totalOpportunities}
-          trend={8}
-          trendLabel="vs last month"
-          icon={Target}
-          color="emerald"
-          index={1}
-        />
-        <AnalyticsCard
-          title="Avg. Score"
-          value={`${stats.avgPlanScore}%`}
-          trend={5}
-          trendLabel="vs last month"
-          icon={Activity}
-          color="amber"
-          index={2}
-        />
-        <AnalyticsCard
-          title="Last Active"
-          value={stats.lastActive}
-          icon={Clock}
-          color="blue"
-          index={3}
-        />
-      </div>
-
-      {/* Charts & Analytics Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Activity Chart */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center">
-                <BarChart3 className="w-5 h-5 text-violet-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-900">Activity Overview</h3>
-                <p className="text-sm text-slate-500">Plans created and views over time</p>
-              </div>
-            </div>
-            <button className="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-              <MoreHorizontal className="w-5 h-5 text-slate-400" />
-            </button>
-          </div>
-          <ActivityChart data={stats.activityData} />
-        </div>
-
-        {/* Top Categories */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
-              <PieChart className="w-5 h-5 text-emerald-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900">Top Categories</h3>
-              <p className="text-sm text-slate-500">Most popular business types</p>
-            </div>
-          </div>
-          <div className="space-y-5">
-            {stats.topCategories.map((category, i) => (
-              <CategoryProgress key={i} category={category} />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions & Recent Plans */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Quick Actions */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-amber-600" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900">Quick Actions</h3>
-              <p className="text-sm text-slate-500">Get started with these tools</p>
-            </div>
-          </div>
-          <div className="space-y-3">
-            <Link href="/plan" className="block group">
-              <div className="flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-violet-300 hover:bg-violet-50/30 transition-all cursor-pointer">
-                <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Sparkles className="w-6 h-6 text-violet-600" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-semibold text-slate-900">Create New Plan</h4>
-                  <p className="text-sm text-slate-500">Generate a complete business plan</p>
-                </div>
-                <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-violet-600 group-hover:translate-x-1 transition-all" />
-              </div>
-            </Link>
-            <Link href="/radar" className="block group">
-              <div className="flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/30 transition-all cursor-pointer">
-                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Target className="w-6 h-6 text-emerald-600" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="font-semibold text-slate-900">Explore Opportunities</h4>
-                  <p className="text-sm text-slate-500">Discover market trends</p>
-                </div>
-                <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Recent Plans */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                <FileText className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-900">Recent Plans</h3>
-                <p className="text-sm text-slate-500">Your latest business ideas</p>
-              </div>
-            </div>
-            <Link href="/plans">
-              <Button variant="outline" size="sm">View All</Button>
-            </Link>
-          </div>
-
-          {stats.recentPlans.length > 0 ? (
-            <div className="space-y-3">
-              {stats.recentPlans.map((plan) => (
-                <PlanListItem key={plan.id} plan={plan} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-slate-50 rounded-xl border border-slate-200 border-dashed">
-              <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm">
-                <FileText className="w-8 h-8 text-slate-400" />
-              </div>
-              <h4 className="font-semibold text-slate-900 mb-1">No plans yet</h4>
-              <p className="text-sm text-slate-500 mb-4">Create your first business plan to get started</p>
-              <Link href="/plan">
-                <Button size="sm" icon={<Sparkles className="w-4 h-4" />}>Create Plan</Button>
+                <Card className="h-full hover:shadow-lg transition-shadow border-slate-200 dark:border-slate-700">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tier.color} flex items-center justify-center flex-shrink-0`}>
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                          {tier.name}
+                        </h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                          {tier.description}
+                        </p>
+                        <div className="flex items-center gap-2 mt-3">
+                          <div className={`px-2 py-1 rounded text-xs font-medium ${tier.bgColor} text-slate-700 dark:text-slate-300`}>
+                            {tier.stats.items} modules
+                          </div>
+                          <div className="flex items-center text-xs text-slate-500">
+                            <div className="w-16 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mr-2">
+                              <div
+                                className="h-full bg-gradient-to-r from-violet-500 to-indigo-500 rounded-full"
+                                style={{ width: `${tier.stats.progress}%` }}
+                              />
+                            </div>
+                            {tier.stats.progress}%
+                          </div>
+                        </div>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors" />
+                    </div>
+                  </CardContent>
+                </Card>
               </Link>
-            </div>
-          )}
+            );
+          })}
         </div>
       </div>
-    </div>
-  );
-}
 
-export default function DashboardPage() {
-  return (
-    <DashboardProvider>
-      <DashboardContent />
-    </DashboardProvider>
+      {/* Get Started CTA */}
+      {stats.totalPlans === 0 && (
+        <Card className="bg-gradient-to-r from-violet-600 to-indigo-600 border-none">
+          <CardContent className="p-8 text-center">
+            <Sparkles className="w-12 h-12 text-white/80 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-2">
+              Ready to build your business?
+            </h3>
+            <p className="text-white/80 mb-6 max-w-md mx-auto">
+              Start by generating your first AI-powered business plan. It takes just 2 minutes.
+            </p>
+            <Link href="/input">
+              <Button variant="secondary" size="lg">
+                Generate Your First Plan
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 }

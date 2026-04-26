@@ -22,100 +22,91 @@ import {
   Bell,
   Shield,
   CreditCard,
-  Palette
+  Palette,
+  Home,
+  BarChart3,
+  Award
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Main navigation items
-const mainNavItems = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-];
-
-// Tier navigation structure
-const tierNavItems = [
-  {
-    id: 'tier1',
-    name: 'Tier 1: Foundation',
-    href: '/dashboard/tier1',
-    icon: Brain,
-    color: 'blue',
-    features: [
-      { name: 'Belief Architecture', href: '/dashboard/tier1/belief', icon: Brain },
-      { name: 'Success Mindset', href: '/dashboard/tier1/mindset', icon: Target },
-      { name: 'Confidence Core', href: '/dashboard/tier1/confidence', icon: Zap },
-      { name: 'Brain Dump', href: '/dashboard/tier1/brain-dump', icon: Target },
-      { name: 'Distraction Killer', href: '/dashboard/tier1/focus', icon: Target },
-      { name: 'Emotion Control', href: '/dashboard/tier1/emotion', icon: Target },
-      { name: 'Momentum Builder', href: '/dashboard/tier1/momentum', icon: TrendingUp },
-    ]
-  },
-  {
-    id: 'tier2',
-    name: 'Tier 2: Intelligence',
-    href: '/dashboard/tier2',
-    icon: Target,
-    color: 'emerald',
-    features: [
-      { name: 'Opportunity Radar', href: '/dashboard/tier2/opportunities', icon: Target },
-      { name: 'Trending Radar', href: '/dashboard/tier2/radar', icon: TrendingUp },
-      { name: 'Archetypes', href: '/dashboard/tier2/archetypes', icon: User },
-    ]
-  },
-  {
-    id: 'tier3',
-    name: 'Tier 3: Product Factory',
-    href: '/dashboard/tier3',
-    icon: Zap,
-    color: 'amber',
-    features: [
-      { name: 'Product Builder', href: '/dashboard/tier3/build', icon: Zap },
-    ]
-  },
-  {
-    id: 'tier4',
-    name: 'Tier 4: Growth Engine',
-    href: '/dashboard/tier4',
-    icon: TrendingUp,
-    color: 'purple',
-    features: [
-      { name: 'Character Stats', href: '/dashboard/tier4/character-stats', icon: User },
-      { name: 'Productivity', href: '/dashboard/tier4/productivity', icon: Zap },
-    ]
-  },
-  {
-    id: 'tier5',
-    name: 'Tier 5: Academy',
-    href: '/dashboard/tier5',
-    icon: GraduationCap,
-    color: 'pink',
-    features: [
-      { name: 'Gamification', href: '/dashboard/tier5/gamification', icon: Zap },
-      { name: 'Curriculum', href: '/dashboard/tier5/curriculum', icon: GraduationCap },
-      { name: 'Certification', href: '/dashboard/tier5/certification', icon: Shield },
-    ]
-  },
-  {
-    id: 'tier6',
-    name: 'Tier 6: Monetization',
-    href: '/dashboard/tier6',
-    icon: DollarSign,
-    color: 'orange',
-    features: [
-      { name: 'Affiliate', href: '/dashboard/tier6/affiliate', icon: DollarSign },
-      { name: 'Billing', href: '/dashboard/tier6/billing', icon: CreditCard },
-      { name: 'Revenue Share', href: '/dashboard/tier6/revenue', icon: DollarSign },
-    ]
-  },
-];
-
-// Settings navigation
-const settingsNavItems = [
-  { name: 'Profile', href: '/dashboard/settings/profile', icon: User },
-  { name: 'Account', href: '/dashboard/settings/account', icon: Shield },
-  { name: 'Billing', href: '/dashboard/settings/billing', icon: CreditCard },
-  { name: 'Appearance', href: '/dashboard/settings/appearance', icon: Palette },
-  { name: 'Notifications', href: '/dashboard/settings/notifications', icon: Bell },
-];
+// Navigation structure
+const navigation = {
+  main: [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  ],
+  tiers: [
+    {
+      id: 'tier1',
+      name: 'Foundation',
+      icon: Brain,
+      color: 'blue',
+      items: [
+        { name: 'Belief Architecture', href: '/dashboard/tier1/belief', icon: Brain },
+        { name: 'Mindset Forge', href: '/dashboard/tier1/mindset', icon: Target },
+        { name: 'Confidence Core', href: '/dashboard/tier1/confidence', icon: Zap },
+      ]
+    },
+    {
+      id: 'tier2',
+      name: 'Intelligence',
+      icon: Target,
+      color: 'emerald',
+      items: [
+        { name: 'Opportunity Radar', href: '/dashboard/tier2/opportunities', icon: Target },
+        { name: 'Trend Radar', href: '/dashboard/tier2/radar', icon: TrendingUp },
+        { name: 'Archetypes', href: '/dashboard/tier2/archetypes', icon: User },
+      ]
+    },
+    {
+      id: 'tier3',
+      name: 'Product Factory',
+      icon: Zap,
+      color: 'amber',
+      items: [
+        { name: 'Product Builder', href: '/dashboard/tier3/build', icon: Zap },
+      ]
+    },
+    {
+      id: 'tier4',
+      name: 'Growth Engine',
+      icon: TrendingUp,
+      color: 'purple',
+      items: [
+        { name: 'Character Stats', href: '/dashboard/tier4/character-stats', icon: BarChart3 },
+        { name: 'Productivity', href: '/dashboard/tier4/productivity', icon: Zap },
+      ]
+    },
+    {
+      id: 'tier5',
+      name: 'Academy',
+      icon: GraduationCap,
+      color: 'pink',
+      items: [
+        { name: 'Gamification', href: '/dashboard/tier5/gamification', icon: Award },
+        { name: 'Curriculum', href: '/dashboard/tier5/curriculum', icon: GraduationCap },
+        { name: 'Certification', href: '/dashboard/tier5/certification', icon: Shield },
+      ]
+    },
+    {
+      id: 'tier6',
+      name: 'Monetization',
+      icon: DollarSign,
+      color: 'orange',
+      items: [
+        { name: 'Affiliate', href: '/dashboard/tier6/affiliate', icon: DollarSign },
+        { name: 'Billing', href: '/dashboard/tier6/billing', icon: CreditCard },
+        { name: 'Revenue', href: '/dashboard/tier6/revenue', icon: BarChart3 },
+      ]
+    },
+  ],
+  settings: [
+    { name: 'Profile', href: '/dashboard/settings/profile', icon: User },
+    { name: 'Account', href: '/dashboard/settings/account', icon: Shield },
+    { name: 'Billing', href: '/dashboard/settings/billing', icon: CreditCard },
+    { name: 'Appearance', href: '/dashboard/settings/appearance', icon: Palette },
+    { name: 'Notifications', href: '/dashboard/settings/notifications', icon: Bell },
+  ],
+};
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -150,21 +141,44 @@ export function DashboardShell({ children }: DashboardShellProps) {
       router.push('/login');
     } catch (error) {
       console.error('Sign out error:', error);
-      // Force redirect even if error
       window.location.href = '/login';
     }
   };
 
-  const getTierColor = (color: string, isActive: boolean, isExpanded: boolean) => {
-    const colors: Record<string, { bg: string; text: string; icon: string }> = {
-      blue: { bg: isActive || isExpanded ? 'bg-blue-50 dark:bg-blue-900/20' : '', text: isActive || isExpanded ? 'text-blue-700 dark:text-blue-300' : 'text-slate-600 dark:text-slate-300', icon: 'text-blue-600 dark:text-blue-400' },
-      emerald: { bg: isActive || isExpanded ? 'bg-emerald-50 dark:bg-emerald-900/20' : '', text: isActive || isExpanded ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-600 dark:text-slate-300', icon: 'text-emerald-600 dark:text-emerald-400' },
-      amber: { bg: isActive || isExpanded ? 'bg-amber-50 dark:bg-amber-900/20' : '', text: isActive || isExpanded ? 'text-amber-700 dark:text-amber-300' : 'text-slate-600 dark:text-slate-300', icon: 'text-amber-600 dark:text-amber-400' },
-      purple: { bg: isActive || isExpanded ? 'bg-purple-50 dark:bg-purple-900/20' : '', text: isActive || isExpanded ? 'text-purple-700 dark:text-purple-300' : 'text-slate-600 dark:text-slate-300', icon: 'text-purple-600 dark:text-purple-400' },
-      pink: { bg: isActive || isExpanded ? 'bg-pink-50 dark:bg-pink-900/20' : '', text: isActive || isExpanded ? 'text-pink-700 dark:text-pink-300' : 'text-slate-600 dark:text-slate-300', icon: 'text-pink-600 dark:text-pink-400' },
-      orange: { bg: isActive || isExpanded ? 'bg-orange-50 dark:bg-orange-900/20' : '', text: isActive || isExpanded ? 'text-orange-700 dark:text-orange-300' : 'text-slate-600 dark:text-slate-300', icon: 'text-orange-600 dark:text-orange-400' },
+  const getTierStyles = (color: string, isActive: boolean, isExpanded: boolean) => {
+    const styles: Record<string, { bg: string; text: string; icon: string }> = {
+      blue: { 
+        bg: isActive || isExpanded ? 'bg-blue-50 dark:bg-blue-900/20' : '', 
+        text: isActive || isExpanded ? 'text-blue-700 dark:text-blue-300' : 'text-slate-600 dark:text-slate-300', 
+        icon: 'text-blue-600 dark:text-blue-400' 
+      },
+      emerald: { 
+        bg: isActive || isExpanded ? 'bg-emerald-50 dark:bg-emerald-900/20' : '', 
+        text: isActive || isExpanded ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-600 dark:text-slate-300', 
+        icon: 'text-emerald-600 dark:text-emerald-400' 
+      },
+      amber: { 
+        bg: isActive || isExpanded ? 'bg-amber-50 dark:bg-amber-900/20' : '', 
+        text: isActive || isExpanded ? 'text-amber-700 dark:text-amber-300' : 'text-slate-600 dark:text-slate-300', 
+        icon: 'text-amber-600 dark:text-amber-400' 
+      },
+      purple: { 
+        bg: isActive || isExpanded ? 'bg-purple-50 dark:bg-purple-900/20' : '', 
+        text: isActive || isExpanded ? 'text-purple-700 dark:text-purple-300' : 'text-slate-600 dark:text-slate-300', 
+        icon: 'text-purple-600 dark:text-purple-400' 
+      },
+      pink: { 
+        bg: isActive || isExpanded ? 'bg-pink-50 dark:bg-pink-900/20' : '', 
+        text: isActive || isExpanded ? 'text-pink-700 dark:text-pink-300' : 'text-slate-600 dark:text-slate-300', 
+        icon: 'text-pink-600 dark:text-pink-400' 
+      },
+      orange: { 
+        bg: isActive || isExpanded ? 'bg-orange-50 dark:bg-orange-900/20' : '', 
+        text: isActive || isExpanded ? 'text-orange-700 dark:text-orange-300' : 'text-slate-600 dark:text-slate-300', 
+        icon: 'text-orange-600 dark:text-orange-400' 
+      },
     };
-    return colors[color] || colors.blue;
+    return styles[color] || styles.blue;
   };
 
   return (
@@ -215,7 +229,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
           <p className="px-3 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Main
           </p>
-          {mainNavItems.map((item) => {
+          {navigation.main.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
             return (
@@ -242,11 +256,11 @@ export function DashboardShell({ children }: DashboardShellProps) {
             Platform Tiers
           </p>
           <div className="space-y-1">
-            {tierNavItems.map((tier) => {
+            {navigation.tiers.map((tier) => {
               const TierIcon = tier.icon;
               const isExpanded = expandedTiers.includes(tier.id);
-              const isTierActive = isActive(tier.href);
-              const colors = getTierColor(tier.color, isTierActive, isExpanded);
+              const isTierActive = isActive(`/dashboard/${tier.id}`);
+              const styles = getTierStyles(tier.color, isTierActive, isExpanded);
               
               return (
                 <div key={tier.id} className="space-y-1">
@@ -254,12 +268,12 @@ export function DashboardShell({ children }: DashboardShellProps) {
                     onClick={() => toggleTier(tier.id)}
                     className={`
                       w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all
-                      ${colors.bg} ${colors.text}
+                      ${styles.bg} ${styles.text}
                       hover:opacity-80
                     `}
                   >
                     <div className="flex items-center gap-3">
-                      <TierIcon className={`w-5 h-5 ${colors.icon}`} />
+                      <TierIcon className={`w-5 h-5 ${styles.icon}`} />
                       <span className="text-left">{tier.name}</span>
                     </div>
                     {isExpanded ? (
@@ -271,24 +285,24 @@ export function DashboardShell({ children }: DashboardShellProps) {
                   
                   {isExpanded && (
                     <div className="ml-4 pl-4 border-l-2 border-slate-200 dark:border-slate-700 space-y-1">
-                      {tier.features.map((feature) => {
-                        const FeatureIcon = feature.icon;
-                        const featureActive = isActive(feature.href);
+                      {tier.items.map((item) => {
+                        const ItemIcon = item.icon;
+                        const itemActive = isActive(item.href);
                         return (
                           <Link
-                            key={feature.name}
-                            href={feature.href}
+                            key={item.name}
+                            href={item.href}
                             onClick={() => setSidebarOpen(false)}
                             className={`
                               flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all
-                              ${featureActive 
+                              ${itemActive 
                                 ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white' 
                                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                               }
                             `}
                           >
-                            <FeatureIcon className={`w-4 h-4 ${featureActive ? colors.icon : ''}`} />
-                            <span>{feature.name}</span>
+                            <ItemIcon className={`w-4 h-4 ${itemActive ? styles.icon : ''}`} />
+                            <span>{item.name}</span>
                           </Link>
                         );
                       })}
@@ -327,7 +341,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
             
             {settingsExpanded && (
               <div className="ml-4 pl-4 border-l-2 border-slate-200 dark:border-slate-700 space-y-1">
-                {settingsNavItems.map((item) => {
+                {navigation.settings.map((item) => {
                   const Icon = item.icon;
                   const active = isActive(item.href);
                   return (
@@ -353,7 +367,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
           </div>
         </nav>
 
-        {/* User Section - Fixed at bottom */}
+        {/* User Section */}
         <div className="p-4 border-t border-slate-200 dark:border-slate-700 flex-shrink-0">
           <div className="flex items-center gap-3 mb-3 px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-700/50">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center">
@@ -380,7 +394,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
         </div>
       </aside>
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile Overlay */}
       {sidebarOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -390,7 +404,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
 
       {/* Main Content */}
       <main className="lg:ml-72 min-h-screen">
-        <div className="p-6 lg:p-8">
+        <div className="p-6 lg:p-8 max-w-7xl mx-auto">
           {children}
         </div>
       </main>
