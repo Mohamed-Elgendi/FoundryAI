@@ -190,7 +190,7 @@ export class CurriculumService {
         order: 1,
         estimatedDuration: 35,
         completed: false,
-        skills_covered: ['foundation', 'basics']
+        skillsCovered: ['foundation', 'basics']
       },
       {
         id: crypto.randomUUID(),
@@ -219,7 +219,7 @@ export class CurriculumService {
         order: 2,
         estimatedDuration: 105,
         completed: false,
-        skills_covered: ['strategy', 'implementation']
+        skillsCovered: ['strategy', 'implementation']
       },
       {
         id: crypto.randomUUID(),
@@ -248,7 +248,7 @@ export class CurriculumService {
         order: 3,
         estimatedDuration: 150,
         completed: false,
-        skills_covered: ['mastery', 'assessment']
+        skillsCovered: ['mastery', 'assessment']
       }
     ];
 
