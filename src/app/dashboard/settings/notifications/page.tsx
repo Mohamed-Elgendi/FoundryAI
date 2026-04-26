@@ -1,6 +1,5 @@
 'use client';
 
-import { DashboardShell } from '@/components/dashboard/DashboardShell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -8,8 +7,7 @@ import { Bell, Mail, MessageSquare, Trophy, DollarSign } from 'lucide-react';
 
 export default function NotificationsSettingsPage() {
   return (
-    <DashboardShell>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Notifications</h1>
           <p className="text-slate-600 dark:text-slate-400 mt-1">
@@ -92,6 +90,5 @@ export default function NotificationsSettingsPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardShell>
   );
 }

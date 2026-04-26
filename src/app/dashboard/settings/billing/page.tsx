@@ -1,14 +1,12 @@
 'use client';
 
-import { DashboardShell } from '@/components/dashboard/DashboardShell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CreditCard, Receipt, Download } from 'lucide-react';
 
 export default function BillingSettingsPage() {
   return (
-    <DashboardShell>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Billing</h1>
           <p className="text-slate-600 dark:text-slate-400 mt-1">
@@ -64,6 +62,5 @@ export default function BillingSettingsPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardShell>
   );
 }

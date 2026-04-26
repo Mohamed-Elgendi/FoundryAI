@@ -1,6 +1,5 @@
 'use client';
 
-import { DashboardShell } from '@/components/dashboard/DashboardShell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,8 +9,7 @@ import { Shield, Lock, Smartphone } from 'lucide-react';
 
 export default function AccountSettingsPage() {
   return (
-    <DashboardShell>
-      <div className="space-y-6">
+    <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Account Settings</h1>
           <p className="text-slate-600 dark:text-slate-400 mt-1">
@@ -83,6 +81,5 @@ export default function AccountSettingsPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardShell>
   );
 }

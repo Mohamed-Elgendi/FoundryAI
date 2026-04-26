@@ -586,22 +586,9 @@ function DashboardContent() {
 }
 
 export default function DashboardPage() {
-  const { signOut, user } = useAuth();
-  const router = useRouter();
-
-  const handleSignOut = async () => {
-    await signOut();
-    router.push('/login');
-  };
-
   return (
     <DashboardProvider>
-      <DashboardShell 
-        user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
-        onSignOut={handleSignOut}
-      >
-        <DashboardContent />
-      </DashboardShell>
+      <DashboardContent />
     </DashboardProvider>
   );
 }
