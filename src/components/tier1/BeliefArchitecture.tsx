@@ -302,7 +302,7 @@ const BeliefArchitecture: React.FC = () => {
           <div className="space-y-3">
             <h3 className="font-semibold flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />
-              Evidence Stack ({evidenceCount} items)
+              Evidence Stack ({Object.values(evidenceCount).reduce((a, b) => a + b, 0)} items)
             </h3>
 
             <div className="flex gap-2">
