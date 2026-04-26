@@ -25,7 +25,13 @@ import {
   Palette,
   Home,
   BarChart3,
-  Award
+  Award,
+  Heart,
+  Lightbulb,
+  BookOpen,
+  Coins,
+  Users,
+  Star
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -44,6 +50,11 @@ const navigation = {
         { name: 'Belief Architecture', href: '/dashboard/tier1/belief', icon: Brain },
         { name: 'Mindset Forge', href: '/dashboard/tier1/mindset', icon: Target },
         { name: 'Confidence Core', href: '/dashboard/tier1/confidence', icon: Zap },
+        { name: 'Brain Dump', href: '/dashboard/tier1/brain-dump', icon: Brain },
+        { name: 'Emotion Tracker', href: '/dashboard/tier1/emotion', icon: Heart },
+        { name: 'Focus Mode', href: '/dashboard/tier1/focus', icon: Target },
+        { name: 'Journal', href: '/dashboard/tier1/journal', icon: BookOpen },
+        { name: 'Momentum', href: '/dashboard/tier1/momentum', icon: TrendingUp },
       ]
     },
     {
@@ -52,9 +63,8 @@ const navigation = {
       icon: Target,
       color: 'emerald',
       items: [
-        { name: 'Opportunity Radar', href: '/dashboard/tier2/opportunities', icon: Target },
-        { name: 'Trend Radar', href: '/dashboard/tier2/radar', icon: TrendingUp },
-        { name: 'Archetypes', href: '/dashboard/tier2/archetypes', icon: User },
+        { name: 'Ideas', href: '/dashboard/tier2/ideas', icon: Lightbulb },
+        { name: 'Opportunities', href: '/dashboard/tier2/opportunities', icon: Target },
       ]
     },
     {
@@ -63,7 +73,7 @@ const navigation = {
       icon: Zap,
       color: 'amber',
       items: [
-        { name: 'Product Builder', href: '/dashboard/tier3/build', icon: Zap },
+        { name: 'Product Builder', href: '/dashboard/tier3', icon: Zap },
       ]
     },
     {
@@ -74,6 +84,7 @@ const navigation = {
       items: [
         { name: 'Character Stats', href: '/dashboard/tier4/character-stats', icon: BarChart3 },
         { name: 'Productivity', href: '/dashboard/tier4/productivity', icon: Zap },
+        { name: 'Self Discovery', href: '/dashboard/tier4/self-discovery', icon: User },
       ]
     },
     {
@@ -83,8 +94,9 @@ const navigation = {
       color: 'pink',
       items: [
         { name: 'Gamification', href: '/dashboard/tier5/gamification', icon: Award },
-        { name: 'Curriculum', href: '/dashboard/tier5/curriculum', icon: GraduationCap },
-        { name: 'Certification', href: '/dashboard/tier5/certification', icon: Shield },
+        { name: 'Learning', href: '/dashboard/tier5/learning', icon: BookOpen },
+        { name: 'Review', href: '/dashboard/tier5/review', icon: Star },
+        { name: 'Skills', href: '/dashboard/tier5/skills', icon: Zap },
       ]
     },
     {
@@ -94,7 +106,9 @@ const navigation = {
       color: 'orange',
       items: [
         { name: 'Affiliate', href: '/dashboard/tier6/affiliate', icon: DollarSign },
-        { name: 'Billing', href: '/dashboard/tier6/billing', icon: CreditCard },
+        { name: 'Coins', href: '/dashboard/tier6/coins', icon: Coins },
+        { name: 'Credits', href: '/dashboard/tier6/credits', icon: CreditCard },
+        { name: 'Membership', href: '/dashboard/tier6/membership', icon: Users },
         { name: 'Revenue', href: '/dashboard/tier6/revenue', icon: BarChart3 },
       ]
     },
