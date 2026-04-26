@@ -70,6 +70,7 @@ const BeliefArchitecture: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [beliefScore, setBeliefScore] = useState(50);
   const [beliefLevel, setBeliefLevel] = useState(1);
+  const [currentLevel, setCurrentLevel] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [evidenceCount, setEvidenceCount] = useState({
     micro: 0,
