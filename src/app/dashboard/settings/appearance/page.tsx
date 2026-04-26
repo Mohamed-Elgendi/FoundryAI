@@ -2,17 +2,11 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useTheme } from '@/lib/theme/theme-context';
-import { Sun, Moon, Check } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { Sun, Moon, Monitor, Check } from 'lucide-react';
 
 export default function AppearanceSettingsPage() {
-  const { theme, toggleTheme } = useTheme();
-
-  const setTheme = (newTheme: 'light' | 'dark') => {
-    if (theme !== newTheme) {
-      toggleTheme();
-    }
-  };
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="space-y-6">
@@ -28,11 +22,11 @@ export default function AppearanceSettingsPage() {
             <CardTitle>Theme</CardTitle>
             <CardDescription>Choose your preferred theme</CardDescription>
           </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-4">
+          <CardContent className="grid grid-cols-3 gap-4">
             <Button
               variant={theme === 'light' ? 'default' : 'outline'}
               onClick={() => setTheme('light')}
-              className="flex flex-col items-center gap-2 h-auto py-4"
+              className="flex flex-col items-center gap-2 h-auto py-4 relative"
             >
               <Sun className="w-6 h-6" />
               <span>Light</span>
@@ -41,11 +35,20 @@ export default function AppearanceSettingsPage() {
             <Button
               variant={theme === 'dark' ? 'default' : 'outline'}
               onClick={() => setTheme('dark')}
-              className="flex flex-col items-center gap-2 h-auto py-4"
+              className="flex flex-col items-center gap-2 h-auto py-4 relative"
             >
               <Moon className="w-6 h-6" />
               <span>Dark</span>
               {theme === 'dark' && <Check className="w-4 h-4 absolute top-2 right-2" />}
+            </Button>
+            <Button
+              variant={theme === 'system' ? 'default' : 'outline'}
+              onClick={() => setTheme('system')}
+              className="flex flex-col items-center gap-2 h-auto py-4 relative"
+            >
+              <Monitor className="w-6 h-6" />
+              <span>System</span>
+              {theme === 'system' && <Check className="w-4 h-4 absolute top-2 right-2" />}
             </Button>
           </CardContent>
         </Card>

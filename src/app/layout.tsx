@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/layer-1-security/auth";
-import { ThemeProvider } from "@/lib/theme/theme-context";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "FoundryAI - Transform Ideas Into Businesses",
@@ -23,7 +23,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen bg-background font-sans antialiased" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-        <ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             {children}
           </AuthProvider>
