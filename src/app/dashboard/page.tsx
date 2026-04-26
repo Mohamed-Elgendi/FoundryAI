@@ -231,29 +231,46 @@ function DashboardContent() {
         let savedPlans: SavedPlan[] = [];
         let opportunitiesCount = 0;
 
-        if (getSupabaseBrowserClient()) {
-          const { data: plans, error: plansError } = await getSupabaseBrowserClient()
-            .from('plans')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false });
+        const client = getSupabaseBrowserClient();
+        if (client) {
+          try {
+            // Try to fetch plans from Supabase
+            const { data: plans, error: plansError } = await client
+              .from('plans')
+              .select('*')
+              .eq('user_id', user.id)
+              .order('created_at', { ascending: false });
 
-          if (plansError) console.error('Error fetching plans:', plansError);
+            if (plansError) {
+              console.warn('Plans table not available, using localStorage fallback');
+            } else if (plans) {
+              savedPlans = plans.map((plan: { id: string; user_input?: string; content: unknown; created_at: string }) => ({
+                id: plan.id,
+                userInput: plan.user_input || '',
+                output: plan.content as FoundryAIOutput,
+                createdAt: plan.created_at
+              }));
+            }
+          } catch (e) {
+            console.warn('Supabase plans fetch failed, using localStorage');
+          }
 
-          const { count: oppCount, error: oppError } = await getSupabaseBrowserClient()
-            .from('opportunities')
-            .select('*', { count: 'exact', head: true });
+          try {
+            // Try to fetch opportunities count
+            const { count: oppCount, error: oppError } = await client
+              .from('opportunities')
+              .select('*', { count: 'exact', head: true });
 
-          if (oppError) console.error('Error fetching opportunities:', oppError);
-          opportunitiesCount = oppCount || 0;
-
-          savedPlans = (plans || []).map((plan: { id: string; user_input?: string; content: unknown; created_at: string }) => ({
-            id: plan.id,
-            userInput: plan.user_input || '',
-            output: plan.content as FoundryAIOutput,
-            createdAt: plan.created_at
-          }));
-        } else {
+            if (!oppError) {
+              opportunitiesCount = oppCount || 0;
+            }
+          } catch (e) {
+            console.warn('Supabase opportunities fetch failed');
+          }
+        }
+        
+        // Fallback to localStorage if no data from Supabase
+        if (savedPlans.length === 0) {
           const savedPlansJson = localStorage.getItem('foundryai-plans');
           savedPlans = savedPlansJson ? JSON.parse(savedPlansJson) : [];
           const radarData = localStorage.getItem('radar-opportunities');
