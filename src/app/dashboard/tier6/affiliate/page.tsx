@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Users, DollarSign, TrendingUp, Copy, Gift } from 'lucide-react';
 
 export default function AffiliatePage() {
-  const [referrals, setReferrals] = useState([]);
+  const [referrals, setReferrals] = useState<any[]>([]);
   const [referralCode] = useState('FOUNDRY-' + Math.random().toString(36).substring(2, 8).toUpperCase());
   const { toast } = useToast();
 

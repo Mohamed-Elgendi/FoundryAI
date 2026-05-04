@@ -39,7 +39,7 @@ export default function BeliefArchitecturePage() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentLevel, setCurrentLevel] = useState(1);
   const [totalScore, setTotalScore] = useState(0);
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState<any[]>([]);
   const [newEntry, setNewEntry] = useState({ evidenceType: '', description: '', impact: 'small' });
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -59,9 +59,9 @@ export default function BeliefArchitecturePage() {
     } catch (e) { console.error(e); }
   };
 
-  const calculateStats = (data) => {
+  const calculateStats = (data: any[]) => {
     let score = 0;
-    data.forEach((entry) => { score += entry.score * IMPACT_MULTIPLIERS[entry.impact]; });
+    data.forEach((entry: any) => { score += entry.score * IMPACT_MULTIPLIERS[entry.impact as keyof typeof IMPACT_MULTIPLIERS]; });
     setTotalScore(score);
     const newLevel = BELIEF_LEVELS.find((l) => score < l.requiredScore)?.level || 5;
     setCurrentLevel(newLevel);
@@ -87,7 +87,7 @@ export default function BeliefArchitecturePage() {
       setEntries(updated);
       localStorage.setItem('foundryai_belief_entries', JSON.stringify(updated));
       calculateStats(updated);
-      toast({ title: 'Evidence Added', description: `+${5 * IMPACT_MULTIPLIERS[newEntry.impact]} points!` });
+      toast({ title: 'Evidence Added', description: `+${5 * IMPACT_MULTIPLIERS[newEntry.impact as keyof typeof IMPACT_MULTIPLIERS]} points!` });
       setNewEntry({ evidenceType: '', description: '', impact: 'small' });
       setIsOpen(false);
     } catch (e) {
@@ -168,7 +168,7 @@ export default function BeliefArchitecturePage() {
                   <div key={entry.id} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800 border">
                     <div className="flex items-center justify-between">
                       <span className="font-medium">{entry.evidence_type}</span>
-                      <span className="text-sm font-semibold text-violet-600">+{entry.score * IMPACT_MULTIPLIERS[entry.impact]} pts</span>
+                      <span className="text-sm font-semibold text-violet-600">+{entry.score * IMPACT_MULTIPLIERS[entry.impact as keyof typeof IMPACT_MULTIPLIERS]} pts</span>
                     </div>
                     <p className="text-sm text-slate-500">{entry.description}</p>
                     <div className="flex gap-2 mt-1">

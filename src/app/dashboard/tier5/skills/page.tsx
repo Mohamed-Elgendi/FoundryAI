@@ -11,7 +11,7 @@ import { Award, TrendingUp, Target, Zap, Plus } from 'lucide-react';
 const SKILL_CATEGORIES = ['Technical', 'Business', 'Creative', 'Leadership', 'Marketing'];
 
 export default function SkillsPage() {
-  const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState<any[]>([]);
   const [newSkill, setNewSkill] = useState({ name: '', category: 'Technical', level: 1 });
   const { toast } = useToast();
 
@@ -30,7 +30,7 @@ export default function SkillsPage() {
     toast({ title: 'Skill added!' });
   };
 
-  const levelUp = (id) => {
+  const levelUp = (id: number) => {
     const updated = skills.map(s => s.id === id ? { ...s, level: Math.min(10, s.level + 1), xp: s.xp + 100 } : s);
     setSkills(updated);
     localStorage.setItem('foundryai_skills', JSON.stringify(updated));

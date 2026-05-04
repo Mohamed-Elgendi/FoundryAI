@@ -133,6 +133,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedTiers, setExpandedTiers] = useState<string[]>(['tier1']);
   const [settingsExpanded, setSettingsExpanded] = useState(false);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   const toggleTier = (tierId: string) => {
     setExpandedTiers(prev => 
@@ -149,7 +150,11 @@ export function DashboardShell({ children }: DashboardShellProps) {
     return pathname?.startsWith(href);
   };
 
-  const handleSignOut = async () => {
+  const handleSignOutClick = () => {
+    setShowSignOutConfirm(true);
+  };
+
+  const handleConfirmSignOut = async () => {
     try {
       await signOut();
       router.push('/login');
@@ -157,6 +162,10 @@ export function DashboardShell({ children }: DashboardShellProps) {
       console.error('Sign out error:', error);
       window.location.href = '/login';
     }
+  };
+
+  const handleCancelSignOut = () => {
+    setShowSignOutConfirm(false);
   };
 
   const getTierStyles = (color: string, isActive: boolean, isExpanded: boolean) => {
@@ -398,13 +407,38 @@ export function DashboardShell({ children }: DashboardShellProps) {
           </div>
           
           <Button
-            onClick={handleSignOut}
+            onClick={handleSignOutClick}
             variant="ghost"
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
           >
             <LogOut className="w-5 h-5" />
             Sign Out
           </Button>
+
+          {/* Sign Out Confirmation Dialog */}
+          {showSignOutConfirm && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              <div className="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl">
+                <h3 className="text-lg font-semibold mb-2">Sign Out?</h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-6">Are you sure you want to sign out of FoundryAI?</p>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={handleCancelSignOut}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleConfirmSignOut}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Yes, Sign Out
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </aside>
 

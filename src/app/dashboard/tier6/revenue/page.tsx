@@ -16,7 +16,7 @@ const REVENUE_STREAMS = [
 ];
 
 export default function RevenuePage() {
-  const [income, setIncome] = useState([]);
+  const [income, setIncome] = useState<any[]>([]);
   const [newEntry, setNewEntry] = useState({ amount: '', source: 'subscriptions' });
   const { toast } = useToast();
 
@@ -37,8 +37,8 @@ export default function RevenuePage() {
 
   const totalRevenue = income.reduce((sum, i) => sum + i.amount, 0);
   const thisMonth = income.filter(i => new Date(i.date).getMonth() === new Date().getMonth()).reduce((sum, i) => sum + i.amount, 0);
-  const bySource = {};
-  income.forEach(i => { bySource[i.source] = (bySource[i.source] || 0) + i.amount; });
+  const bySource: Record<string, number> = {};
+  income.forEach((i: any) => { bySource[i.source] = (bySource[i.source] || 0) + i.amount; });
 
   return (
     <div className="space-y-6">

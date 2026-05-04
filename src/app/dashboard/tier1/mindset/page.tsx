@@ -27,11 +27,12 @@ export default function MindsetPage() {
     if (savedReflection) setReflection(savedReflection);
   }, []);
 
-  const togglePillar = (id) => {
+  const togglePillar = (id: string) => {
     const updated = pillars.map(p => p.id === id ? { ...p, completed: !p.completed, streak: p.completed ? p.streak : p.streak + 1 } : p);
     setPillars(updated);
     localStorage.setItem('foundryai_mindset_pillars', JSON.stringify(updated));
-    toast({ title: updated.find(p => p.id === id).completed ? 'Pillar Completed!' : 'Pillar Reset', description: 'Keep building your mindset!' });
+    const found = updated.find(p => p.id === id);
+    toast({ title: found?.completed ? 'Pillar Completed!' : 'Pillar Reset', description: 'Keep building your mindset!' });
   };
 
   const completedCount = pillars.filter(p => p.completed).length;

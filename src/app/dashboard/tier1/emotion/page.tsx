@@ -15,7 +15,7 @@ const EMOTIONS = [
 ];
 
 export default function EmotionPage() {
-  const [checkIns, setCheckIns] = useState([]);
+  const [checkIns, setCheckIns] = useState<any[]>([]);
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [note, setNote] = useState('');
   const { toast } = useToast();
@@ -25,7 +25,7 @@ export default function EmotionPage() {
     if (saved) setCheckIns(JSON.parse(saved));
   }, []);
 
-  const recordEmotion = (emotionId) => {
+  const recordEmotion = (emotionId: string) => {
     const checkIn = {
       id: Date.now(),
       emotion: emotionId,
@@ -41,8 +41,8 @@ export default function EmotionPage() {
   };
 
   const getEmotionStats = () => {
-    const stats = {};
-    checkIns.forEach(c => { stats[c.emotion] = (stats[c.emotion] || 0) + 1; });
+    const stats: Record<string, number> = {};
+    checkIns.forEach((c: any) => { stats[c.emotion] = (stats[c.emotion] || 0) + 1; });
     return stats;
   };
 

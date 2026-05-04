@@ -1,6 +1,3 @@
-// @ts-nocheck
-import { Metadata } from 'next';
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -11,13 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Lightbulb, Plus, CheckCircle } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Idea Extraction | FoundryAI',
-  description: 'Transform vague ideas into concrete, validated business opportunities.',
-};
-
 export default function IdeaExtractionPage() {
-  const [ideas, setIdeas] = useState([]);
+  const [ideas, setIdeas] = useState<any[]>([]);
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
   const { toast } = useToast();

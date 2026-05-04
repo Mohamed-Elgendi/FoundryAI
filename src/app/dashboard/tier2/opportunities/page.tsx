@@ -15,7 +15,7 @@ const ARCHETYPES = [
 ];
 
 export default function OpportunitiesPage() {
-  const [opportunities, setOpportunities] = useState([]);
+  const [opportunities, setOpportunities] = useState<any[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function OpportunitiesPage() {
     if (saved) setOpportunities(JSON.parse(saved));
   }, []);
 
-  const trackOpportunity = (arch) => {
+  const trackOpportunity = (arch: any) => {
     const opp = { id: Date.now(), archetype: arch, trackedAt: new Date().toISOString() };
     const updated = [opp, ...opportunities];
     setOpportunities(updated);

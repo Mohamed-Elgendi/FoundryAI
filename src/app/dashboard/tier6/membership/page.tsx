@@ -22,7 +22,7 @@ export default function MembershipPage() {
     if (saved) setCurrentPlan(saved);
   }, []);
 
-  const upgrade = (planId) => {
+  const upgrade = (planId: string) => {
     setCurrentPlan(planId);
     localStorage.setItem('foundryai_membership_plan', planId);
     toast({ title: `Upgraded to ${planId}!`, description: 'Welcome to your new plan' });

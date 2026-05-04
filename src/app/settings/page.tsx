@@ -40,6 +40,7 @@ function SettingsContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isPortalLoading, setIsPortalLoading] = useState(false);
   const [message, setMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   const success = searchParams.get('success');
   const canceled = searchParams.get('canceled');
@@ -317,14 +318,39 @@ function SettingsContent() {
           Sign out of your account on this device.
         </p>
         <button
-          onClick={() => {
-            const event = new CustomEvent('settings-signout');
-            window.dispatchEvent(event);
-          }}
+          onClick={() => setShowSignOutConfirm(true)}
           className="w-full py-2.5 px-4 border border-red-200 text-red-600 font-medium rounded-lg hover:bg-red-50 transition-colors flex items-center justify-center gap-2"
         >
           Sign Out
         </button>
+
+        {/* Sign Out Confirmation Dialog */}
+        {showSignOutConfirm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl">
+              <h3 className="text-lg font-semibold mb-2">Sign Out?</h3>
+              <p className="text-slate-600 dark:text-slate-400 mb-6">Are you sure you want to sign out of FoundryAI?</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowSignOutConfirm(false)}
+                  className="flex-1 py-2.5 px-4 border border-slate-200 rounded-lg hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowSignOutConfirm(false);
+                    const event = new CustomEvent('settings-signout');
+                    window.dispatchEvent(event);
+                  }}
+                  className="flex-1 py-2.5 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                >
+                  Yes, Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -338,6 +364,15 @@ export default function SettingsPage() {
     await signOut();
     router.push('/login');
   };
+
+  // Also listen for confirmation from SettingsContent
+  useEffect(() => {
+    const handleConfirmSettingsSignOut = () => {
+      handleSignOut();
+    };
+    window.addEventListener('settings-signout-confirmed', handleConfirmSettingsSignOut);
+    return () => window.removeEventListener('settings-signout-confirmed', handleConfirmSettingsSignOut);
+  }, []);
 
   // Listen for sign out event from SettingsContent
   useEffect(() => {

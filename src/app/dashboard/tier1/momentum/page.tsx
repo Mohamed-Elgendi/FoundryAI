@@ -18,7 +18,7 @@ const DIMENSIONS = [
 ];
 
 export default function MomentumPage() {
-  const [scores, setScores] = useState({});
+  const [scores, setScores] = useState<Record<string, number>>({});
   const { toast } = useToast();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function MomentumPage() {
     if (saved) setScores(JSON.parse(saved));
   }, []);
 
-  const adjustScore = (id, delta) => {
+  const adjustScore = (id: string, delta: number) => {
     const newScores = { ...scores, [id]: Math.max(0, Math.min(10, (scores[id] || 5) + delta)) };
     setScores(newScores);
     localStorage.setItem('foundryai_momentum', JSON.stringify(newScores));

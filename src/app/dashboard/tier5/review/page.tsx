@@ -15,7 +15,7 @@ const REVIEW_AREAS = [
 ];
 
 export default function ReviewPage() {
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [currentReview, setCurrentReview] = useState({ wins: '', challenges: '', learnings: '', tomorrow: '' });
   const { toast } = useToast();
 
@@ -50,7 +50,7 @@ export default function ReviewPage() {
             <Card key={area.id}>
               <CardHeader><CardTitle className="flex items-center gap-2"><Icon className="w-5 h-5"/>{area.name}</CardTitle></CardHeader>
               <CardContent>
-                <Textarea placeholder={`Enter your ${area.name.toLowerCase()}...`} value={currentReview[area.id]} onChange={(e) => setCurrentReview({...currentReview, [area.id]: e.target.value})} className="min-h-[100px]" />
+                <Textarea placeholder={`Enter your ${area.name.toLowerCase()}...`} value={(currentReview as any)[area.id]} onChange={(e) => setCurrentReview({...currentReview, [area.id]: e.target.value})} className="min-h-[100px]" />
               </CardContent>
             </Card>
           );

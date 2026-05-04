@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Trophy, TrendingUp, Target, Plus, Star, Calendar } from 'lucide-react';
+import ConfidenceCore from '@/components/tier1/ConfidenceCore';
 import { useAuth } from '@/layer-1-security/auth';
 import { DashboardShell } from '@/components/dashboard/DashboardShell';
 import { ArrowLeft } from 'lucide-react';
@@ -24,7 +25,7 @@ export default function ConfidencePage() {
   const { user } = useAuth();
   if (!user) return null;
 
-  const [wins, setWins] = useState([]);
+  const [wins, setWins] = useState<any[]>([]);
   const [newWin, setNewWin] = useState('');
   const [confidenceScore, setConfidenceScore] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -67,7 +68,7 @@ export default function ConfidencePage() {
   const progress = ((confidenceScore - getCurrentLevel().minScore) / (getCurrentLevel().maxScore - getCurrentLevel().minScore)) * 100;
 
   return (
-    <DashboardShell user={user}>
+    <DashboardShell>
       <div className="space-y-6">
         <Link href="/dashboard/tier1">
           <Button variant="ghost" size="sm" className="gap-2">

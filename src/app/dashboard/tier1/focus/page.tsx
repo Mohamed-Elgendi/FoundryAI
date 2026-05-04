@@ -16,8 +16,8 @@ const DEFENSE_LAYERS = [
 ];
 
 export default function FocusPage() {
-  const [activeLayer, setActiveLayer] = useState(null);
-  const [completedLayers, setCompletedLayers] = useState([]);
+  const [activeLayer, setActiveLayer] = useState<string | null>(null);
+  const [completedLayers, setCompletedLayers] = useState<string[]>([]);
   const [sessionTime, setSessionTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const { toast } = useToast();
@@ -28,14 +28,14 @@ export default function FocusPage() {
   }, []);
 
   useEffect(() => {
-    let interval;
+    let interval: NodeJS.Timeout | null = null;
     if (isRunning) {
       interval = setInterval(() => setSessionTime(t => t + 1), 1000);
     }
-    return () => clearInterval(interval);
+    return () => { if (interval) clearInterval(interval); };
   }, [isRunning]);
 
-  const toggleLayer = (layerId) => {
+  const toggleLayer = (layerId: string) => {
     const updated = completedLayers.includes(layerId)
       ? completedLayers.filter(id => id !== layerId)
       : [...completedLayers, layerId];
@@ -44,7 +44,7 @@ export default function FocusPage() {
     toast({ title: completedLayers.includes(layerId) ? 'Layer undone' : 'Layer activated!' });
   };
 
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;

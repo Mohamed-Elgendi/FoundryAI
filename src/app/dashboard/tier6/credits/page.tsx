@@ -14,7 +14,7 @@ const TRANSACTIONS = [
 
 export default function CreditsPage() {
   const [balance, setBalance] = useState(0);
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {

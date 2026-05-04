@@ -22,7 +22,7 @@ const EVENING_PROMPTS = [
 ];
 
 export default function JournalPage() {
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState<any[]>([]);
   const [currentEntry, setCurrentEntry] = useState('');
   const [selectedPrompt, setSelectedPrompt] = useState('');
   const [entryType, setEntryType] = useState('morning');

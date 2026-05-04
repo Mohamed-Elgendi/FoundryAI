@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { BookOpen, TrendingUp, Clock, Award, Plus } from 'lucide-react';
 
 export default function LearningPage() {
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [newCourse, setNewCourse] = useState('');
   const { toast } = useToast();
 
@@ -28,7 +28,7 @@ export default function LearningPage() {
     toast({ title: 'Course added!' });
   };
 
-  const updateProgress = (id, delta) => {
+  const updateProgress = (id: number, delta: number) => {
     const updated = courses.map(c => c.id === id ? { ...c, progress: Math.min(100, Math.max(0, c.progress + delta)) } : c);
     setCourses(updated);
     localStorage.setItem('foundryai_courses', JSON.stringify(updated));
