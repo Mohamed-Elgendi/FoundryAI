@@ -162,7 +162,7 @@ export class CurriculumService {
     skillLevel: string
   ): CurriculumModule[] {
     // Generate modules based on topic and level
-    const baseModules = [
+    const baseModules: CurriculumModule[] = [
       {
         id: crypto.randomUUID(),
         title: `Introduction to ${topic}`,
@@ -172,7 +172,9 @@ export class CurriculumService {
             id: crypto.randomUUID(),
             title: 'Getting Started',
             description: 'Overview and setup',
-            content_type: 'video',
+            contentType: 'video',
+            content: { videoUrl: '' },
+            resources: [],
             duration: 15,
             completed: false,
             order: 1
@@ -181,7 +183,9 @@ export class CurriculumService {
             id: crypto.randomUUID(),
             title: 'Core Concepts',
             description: 'Essential principles',
-            content_type: 'article',
+            contentType: 'article',
+            content: { articleContent: '' },
+            resources: [],
             duration: 20,
             completed: false,
             order: 2
@@ -201,7 +205,9 @@ export class CurriculumService {
             id: crypto.randomUUID(),
             title: 'Strategy Development',
             description: 'Creating effective strategies',
-            content_type: 'interactive',
+            contentType: 'interactive',
+            content: { interactiveData: { type: 'exercise', data: {} } },
+            resources: [],
             duration: 45,
             completed: false,
             order: 1
@@ -210,7 +216,9 @@ export class CurriculumService {
             id: crypto.randomUUID(),
             title: 'Practical Exercise',
             description: 'Hands-on practice',
-            content_type: 'project',
+            contentType: 'project',
+            content: { projectInstructions: '' },
+            resources: [],
             duration: 60,
             completed: false,
             order: 2
@@ -230,7 +238,9 @@ export class CurriculumService {
             id: crypto.randomUUID(),
             title: 'Final Project',
             description: 'Capstone project',
-            content_type: 'project',
+            contentType: 'project',
+            content: { projectInstructions: '' },
+            resources: [],
             duration: 120,
             completed: false,
             order: 1
@@ -239,7 +249,9 @@ export class CurriculumService {
             id: crypto.randomUUID(),
             title: 'Knowledge Check',
             description: 'Comprehensive assessment',
-            content_type: 'quiz',
+            contentType: 'quiz',
+            content: { quizQuestions: [] },
+            resources: [],
             duration: 30,
             completed: false,
             order: 2

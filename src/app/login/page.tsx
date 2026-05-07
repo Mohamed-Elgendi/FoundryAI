@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client';
 
 import { useState } from 'react';
@@ -6,7 +5,6 @@ import { useAuth } from '@/layer-1-security/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Mail, Lock, Loader2 } from 'lucide-react';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -57,11 +55,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
-      {/* Theme Toggle - Top Right */}
-      <div className="fixed top-4 right-4">
-        <ThemeToggle />
-      </div>
-      
       <div className="w-full max-w-md">
         {/* Logo - Clickable */}
         <Link href="/" className="block text-center mb-8 group">
