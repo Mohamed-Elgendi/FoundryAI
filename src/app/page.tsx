@@ -1,8 +1,12 @@
-// @ts-nocheck
 'use client';
 
+import { ThemeProvider } from '@/lib/theme/theme-context';
 import { LandingPage } from './landing/LandingPage';
 
 export default function Home() {
-  return <LandingPage />;
+  return (
+    <ThemeProvider>
+      <LandingPage />
+    </ThemeProvider>
+  );
 }

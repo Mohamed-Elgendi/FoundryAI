@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,6 +5,7 @@ import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
 import { useAuth } from '@/layer-1-security/auth';
 import { getSupabaseBrowserClient } from '@/layer-3-data/storage/supabase-client';
 import { FoundryAIOutput } from '@/types';
+import { ThemeProvider } from '@/lib/theme/theme-context';
 import { 
   FileText, 
   Trash2, 
@@ -323,13 +323,15 @@ export default function PlansPage() {
   };
 
   return (
-    <DashboardProvider>
-      <DashboardShell 
-        user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
-        onSignOut={handleSignOut}
-      >
-        <PlansContent />
-      </DashboardShell>
-    </DashboardProvider>
+    <ThemeProvider>
+      <DashboardProvider>
+        <DashboardShell
+          user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
+          onSignOut={handleSignOut}
+        >
+          <PlansContent />
+        </DashboardShell>
+      </DashboardProvider>
+    </ThemeProvider>
   );
 }

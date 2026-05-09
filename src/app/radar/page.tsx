@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
+import { ThemeProvider } from '@/lib/theme/theme-context';
 import { useAuth } from '@/layer-1-security/auth';
 import { OpportunityRadar } from '@/components/foundryai/OpportunityRadar';
 import { useRouter } from 'next/navigation';
@@ -64,13 +65,15 @@ export default function RadarPage() {
   };
 
   return (
-    <DashboardProvider>
-      <DashboardShell 
-        user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
-        onSignOut={handleSignOut}
-      >
-        <RadarContent />
-      </DashboardShell>
-    </DashboardProvider>
+    <ThemeProvider>
+      <DashboardProvider>
+        <DashboardShell 
+          user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
+          onSignOut={handleSignOut}
+        >
+          <RadarContent />
+        </DashboardShell>
+      </DashboardProvider>
+    </ThemeProvider>
   );
 }

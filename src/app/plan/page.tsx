@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,6 +6,7 @@ import { useAuth } from '@/layer-1-security/auth';
 import { FoundryAI } from '@/components/foundryai/FoundryAI';
 import { useRouter } from 'next/navigation';
 import { Lightbulb, Sparkles } from 'lucide-react';
+import { ThemeProvider } from '@/lib/theme/theme-context';
 
 function PlanContent() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
@@ -64,13 +64,15 @@ export default function PlanPage() {
   };
 
   return (
-    <DashboardProvider>
-      <DashboardShell 
-        user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
-        onSignOut={handleSignOut}
-      >
-        <PlanContent />
-      </DashboardShell>
-    </DashboardProvider>
+    <ThemeProvider>
+      <DashboardProvider>
+        <DashboardShell
+          user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
+          onSignOut={handleSignOut}
+        >
+          <PlanContent />
+        </DashboardShell>
+      </DashboardProvider>
+    </ThemeProvider>
   );
 }

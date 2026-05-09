@@ -21,7 +21,12 @@ const nextConfig: NextConfig = {
       'lucide-react',
       '@radix-ui/react-icons',
     ],
+    // Optimize CSS
+    optimizeCss: true,
   },
+  
+  // Server external packages
+  serverExternalPackages: ['@supabase/supabase-js'],
   
   // Headers for caching and security
   async headers() {
@@ -65,6 +70,17 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
     ];
+  },
+  
+  // Turbopack configuration for performance
+  turbopack: {
+    rules: {
+      // Optimize bundle splitting
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
   },
 };
 

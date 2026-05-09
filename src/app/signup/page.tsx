@@ -6,6 +6,7 @@ import { useAuth } from '@/layer-1-security/auth';
 import Link from 'next/link';
 import { Eye, EyeOff, Mail, Lock, Loader2, User } from 'lucide-react';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { ThemeProvider } from '@/lib/theme/theme-context';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -109,13 +110,14 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
-      {/* Theme Toggle */}
-      <div className="fixed top-4 right-4">
-        <ThemeToggle />
-      </div>
-      
-      <div className="w-full max-w-md">
+    <ThemeProvider>
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+        {/* Theme Toggle */}
+        <div className="fixed top-4 right-4">
+          <ThemeToggle />
+        </div>
+        
+        <div className="w-full max-w-md">
         {/* Logo - Clickable */}
         <Link href="/" className="block text-center mb-8 group">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-200 mb-4 group-hover:shadow-violet-300 transition-shadow">
@@ -279,7 +281,8 @@ export default function SignupPage() {
             </p>
           </div>
         </div>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }

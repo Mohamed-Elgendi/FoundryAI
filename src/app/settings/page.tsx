@@ -3,6 +3,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { DashboardProvider, DashboardShell } from '@/lib/layers/frontend-layer';
+import { ThemeProvider } from '@/lib/theme/theme-context';
 import { useAuth } from '@/layer-1-security/auth';
 import { getSupabaseBrowserClient } from '@/layer-3-data/storage/supabase-client';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -384,15 +385,17 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <DashboardProvider>
-      <DashboardShell 
-        user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
-        onSignOut={handleSignOut}
-      >
-        <Suspense fallback={<div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin" /></div>}>
-          <SettingsContent />
-        </Suspense>
-      </DashboardShell>
-    </DashboardProvider>
+    <ThemeProvider>
+      <DashboardProvider>
+        <DashboardShell 
+          user={user ? { name: user.user_metadata?.name || user.email?.split('@')[0] || 'User', email: user.email || '', role: 'Member' } : undefined}
+          onSignOut={handleSignOut}
+        >
+          <Suspense fallback={<div className="flex items-center justify-center h-64"><Loader2 className="w-8 h-8 animate-spin" /></div>}>
+            <SettingsContent />
+          </Suspense>
+        </DashboardShell>
+      </DashboardProvider>
+    </ThemeProvider>
   );
 }

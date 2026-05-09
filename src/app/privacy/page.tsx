@@ -3,7 +3,6 @@
 
 import Link from 'next/link';
 import { Crown, ArrowLeft, Shield, Lock, Eye, Trash2, Server, Globe } from 'lucide-react';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function PrivacyPage() {
   return (
@@ -17,15 +16,12 @@ export default function PrivacyPage() {
             </div>
             <span className="font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">FoundryAI</span>
           </Link>
-          <div className="flex items-center gap-4">
-            <Link 
-              href="/login" 
-              className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-            >
-              Sign In
-            </Link>
-            <ThemeToggle />
-          </div>
+          <Link 
+            href="/login" 
+            className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+          >
+            Sign In
+          </Link>
         </div>
       </header>
 

@@ -7,6 +7,7 @@ export * from './affiliate';
 // AI Output types
 export interface FoundryAIOutput {
   ideaName: string;
+  toolIdea?: string;
   targetAudience: {
     description: string;
     painLevel: number;
