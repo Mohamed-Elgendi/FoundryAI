@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Revenue Analytics API
  * GET /api/tier4/revenue/analytics

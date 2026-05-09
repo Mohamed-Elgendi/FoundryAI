@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Metadata } from 'next';
 import { CoinsWallet } from '@/components/tier6';
 

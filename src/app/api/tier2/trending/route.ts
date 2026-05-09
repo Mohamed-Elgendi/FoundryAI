@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 2 Radar Trending API Route
  * Returns trending opportunities

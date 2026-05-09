@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 1 Data Hooks
  * React hooks for fetching and updating Tier 1 foundation data

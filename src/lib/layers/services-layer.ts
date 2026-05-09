@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Layer 8: Services Layer
  * AI service, Plan service, Integration layer

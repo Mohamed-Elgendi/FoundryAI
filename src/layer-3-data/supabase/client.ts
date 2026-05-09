@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Supabase Client Configuration
  * Server and client-side Supabase instances

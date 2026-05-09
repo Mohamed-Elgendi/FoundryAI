@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { processWithAI, AIProvider, getDefaultProvider } from '@/layer-2-ai/router/ai-router';
 import { successResponse, errorResponse, errors } from '@/lib/api/response';

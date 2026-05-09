@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { BaseRepository } from './base-repository';
 import { Tables } from '../storage/database.types';
 import { SupabaseClient } from '@supabase/supabase-js';

@@ -4,6 +4,16 @@ export * from './billing';
 export * from './curriculum';
 export * from './affiliate';
 
+// Feedback types
+export interface FeedbackData {
+  id?: string;
+  userId: string;
+  email: string;
+  feedback: string;
+  rating: number;
+  createdAt?: string;
+}
+
 // AI Output types
 export interface FoundryAIOutput {
   ideaName: string;

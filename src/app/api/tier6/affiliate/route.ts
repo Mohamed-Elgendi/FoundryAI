@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 6 Affiliate API Routes
  * Affiliate tracking, conversions, payouts

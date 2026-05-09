@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 2 Archetype Analysis API Route
  * Returns opportunity analysis by business archetype

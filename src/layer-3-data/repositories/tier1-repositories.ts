@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 1 Foundation Repository
  * Repository for all Tier 1 Core Foundation systems

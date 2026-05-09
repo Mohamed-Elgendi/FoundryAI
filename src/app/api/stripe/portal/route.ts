@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
 import { createSupabaseClient } from '@/layer-3-data/storage/supabase-client';

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Layer 1: Security Module - Permissions
  * Permission and role management

@@ -1,32 +1,31 @@
-// @ts-nocheck
 'use client';
 
-import { createContext, useContext, ReactNode } from 'react';
+import * as React from 'react';
 
 interface DashboardContextType {
-  isLoading: boolean;
-  refreshData: () => void;
+  user: {
+    name: string;
+    role: string;
+  } | null;
+  setUser: (user: DashboardContextType['user']) => void;
 }
 
-const DashboardContext = createContext<DashboardContextType | null>(null);
+const DashboardContext = React.createContext<DashboardContextType | undefined>(undefined);
 
-export function DashboardProvider({ children }: { children: ReactNode }) {
-  const refreshData = () => {
-    // Refresh data implementation
-    console.log('Refreshing dashboard data...');
-  };
+export function DashboardProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = React.useState<DashboardContextType['user']>(null);
 
   return (
-    <DashboardContext.Provider value={{ isLoading: false, refreshData }}>
+    <DashboardContext.Provider value={{ user, setUser }}>
       {children}
     </DashboardContext.Provider>
   );
 }
 
 export function useDashboard() {
-  const context = useContext(DashboardContext);
-  if (!context) {
-    throw new Error('useDashboard must be used within DashboardProvider');
+  const context = React.useContext(DashboardContext);
+  if (context === undefined) {
+    throw new Error('useDashboard must be used within a DashboardProvider');
   }
   return context;
 }

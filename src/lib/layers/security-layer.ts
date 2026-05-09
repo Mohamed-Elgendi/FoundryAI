@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Layer 6: Security & Authentication
  * Auth with RBAC, encryption, API security

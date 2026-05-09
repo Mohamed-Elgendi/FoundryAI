@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Security Audit Module
  * Activity logging and audit trail

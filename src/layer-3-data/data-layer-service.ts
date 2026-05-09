@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { createSupabaseClient, createServiceClient, getSupabaseBrowserClient } from './storage/supabase-client';
 import { ProfileRepository } from './repositories/profile-repository';
 import { UserJourneyRepository } from './repositories/user-journey-repository';

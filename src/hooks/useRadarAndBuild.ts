@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Opportunity Radar & Build System Hooks
  * React hooks for Tier 2 and Tier 3 functionality

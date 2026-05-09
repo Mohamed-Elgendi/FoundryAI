@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Cache Manager for Data Layer
  * Provides in-memory caching with TTL support

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Plans Repository
  * Handles CRUD operations for business plans

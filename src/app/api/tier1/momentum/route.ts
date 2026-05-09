@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 1 Foundation API Routes - Momentum
  * Momentum Builder (7 Dimensions) endpoints

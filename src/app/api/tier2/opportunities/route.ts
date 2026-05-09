@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 2 Opportunity API Routes
  * Individual opportunity endpoints

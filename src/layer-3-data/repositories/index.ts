@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Repository pattern
 export * from './repository.types';
 export * from './base-repository';

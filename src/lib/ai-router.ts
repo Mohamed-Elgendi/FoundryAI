@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { groq } from '@ai-sdk/groq';
 import { generateText } from 'ai';
 import { apiKeys } from './config/api-keys';

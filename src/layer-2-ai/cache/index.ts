@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * AI Cache Manager with Supabase Persistence
  * Semantic caching for AI responses with similarity matching

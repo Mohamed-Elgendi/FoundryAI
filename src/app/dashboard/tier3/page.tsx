@@ -1,4 +1,3 @@
-// @ts-nocheck
 'use client';
 
 import { useAuth } from '@/layer-1-security/auth';

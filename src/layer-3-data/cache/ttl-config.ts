@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * TTL Configuration for Cache
  */

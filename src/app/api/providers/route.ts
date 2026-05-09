@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { getProviderStatus, getDefaultProvider } from '@/layer-2-ai/router/ai-router';
 import { successResponse } from '@/lib/api/response';

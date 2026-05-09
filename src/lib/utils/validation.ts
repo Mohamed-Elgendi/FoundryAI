@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Input Validation Utilities
  * Validates all user inputs to prevent crashes from malformed data

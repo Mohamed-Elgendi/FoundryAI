@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Database Type Definitions for FoundryAI
  * Auto-generated from Supabase schema

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Revenue Transactions API
  * GET /api/tier4/revenue/transactions

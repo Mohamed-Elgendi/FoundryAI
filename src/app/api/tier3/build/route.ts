@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 3 Build & Execution API Routes
  * AI Build Assistant and workflow engine endpoints

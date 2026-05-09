@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { SupabaseClient, PostgrestError } from '@supabase/supabase-js';
 import { Database, Tables } from '../storage/database.types';
 import { Repository, QueryOptions, RepositoryError } from './repository.types';

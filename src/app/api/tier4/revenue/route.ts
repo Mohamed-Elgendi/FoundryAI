@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Revenue API Routes
  * Tier 4 Revenue Engine endpoints

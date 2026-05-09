@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Layer 4: Deep Logic Layer
  * Business logic, workflows, state management

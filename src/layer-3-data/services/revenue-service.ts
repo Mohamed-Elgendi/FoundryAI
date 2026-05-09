@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Revenue Service
  * Client-side service for revenue tracking and management

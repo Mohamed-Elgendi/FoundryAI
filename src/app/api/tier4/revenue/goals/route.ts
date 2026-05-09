@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Revenue Goals API
  * GET /api/tier4/revenue/goals

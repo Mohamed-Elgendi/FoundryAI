@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseClient } from '@/layer-3-data/storage/supabase-client';
 import type { Database } from '@/layer-3-data/storage/database.types';

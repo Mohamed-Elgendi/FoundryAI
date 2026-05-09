@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Security Validation Module
  * Schema and input validation utilities

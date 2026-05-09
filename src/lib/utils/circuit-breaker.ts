@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Circuit Breaker Pattern for API Resilience
  * Prevents cascading failures when APIs are down or rate-limited

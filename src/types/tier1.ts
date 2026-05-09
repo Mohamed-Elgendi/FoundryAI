@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 1 Core Foundation Layer - Type Definitions
  * All types for the 8 foundation systems

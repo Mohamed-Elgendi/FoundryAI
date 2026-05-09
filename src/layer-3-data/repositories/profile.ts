@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Profile Repository
  * User profile data access

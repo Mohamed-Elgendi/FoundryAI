@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Layer 5: Presentation - Main Export
 export * from './components';
 export * from './hooks';

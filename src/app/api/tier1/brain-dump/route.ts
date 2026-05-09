@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 1 Foundation API Routes - Brain Dump
  * Brain Dump System endpoints

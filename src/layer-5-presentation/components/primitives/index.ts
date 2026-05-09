@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Primitives
 export * from './button';
 export * from './card';

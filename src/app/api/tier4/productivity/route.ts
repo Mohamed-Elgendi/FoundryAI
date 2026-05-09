@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Tier 4 Productivity API Routes
  * Sessions, time allocation, chronotype
