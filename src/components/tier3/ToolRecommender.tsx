@@ -1,0 +1,19 @@
+"use client"
+
+import * as React from "react"
+import { Card } from "@/components/ui"
+import { Badge } from "@/components/ui"
+
+export const ToolRecommender = () => {
+  return (
+    <Card className="p-6">
+      <h3 className="text-lg font-semibold mb-4">Tool Recommender</h3>
+      <p className="text-muted-foreground mb-4">
+        AI-powered tool recommendations
+      </p>
+      <Badge variant="secondary">Tier 3</Badge>
+    </Card>
+  )
+}
+
+export default ToolRecommender

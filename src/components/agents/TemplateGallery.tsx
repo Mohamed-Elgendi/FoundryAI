@@ -454,24 +454,17 @@ export function TemplateGallery({
                 <div>
                   <h4 className="text-sm font-medium text-slate-900 dark:text-white mb-2">Features</h4>
                   <div className="space-y-1">
-                    {template.features.slice(0, 3).map((feature, index) => (
+                    {template.features.map((feature, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <CheckCircle className="h-3 w-3 text-green-500" />
                         <span className="text-xs text-slate-600 dark:text-slate-400">{feature}</span>
                       </div>
                     ))}
-                    {template.features.length > 3 && (
-                      <div className="text-xs text-slate-500 dark:text-slate-400">
-                        +{template.features.length - 3} more features
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
             </Card.Content>
-            
-            <Card.Footer className="pt-3">
-              <div className="flex items-center justify-between">
+          </Card>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-slate-600 dark:text-slate-400">by {template.author}</span>
                   <span className="text-xs text-slate-500 dark:text-slate-400">

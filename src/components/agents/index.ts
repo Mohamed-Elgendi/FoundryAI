@@ -12,3 +12,4 @@ export { CommandPalette } from './CommandPalette';
 export { CommandHistory } from './CommandHistory';
 export { AgentCommands } from './AgentCommands';
 export { SystemControls } from './SystemControls';
+export { AgentCommandCenter } from './AgentCommandCenter';
