@@ -134,7 +134,6 @@ export function SystemControls({ agents, templateGallery, onSystemStatusCheck, o
                 </div>
               </div>
             </div>
-            </div>
           </Card.Content>
         </Card>
 
