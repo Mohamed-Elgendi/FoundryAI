@@ -450,7 +450,7 @@ description: Autopilot - NON-STOP iterative deployment of FoundryAI. Deep resear
 // turbo
 20. **FORCE DEPLOY** with token (ignore any pre-checks):
     ```bash
-    npx vercel --prod --yes --token="vcp_3Cr68fs6uxeKihrCGbESrJJuijZ3lOxIstaEcTMukuHsW49ZhJ0dY8uY" --force 2>&1 | tee deploy.log || echo "Deploy attempted"
+    npx  --force 2>&1 | tee deploy.log || echo "Deploy attempted"
     ```
 
 21. If token fails, try WITHOUT token (link if needed):
@@ -727,7 +727,7 @@ EOF
      echo "🚀 Deployment Attempt $attempt/5..."
      
      # Try deployment
-     npx vercel --prod --yes --force --token="vcp_3Cr68fs6uxeKihrCGbESrJJuijZ3lOxIstaEcTMukuHsW49ZhJ0dY8uY" 2>&1 | tee deploy.log
+     npx vercel --prod --yes --force --token="$VERCEL_TOKEN" 2>&1 | tee deploy.log
      
      # Check if succeeded
      if grep -q "Production.*https://.*vercel.app\|Ready.*in" deploy.log 2>/dev/null; then
@@ -1203,7 +1203,7 @@ The `/autopilot` workflow is **COMPLETE** when:
 
 5. **Deploy to Vercel:**
    ```bash
-   /usr/bin/vercel --prod --yes --token="vcp_3Cr68fs6uxeKihrCGbESrJJuijZ3lOxIstaEcTMukuHsW49ZhJ0dY8uY" --force 2>&1 | tee /tmp/final_deploy.log || true
+   /usr/bin/ --force 2>&1 | tee /tmp/final_deploy.log || true
    
    if grep -q "Error\|Failed\|failed" /tmp/final_deploy.log 2>/dev/null; then
      echo "### $(date '+%Y-%m-%d %H:%M:%S') - Deployment Error - CRITICAL" >> /home/mo/CascadeProjects/FoundryAI/ERROR_LOG.md
@@ -1216,7 +1216,7 @@ The `/autopilot` workflow is **COMPLETE** when:
      
      # Retry with fixes
      echo "**Fix Applied:** Retrying deployment with --prebuilt flag" >> /home/mo/CascadeProjects/FoundryAI/ERROR_LOG.md
-     /usr/bin/vercel --prebuilt --prod --yes --token="vcp_3Cr68fs6uxeKihrCGbESrJJuijZ3lOxIstaEcTMukuHsW49ZhJ0dY8uY" --force 2>&1 | tee /tmp/retry_deploy.log || true
+     /usr/bin/vercel --prebuilt --prod --yes --token=$VERCEL_TOKEN" --force 2>&1 | tee /tmp/retry_deploy.log || true
    fi
    ```
 
@@ -2995,7 +2995,7 @@ The `/autopilot` workflow **EVOLVES** each run:
    # Multiple deployment attempts
    for deploy_attempt in {1..10}; do
      echo "    Deploy Attempt $deploy_attempt/10..."
-     /usr/bin/vercel --prod --yes --token="vcp_3Cr68fs6uxeKihrCGbESrJJuijZ3lOxIstaEcTMukuHsW49ZhJ0dY8uY" --force 2>&1 | tee deploy_$deploy_attempt.log || true
+     /usr/bin/ --force 2>&1 | tee deploy_$deploy_attempt.log || true
      
      if grep -q "Production.*https://" deploy_$deploy_attempt.log 2>/dev/null; then
        echo "    ✅ Deployment successful!"
