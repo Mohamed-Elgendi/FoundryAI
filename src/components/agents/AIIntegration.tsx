@@ -1,10 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { Bot, Zap, Code, Globe, Users, TrendingUp, AlertTriangle, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Bot, Zap, Code, Globe, Users, TrendingUp, AlertTriangle, CheckCircle, XCircle, Clock, Command } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { Card } from '@/components/ui';
-import { Badge } from '@/components/ui';
+import { Card, CardHeader, CardContent } from "@/components/ui"
+import { Badge } from "@/components/ui";
 import { Progress } from '@/components/ui';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui';
 import { Separator } from '@/components/ui';
@@ -147,12 +147,12 @@ export function AIIntegration({ agents, onAgentUpdate, onTaskUpdate, className }
     if (!task) return;
 
     // Update task status
-    const updatedTask = { ...task, status: 'in-progress' };
+    const updatedTask = { ...task, status: 'in-progress' as const };
     onTaskUpdate?.(updatedTask);
     
     // Simulate task execution
     setTimeout(() => {
-      const completedTask = { ...updatedTask, status: 'completed', completedAt: new Date() };
+      const completedTask = { ...updatedTask, status: 'completed' as const, completedAt: new Date() };
       onTaskUpdate?.(completedTask);
     }, 3000 + Math.random() * 2000);
   };
@@ -196,13 +196,13 @@ export function AIIntegration({ agents, onAgentUpdate, onTaskUpdate, className }
 
       {/* Provider Management */}
       <Card>
-        <Card.Header>
+        <CardHeader>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <Bot className="h-5 w-5" />
             AI Provider Management
           </h3>
-        </Card.Header>
-        <Card.Content>
+        </CardHeader>
+        <CardContent>
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-slate-900 dark:text-white">Primary Provider</label>
@@ -235,7 +235,7 @@ export function AIIntegration({ agents, onAgentUpdate, onTaskUpdate, className }
                   }`}
                   onClick={() => handleProviderSwitch(provider.id)}
                 >
-                  <Card.Header className="pb-3">
+                  <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-semibold text-slate-900 dark:text-white">{provider.name}</h4>
@@ -245,8 +245,8 @@ export function AIIntegration({ agents, onAgentUpdate, onTaskUpdate, className }
                         {provider.status}
                       </div>
                     </div>
-                  </Card.Header>
-                  <Card.Content>
+                  </CardHeader>
+                  <CardContent>
                     <div className="space-y-3">
                       {/* Quota */}
                       <div>
@@ -278,23 +278,23 @@ export function AIIntegration({ agents, onAgentUpdate, onTaskUpdate, className }
                         </div>
                       </div>
                     </div>
-                  </Card.Content>
+                  </CardContent>
                 </Card>
               ))}
             </div>
           </div>
-        </Card.Content>
+        </CardContent>
       </Card>
 
       {/* Active Tasks */}
       <Card>
-        <Card.Header>
+        <CardHeader>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <Zap className="h-5 w-5" />
             Active AI Tasks
           </h3>
-        </Card.Header>
-        <Card.Content>
+        </CardHeader>
+        <CardContent>
           <div className="space-y-4">
             {activeTasks.map((task) => (
               <div key={task.id} className="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
@@ -341,18 +341,18 @@ export function AIIntegration({ agents, onAgentUpdate, onTaskUpdate, className }
               </div>
             ))}
           </div>
-        </Card.Content>
+        </CardContent>
       </Card>
 
       {/* Command Queue */}
       <Card>
-        <Card.Header>
+        <CardHeader>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <Code className="h-5 w-5" />
             Command Queue
           </h3>
-        </Card.Header>
-        <Card.Content>
+        </CardHeader>
+        <CardContent>
           <div className="space-y-4">
             {commandQueue.map((command) => (
               <div key={command.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
@@ -380,18 +380,18 @@ export function AIIntegration({ agents, onAgentUpdate, onTaskUpdate, className }
               </div>
             ))}
           </div>
-        </Card.Content>
+        </CardContent>
       </Card>
 
       {/* Integration Status */}
       <Card>
-        <Card.Header>
+        <CardHeader>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <Globe className="h-5 w-5" />
             Integration Status
           </h3>
-        </Card.Header>
-        <Card.Content>
+        </CardHeader>
+        <CardContent>
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900 rounded-lg border border-green-200 dark:border-green-700">
@@ -428,7 +428,7 @@ export function AIIntegration({ agents, onAgentUpdate, onTaskUpdate, className }
               <Badge variant="outline">Ready</Badge>
             </div>
           </div>
-        </Card.Content>
+        </CardContent>
       </Card>
     </div>
   );

@@ -12,6 +12,8 @@ export interface FeedbackData {
   feedback: string;
   rating: number;
   createdAt?: string;
+  userInput?: string;
+  isHelpful?: boolean;
 }
 
 // AI Output types
@@ -32,4 +34,12 @@ export interface FoundryAIOutput {
     keyBenefits: string[];
     fullStatement: string;
   };
+}
+
+// Refinement state types
+export interface RefinementState {
+  iterationCount: number;
+  isRefining: boolean;
+  previousRefinements: string[];
+  originalInput: string;
 }

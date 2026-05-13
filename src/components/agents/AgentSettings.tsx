@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Save, X, Eye, EyeOff, Lock, Unlock, Copy, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { Card } from '@/components/ui';
+import { Card, CardHeader, CardContent } from '@/components/ui';
 import { Input } from '@/components/ui';
 import { Label } from '@/components/ui';
 import { Switch } from '@/components/ui';
@@ -95,10 +95,10 @@ export function AgentSettings({ agent, onSave, onBack, className }: AgentSetting
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Basic Settings */}
         <Card>
-          <Card.Header>
+          <CardHeader>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Basic Settings</h3>
-          </Card.Header>
-          <Card.Content className="space-y-4">
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div>
               <Label htmlFor="name">Agent Name</Label>
               <Input
@@ -156,15 +156,15 @@ export function AgentSettings({ agent, onSave, onBack, className }: AgentSetting
                 </SelectContent>
               </Select>
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
 
         {/* Behavior Settings */}
         <Card>
-          <Card.Header>
+          <CardHeader>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Behavior</h3>
-          </Card.Header>
-          <Card.Content className="space-y-4">
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div>
               <Label htmlFor="responseStyle">Response Style</Label>
               <Select value={settings.responseStyle} onValueChange={(value) => setSettings(prev => ({ ...prev, responseStyle: value }))}>
@@ -185,8 +185,8 @@ export function AgentSettings({ agent, onSave, onBack, className }: AgentSetting
                 min={0}
                 max={2}
                 step={0.1}
-                value={[settings.temperature]}
-                onValueChange={(value) => setSettings(prev => ({ ...prev, temperature: value[0] }))}
+                value={settings.temperature}
+                onValueChange={(value) => setSettings(prev => ({ ...prev, temperature: value }))}
                 className="w-full"
               />
             </div>
@@ -197,8 +197,8 @@ export function AgentSettings({ agent, onSave, onBack, className }: AgentSetting
                 min={100}
                 max={4000}
                 step={100}
-                value={[settings.maxTokens]}
-                onValueChange={(value) => setSettings(prev => ({ ...prev, maxTokens: value[0] }))}
+                value={settings.maxTokens}
+                onValueChange={(value) => setSettings(prev => ({ ...prev, maxTokens: value }))}
                 className="w-full"
               />
             </div>
@@ -211,15 +211,15 @@ export function AgentSettings({ agent, onSave, onBack, className }: AgentSetting
               />
               <Label htmlFor="autoActivate">Auto-activate on startup</Label>
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
 
         {/* Privacy Settings */}
         <Card>
-          <Card.Header>
+          <CardHeader>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Privacy & Security</h3>
-          </Card.Header>
-          <Card.Content className="space-y-4">
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div className="flex items-center space-x-2">
               <Switch
                 id="memoryEnabled"
@@ -251,15 +251,15 @@ export function AgentSettings({ agent, onSave, onBack, className }: AgentSetting
                 </SelectContent>
               </Select>
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
 
         {/* Advanced Settings */}
         <Card>
-          <Card.Header>
+          <CardHeader>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Advanced</h3>
-          </Card.Header>
-          <Card.Content className="space-y-4">
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div>
               <Label htmlFor="systemPrompt">System Prompt</Label>
               <Textarea
@@ -314,7 +314,7 @@ export function AgentSettings({ agent, onSave, onBack, className }: AgentSetting
                 </SelectContent>
               </Select>
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
       </div>
 

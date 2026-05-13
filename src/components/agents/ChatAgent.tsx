@@ -81,7 +81,7 @@ export function ChatAgent({ agent, onMessageSend, onSessionStart, onSessionEnd, 
 
   const endSession = () => {
     if (session) {
-      setSession(prev => ({ ...prev, status: 'ended' }));
+      setSession(session ? { ...session, status: 'ended' } : null);
       onSessionEnd?.(session.id);
     }
   };

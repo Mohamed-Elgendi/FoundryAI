@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Search, Terminal, Code, Zap, Cpu, Globe, Database, Lock, Key, Shield, AlertTriangle } from 'lucide-react';
+import { Search, Terminal, Code, Zap, Cpu, Globe, Database, Lock, Key, Shield, AlertTriangle, FileText, TrendingUp, Users, Rocket } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { Card } from '@/components/ui';
+import { Card, CardHeader, CardContent } from '@/components/ui';
 import { Badge } from '@/components/ui';
 import { Input } from '@/components/ui';
 import { Separator } from '@/components/ui';
@@ -177,7 +177,7 @@ export function CommandPalette({ agentId, onCommandExecute, className }: Command
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <Card className="w-full max-w-2xl mx-4">
-            <Card.Header className="pb-4">
+            <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-bold text-white">Command Palette</h3>
                 <Button 
@@ -188,8 +188,8 @@ export function CommandPalette({ agentId, onCommandExecute, className }: Command
                   <Terminal className="h-4 w-4" />
                 </Button>
               </div>
-            </Card.Header>
-            <Card.Content className="space-y-4">
+            </CardHeader>
+            <CardContent className="space-y-4">
               <Input
                 placeholder="Type command or search..."
                 value={searchTerm}
@@ -207,7 +207,7 @@ export function CommandPalette({ agentId, onCommandExecute, className }: Command
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex items-center justify-center w-10 h-10 bg-slate-200 dark:bg-slate-700 rounded">
-                        {getCommandIcon(command.icon)}
+                        {getCommandIcon(command.icon || '')}
                       </div>
                       <div className="flex-1">
                         <div className="font-medium text-slate-900 dark:text-white">{command.name}</div>
@@ -227,7 +227,7 @@ export function CommandPalette({ agentId, onCommandExecute, className }: Command
                   </div>
                 ))}
               </div>
-            </Card.Content>
+            </CardContent>
           </Card>
         </div>
       )}

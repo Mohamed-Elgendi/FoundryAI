@@ -7,7 +7,7 @@ export default function GamificationPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <GamificationDashboard userId={userId} />
+      <GamificationDashboard />
     </div>
   );
 }

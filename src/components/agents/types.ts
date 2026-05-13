@@ -3,11 +3,13 @@
  * Type definitions for chat agents and command center
  */
 
+import { CommandHistoryItem } from './CommandHistory';
+
 export interface Agent {
   id: string;
   name: string;
   type: 'chat' | 'command' | 'analysis' | 'creative' | 'strategic';
-  status: 'active' | 'idle' | 'busy' | 'offline';
+  status: 'active' | 'idle' | 'busy' | 'error';
   avatar?: string;
   capabilities: AgentCapability[];
   model?: string;
@@ -41,6 +43,15 @@ export interface AgentCommand {
   shortcut?: string;
   icon?: string;
   requiresAuth?: boolean;
+  parameters?: Array<{
+    name: string;
+    type: 'text' | 'select' | 'number' | 'boolean';
+    required: boolean;
+    description: string;
+    options?: string[];
+    default?: any;
+  }>;
+  examples?: string[];
 }
 
 export interface AgentSession {

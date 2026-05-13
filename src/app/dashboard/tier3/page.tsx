@@ -9,10 +9,7 @@ export default function Tier3Page() {
   const { user, signOut } = useAuth();
 
   return (
-    <DashboardShell 
-      user={user ? { name: user.user_metadata?.name || 'User', email: user.email || '', role: 'Founder' } : undefined}
-      onSignOut={signOut}
-    >
+    <DashboardShell>
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">

@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Search, Filter, Download, Trash2, Archive, Eye, EyeOff, MessageSquare, Calendar, Clock } from 'lucide-react';
+import { Search, Filter, Download, Trash2, Archive, Eye, EyeOff, MessageSquare, Calendar, Clock, User } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { Card } from '@/components/ui';
+import { Card, CardHeader, CardContent } from '@/components/ui';
 import { Badge } from '@/components/ui';
 import { Input } from '@/components/ui';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui';
@@ -116,10 +116,10 @@ export function AgentHistory({ sessions, onSessionSelect, onSessionDelete, onSes
 
       {/* Search and Filter */}
       <Card>
-        <Card.Header>
+        <CardHeader>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Search & Filter</h3>
-        </Card.Header>
-        <Card.Content>
+        </CardHeader>
+        <CardContent>
           <div className="space-y-4">
             <div>
               <div className="relative">
@@ -147,7 +147,7 @@ export function AgentHistory({ sessions, onSessionSelect, onSessionDelete, onSes
               </Select>
             </div>
           </div>
-        </Card.Content>
+        </CardContent>
       </Card>
 
       {/* Session List */}
@@ -160,7 +160,7 @@ export function AgentHistory({ sessions, onSessionSelect, onSessionDelete, onSes
             }`}
             onClick={() => handleSessionSelect(session.id)}
           >
-            <Card.Header className="pb-3">
+            <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
@@ -196,9 +196,9 @@ export function AgentHistory({ sessions, onSessionSelect, onSessionDelete, onSes
                   </Button>
                 </div>
               </div>
-            </Card.Header>
+            </CardHeader>
             
-            <Card.Content>
+            <CardContent>
               <div className="space-y-3">
                 <div className="text-sm text-slate-600 dark:text-slate-400 mb-2">
                   {session.messages.length} messages
@@ -251,7 +251,7 @@ export function AgentHistory({ sessions, onSessionSelect, onSessionDelete, onSes
                   </div>
                 )}
               </div>
-            </Card.Content>
+            </CardContent>
           </Card>
         ))}
       </div>
@@ -259,10 +259,10 @@ export function AgentHistory({ sessions, onSessionSelect, onSessionDelete, onSes
       {/* Export Options */}
       {selectedSessions.length > 0 && (
         <Card>
-          <Card.Header>
+          <CardHeader>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Export Options</h3>
-          </Card.Header>
-          <Card.Content>
+          </CardHeader>
+          <CardContent>
             <div className="flex gap-2">
               <Button variant="outline">
                 <Download className="h-4 w-4 mr-2" />
@@ -273,7 +273,7 @@ export function AgentHistory({ sessions, onSessionSelect, onSessionDelete, onSes
                 Archive Selected
               </Button>
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
       )}
     </div>

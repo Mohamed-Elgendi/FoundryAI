@@ -54,7 +54,7 @@ export default function Tier2Dashboard() {
   if (!user) return null;
 
   return (
-    <DashboardShell user={user}>
+    <DashboardShell>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">

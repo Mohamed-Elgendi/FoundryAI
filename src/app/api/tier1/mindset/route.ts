@@ -18,11 +18,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const pillars = await tier1Repositories.mindsetPillar.getOrInitialize(user.id);
-    const exercises = await tier1Repositories.mindsetExercise.findByUserId(user.id, {
-      orderBy: 'created_at',
-      orderDirection: 'desc',
-      limit: 20,
-    });
+    const exercises = await tier1Repositories.mindsetExercise.getByPillarId(user.id, 'all');
 
     return NextResponse.json({ pillars, exercises });
   } catch (error) {
@@ -55,6 +51,7 @@ export async function POST(request: NextRequest) {
       completionStatus: body.completionStatus || 'completed',
       reflection: body.reflection,
       completedAt: body.completionStatus === 'completed' ? new Date().toISOString() : undefined,
+      createdAt: new Date().toISOString(),
     });
 
     // Update pillar score and streak if exercise was completed

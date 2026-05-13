@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Bot, User, Settings, MoreVertical } from 'lucide-react';
-import { Card } from '@/components/ui';
+import { Card, CardHeader, CardContent, CardTitle, CardFooter } from '@/components/ui';
 import { Badge } from '@/components/ui';
 import { Avatar, AvatarFallback } from '@/components/ui';
 import { Button } from '@/components/ui';
@@ -33,7 +33,7 @@ export function AgentCard({
     <Card className={`transition-all hover:shadow-lg ${
       isActive ? 'ring-2 ring-blue-500' : ''
     } ${className || ''}`}>
-      <Card.Header className="pb-3">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar className="h-12 w-12">
@@ -75,8 +75,8 @@ export function AgentCard({
             </div>
           </div>
         </div>
-      </Card.Header>
-      <Card.Content>
+      </CardHeader>
+      <CardContent>
         <div className="space-y-4">
           {/* Capabilities */}
           <div>
@@ -122,8 +122,8 @@ export function AgentCard({
             </p>
           </div>
         </div>
-      </Card.Content>
-      <Card.Footer className="pt-3">
+      </CardContent>
+      <CardFooter className="pt-3">
         <div className="flex justify-between gap-2">
           <div className="flex gap-2">
             {!isActive ? (
@@ -168,7 +168,7 @@ export function AgentCard({
             </Button>
           </div>
         </div>
-      </Card.Footer>
+      </CardFooter>
     </Card>
   );
 }

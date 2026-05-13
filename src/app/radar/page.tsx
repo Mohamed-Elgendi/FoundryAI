@@ -48,7 +48,7 @@ function RadarContent() {
 
       {/* Radar Component */}
       <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
-        <OpportunityRadar limit={10} />
+        <OpportunityRadar />
       </div>
     </div>
   );

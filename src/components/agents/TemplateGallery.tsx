@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useState } from "react"
-import { Card } from "@/components/ui"
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui"
 import { Badge } from "@/components/ui"
 import { Button } from "@/components/ui"
 import { Input } from "@/components/ui"
@@ -20,6 +20,7 @@ interface Template {
   updatedAt: string
   downloads: number
   rating: number
+  features: string[]
 }
 
 export const TemplateGallery = () => {
@@ -39,7 +40,8 @@ export const TemplateGallery = () => {
       author: "FoundryAI Team",
       updatedAt: new Date().toISOString(),
       downloads: 1250,
-      rating: 4.8
+      rating: 4.8,
+      features: ["Financial Projections", "Market Analysis", "Executive Summary", "Risk Assessment"]
     },
     {
       id: "2",
@@ -51,7 +53,8 @@ export const TemplateGallery = () => {
       author: "FoundryAI Team",
       updatedAt: new Date().toISOString(),
       downloads: 890,
-      rating: 4.6
+      rating: 4.6,
+      features: ["Value Proposition", "Customer Segments", "Key Metrics", "Unique Channels"]
     }
   ]
 
@@ -81,10 +84,10 @@ export const TemplateGallery = () => {
 
       {/* Search and Filter Controls */}
       <Card className="mb-6">
-        <Card.Header>
+        <CardHeader>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Search & Filter</h3>
-        </Card.Header>
-        <Card.Content>
+        </CardHeader>
+        <CardContent>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
@@ -100,7 +103,7 @@ export const TemplateGallery = () => {
             <div className="flex gap-2">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger className="w-[180px]">
-                  <SelectTrigger />
+                  Category
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
@@ -111,7 +114,7 @@ export const TemplateGallery = () => {
               </Select>
               <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
                 <SelectTrigger className="w-[180px]">
-                  <SelectTrigger />
+                  Level
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Levels</SelectItem>
@@ -122,7 +125,7 @@ export const TemplateGallery = () => {
               </Select>
             </div>
           </div>
-        </Card.Content>
+        </CardContent>
       </Card>
 
       {/* View Toggle */}
@@ -152,7 +155,7 @@ export const TemplateGallery = () => {
       <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
         {filteredTemplates.map((template) => (
           <Card key={template.id} className="overflow-hidden">
-            <Card.Header>
+            <CardHeader>
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{template.name}</h3>
@@ -160,8 +163,8 @@ export const TemplateGallery = () => {
                 </div>
                 <Badge variant="secondary">{template.difficulty}</Badge>
               </div>
-            </Card.Header>
-            <Card.Content>
+            </CardHeader>
+            <CardContent>
               <div className="space-y-3">
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1">
@@ -184,8 +187,8 @@ export const TemplateGallery = () => {
                   ))}
                 </div>
               </div>
-            </Card.Content>
-            <Card.Footer className="pt-3">
+            </CardContent>
+            <CardFooter className="pt-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-slate-600 dark:text-slate-400">by {template.author}</span>
@@ -216,7 +219,7 @@ export const TemplateGallery = () => {
                   </Button>
                 </div>
               </div>
-            </Card.Footer>
+            </CardFooter>
           </Card>
         ))}
       </div>

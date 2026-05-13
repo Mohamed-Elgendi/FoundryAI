@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Clock, CheckCircle, XCircle, AlertCircle, RefreshCw, Download, Trash2, Filter } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { Card } from '@/components/ui';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui';
 import { Badge } from '@/components/ui';
 import { Input } from '@/components/ui';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui';
@@ -11,7 +11,7 @@ import { Separator } from '@/components/ui';
 import { ScrollArea } from '@/components/ui';
 import type { AgentCommand } from './types';
 
-interface CommandHistoryItem {
+export interface CommandHistoryItem {
   id: string;
   command: string;
   agentId?: string;
@@ -136,10 +136,10 @@ export function CommandHistory({ commands, onCommandReExecute, onCommandDelete, 
 
       {/* Search and Filter */}
       <Card>
-        <Card.Header>
+        <CardHeader>
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Search & Filter</h3>
-        </Card.Header>
-        <Card.Content>
+        </CardHeader>
+        <CardContent>
           <div className="space-y-4">
             <div>
               <div className="relative">
@@ -168,42 +168,42 @@ export function CommandHistory({ commands, onCommandReExecute, onCommandDelete, 
               </Select>
             </div>
           </div>
-        </Card.Content>
+        </CardContent>
       </Card>
 
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
-          <Card.Content className="text-center">
+          <CardContent className="text-center">
             <div className="text-2xl font-bold text-slate-900 dark:text-white">
               {getCommandStats().totalCommands}
             </div>
             <div className="text-sm text-slate-600 dark:text-slate-400">Total Commands</div>
-          </Card.Content>
+          </CardContent>
         </Card>
         <Card>
-          <Card.Content className="text-center">
+          <CardContent className="text-center">
             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
               {getCommandStats().successfulCommands}
             </div>
             <div className="text-sm text-slate-600 dark:text-slate-400">Successful</div>
-          </Card.Content>
+          </CardContent>
         </Card>
         <Card>
-          <Card.Content className="text-center">
+          <CardContent className="text-center">
             <div className="text-2xl font-bold text-red-600 dark:text-red-400">
               {getCommandStats().errorCommands}
             </div>
             <div className="text-sm text-slate-600 dark:text-slate-400">Failed</div>
-          </Card.Content>
+          </CardContent>
         </Card>
         <Card>
-          <Card.Content className="text-center">
+          <CardContent className="text-center">
             <div className="text-2xl font-bold text-slate-900 dark:text-white">
               {formatDuration(getCommandStats().avgDuration)}
             </div>
             <div className="text-sm text-slate-600 dark:text-slate-400">Avg Duration</div>
-          </Card.Content>
+          </CardContent>
         </Card>
       </div>
 
@@ -217,7 +217,7 @@ export function CommandHistory({ commands, onCommandReExecute, onCommandDelete, 
             }`}
             onClick={() => handleCommandSelect(command.id)}
           >
-            <Card.Header className="pb-3">
+            <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {getStatusIcon(command.status)}
@@ -237,9 +237,9 @@ export function CommandHistory({ commands, onCommandReExecute, onCommandDelete, 
                   </div>
                 </div>
               </div>
-            </Card.Header>
+            </CardHeader>
             
-            <Card.Content>
+            <CardContent>
               <div className="space-y-3">
                 {/* Parameters */}
                 {command.parameters && Object.keys(command.parameters).length > 0 && (
@@ -287,9 +287,9 @@ export function CommandHistory({ commands, onCommandReExecute, onCommandDelete, 
                   </div>
                 )}
               </div>
-            </Card.Content>
+            </CardContent>
             
-            <Card.Footer className="pt-3">
+            <CardFooter className="pt-3">
               <div className="flex justify-between">
                 <div className="flex gap-2">
                   <Button 
@@ -320,7 +320,7 @@ export function CommandHistory({ commands, onCommandReExecute, onCommandDelete, 
                   </Button>
                 </div>
               </div>
-            </Card.Footer>
+            </CardFooter>
           </Card>
         ))}
       </div>
@@ -328,10 +328,10 @@ export function CommandHistory({ commands, onCommandReExecute, onCommandDelete, 
       {/* Export Options */}
       {selectedCommands.length > 0 && (
         <Card>
-          <Card.Header>
+          <CardHeader>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Export Options</h3>
-          </Card.Header>
-          <Card.Content>
+          </CardHeader>
+          <CardContent>
             <div className="flex gap-2">
               <Button variant="outline">
                 <Download className="h-4 w-4 mr-2" />
@@ -341,7 +341,7 @@ export function CommandHistory({ commands, onCommandReExecute, onCommandDelete, 
                 Archive Selected
               </Button>
             </div>
-          </Card.Content>
+          </CardContent>
         </Card>
       )}
     </div>

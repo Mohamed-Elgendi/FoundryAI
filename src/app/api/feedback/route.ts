@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { storeFeedback, getFeedbackStats } from '@/layer-3-data/storage/supabase-client';
+import { createSupabaseClient } from '@/layer-3-data/storage/supabase-client';
 import { FeedbackData } from '@/types';
 
 export async function POST(request: Request) {
@@ -13,40 +13,38 @@ export async function POST(request: Request) {
       );
     }
 
-    const feedback: FeedbackData = {
+    const feedbackData: FeedbackData = {
+      userId: 'anonymous', // Default for now
+      email: 'anonymous@example.com', // Default for now
       userInput,
-      output,
+      feedback: output,
+      rating: isHelpful ? 5 : 1, // Convert boolean to rating
       isHelpful,
-      timestamp: new Date().toISOString(),
-      userAgent: request.headers.get('user-agent') || undefined,
+      createdAt: new Date().toISOString(),
     };
 
-    // Transform FeedbackData to match storeFeedback requirements
-    await storeFeedback({
-      userId: 'anonymous', // or extract from auth context if available
-      type: 'general',
-      message: `${userInput}: ${output}`,
-      rating: isHelpful ? 5 : 1,
-    });
+    const supabase = createSupabaseClient();
+    const { error } = await supabase
+      .from('evidence_stack')
+      .insert({
+        user_id: feedbackData.userId,
+        belief_id: null,
+        evidence_type: 'Feedback',
+        description: feedbackData.feedback,
+        proof_value: feedbackData.rating,
+        created_at: feedbackData.createdAt,
+      } as any);
+
+    if (error) {
+      console.error('Error storing feedback:', error);
+      throw error;
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Feedback API error:', error);
     return NextResponse.json(
-      { error: 'Failed to store feedback' },
-      { status: 500 }
-    );
-  }
-}
-
-export async function GET() {
-  try {
-    const stats = await getFeedbackStats();
-    return NextResponse.json(stats);
-  } catch (error) {
-    console.error('Stats API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch stats' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

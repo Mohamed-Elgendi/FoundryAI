@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Brain, Sparkles, Plus, Trash2, Tag, Archive } from 'lucide-react';
 
 export default function BrainDumpPage() {
-  const [thoughts, setThoughts] = useState([]);
+  const [thoughts, setThoughts] = useState<any[]>([]);
   const [newThought, setNewThought] = useState('');
   const [tags, setTags] = useState('');
   const [mounted, setMounted] = useState(false);
@@ -21,7 +21,7 @@ export default function BrainDumpPage() {
     setMounted(true);
   }, []);
 
-  const saveThoughts = (updated) => {
+  const saveThoughts = (updated: any[]) => {
     setThoughts(updated);
     localStorage.setItem('foundryai_braindump', JSON.stringify(updated));
   };
@@ -43,7 +43,7 @@ export default function BrainDumpPage() {
     toast({ title: 'Thought captured!', description: 'Your idea has been saved' });
   };
 
-  const deleteThought = (id) => {
+  const deleteThought = (id: string) => {
     saveThoughts(thoughts.filter(t => t.id !== id));
     toast({ title: 'Thought deleted' });
   };
@@ -91,7 +91,7 @@ export default function BrainDumpPage() {
                 <p className="text-slate-900 dark:text-white whitespace-pre-wrap">{thought.text}</p>
                 {thought.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-3">
-                    {thought.tags.map((tag, i) => (
+                    {thought.tags.map((tag: string, i: number) => (
                       <span key={i} className="text-xs px-2 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-full text-blue-600 dark:text-blue-400 flex items-center gap-1"><Tag className="w-3 h-3"/>{tag}</span>
                     ))}
                   </div>

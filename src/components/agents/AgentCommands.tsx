@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Code, Zap, Play, Pause, Square, RotateCw, MoreHorizontal } from 'lucide-react';
+import { Code, Zap, Play, Pause, Square, RotateCw, MoreHorizontal, Plus, FileText } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { Card } from '@/components/ui';
+import { Card, CardHeader, CardContent } from '@/components/ui';
 import { Badge } from '@/components/ui';
 import { Input } from '@/components/ui';
 import { Textarea } from '@/components/ui';
@@ -36,7 +36,7 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       parameters: [
         { name: 'business_idea', type: 'text', required: true, description: 'Business idea or concept' },
         { name: 'target_market', type: 'text', required: true, description: 'Target market segment' },
-        { name: 'timeframe', type: 'select', required: true, options: ['1-3 months', '3-6 months', '6-12 months', '1-2 years'] }
+        { name: 'timeframe', type: 'select', required: true, description: 'Timeframe for implementation', options: ['1-3 months', '3-6 months', '6-12 months', '1-2 years'] }
       ],
       examples: ['Generate business plan for AI-powered SaaS', 'Create e-commerce business strategy']
     },
@@ -48,8 +48,8 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       shortcut: 'ctrl+shift+m',
       icon: 'Globe',
       parameters: [
-        { name: 'industry', type: 'select', required: true, options: ['SaaS', 'E-commerce', 'Digital Products', 'Online Services', 'Content Creation'] },
-        { name: 'geography', type: 'select', required: true, options: ['Global', 'North America', 'Europe', 'Asia Pacific'] },
+        { name: 'industry', type: 'select', required: true, description: 'Industry sector to analyze', options: ['SaaS', 'E-commerce', 'Digital Products', 'Online Services', 'Content Creation'] },
+        { name: 'geography', type: 'select', required: true, description: 'Geographic market focus', options: ['Global', 'North America', 'Europe', 'Asia Pacific'] },
         { name: 'keywords', type: 'text', required: false, description: 'Optional keywords for focused analysis' }
       ],
       examples: ['Analyze AI SaaS market trends', 'Scan e-commerce opportunities in Europe']
@@ -63,7 +63,7 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       icon: 'Users',
       parameters: [
         { name: 'competitors', type: 'text', required: true, description: 'Competitor names or URLs' },
-        { name: 'analysis_depth', type: 'select', required: true, options: ['Basic', 'Comprehensive', 'Deep Dive'] }
+        { name: 'analysis_depth', type: 'select', required: true, description: 'Depth of competitive analysis', options: ['Basic', 'Comprehensive', 'Deep Dive'] }
       ],
       examples: ['Analyze top 5 SaaS competitors', 'Deep dive into e-commerce leader strategies']
     },
@@ -75,8 +75,8 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       shortcut: 'ctrl+shift+l',
       icon: 'Zap',
       parameters: [
-        { name: 'content_type', type: 'select', required: true, options: ['Blog Post', 'Social Media', 'Ad Copy', 'Email Newsletter', 'Product Description'] },
-        { name: 'tone', type: 'select', required: true, options: ['Professional', 'Casual', 'Creative', 'Persuasive'] },
+        { name: 'content_type', type: 'select', required: true, description: 'Type of content to generate', options: ['Blog Post', 'Social Media', 'Ad Copy', 'Email Newsletter', 'Product Description'] },
+        { name: 'tone', type: 'select', required: true, description: 'Tone of voice for content', options: ['Professional', 'Casual', 'Creative', 'Persuasive'] },
         { name: 'length', type: 'number', required: true, description: 'Content length in words' },
         { name: 'seo_optimized', type: 'boolean', required: false, description: 'Include SEO keywords' }
       ],
@@ -90,9 +90,9 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       shortcut: 'ctrl+shift+v',
       icon: 'Code',
       parameters: [
-        { name: 'tech_stack', type: 'select', required: true, options: ['Next.js', 'React', 'Node.js', 'Python', 'Docker', 'AWS', 'Vercel'] },
+        { name: 'tech_stack', type: 'select', required: true, description: 'Technology stack to use', options: ['Next.js', 'React', 'Node.js', 'Python', 'Docker', 'AWS', 'Vercel'] },
         { name: 'feature', type: 'text', required: true, description: 'Feature to implement' },
-        { name: 'complexity', type: 'select', required: true, options: ['Simple', 'Medium', 'Complex'] },
+        { name: 'complexity', type: 'select', required: true, description: 'Implementation complexity level', options: ['Simple', 'Medium', 'Complex'] },
         { name: 'documentation', type: 'boolean', required: false, description: 'Include technical documentation' }
       ],
       examples: ['Generate Next.js API for user authentication', 'Create database schema for e-commerce platform']
@@ -105,8 +105,8 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       shortcut: 'ctrl+shift+p',
       icon: 'Rocket',
       parameters: [
-        { name: 'environment', type: 'select', required: true, options: ['Development', 'Staging', 'Production'] },
-        { name: 'deploy_target', type: 'select', required: true, options: ['Vercel', 'Netlify', 'AWS', 'DigitalOcean', 'Self-hosted'] },
+        { name: 'environment', type: 'select', required: true, description: 'Deployment environment', options: ['Development', 'Staging', 'Production'] },
+        { name: 'deploy_target', type: 'select', required: true, description: 'Target deployment platform', options: ['Vercel', 'Netlify', 'AWS', 'DigitalOcean', 'Self-hosted'] },
         { name: 'rollback', type: 'boolean', required: false, description: 'Enable automatic rollback on failure' },
         { name: 'health_checks', type: 'boolean', required: false, description: 'Run pre and post-deployment health checks' }
       ],
@@ -120,9 +120,9 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       shortcut: 'ctrl+shift+f',
       icon: 'RotateCw',
       parameters: [
-        { name: 'metrics', type: 'select', required: true, options: ['Revenue', 'Users', 'Conversion', 'Retention', 'Engagement'] },
-        { name: 'timeframe', type: 'select', required: true, options: ['Last 7 days', 'Last 30 days', 'Last 90 days', 'Custom Range'] },
-        { name: 'export_format', type: 'select', required: true, options: ['JSON', 'CSV', 'PDF', 'Dashboard'] }
+        { name: 'metrics', type: 'select', required: true, description: 'Metrics to analyze', options: ['Revenue', 'Users', 'Conversion', 'Retention', 'Engagement'] },
+        { name: 'timeframe', type: 'select', required: true, description: 'Time period for analysis', options: ['Last 7 days', 'Last 30 days', 'Last 90 days', 'Custom Range'] },
+        { name: 'export_format', type: 'select', required: true, description: 'Export format for results', options: ['JSON', 'CSV', 'PDF', 'Dashboard'] }
       ],
       examples: ['Generate revenue analytics report', 'Analyze user engagement patterns', 'Export conversion data to CSV']
     },
@@ -134,9 +134,9 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       shortcut: 'ctrl+shift+a',
       icon: 'Shield',
       parameters: [
-        { name: 'scan_type', type: 'select', required: true, options: ['Quick Scan', 'Comprehensive Audit', 'Penetration Testing'] },
-        { name: 'target', type: 'select', required: true, options: ['Application', 'Infrastructure', 'Data', 'Network'] },
-        { name: 'compliance', type: 'select', required: true, options: ['GDPR', 'SOC2', 'PCI DSS', 'HIPAA'] }
+        { name: 'scan_type', type: 'select', required: true, description: 'Type of security scan', options: ['Quick Scan', 'Comprehensive Audit', 'Penetration Testing'] },
+        { name: 'target', type: 'select', required: true, description: 'Security scan target', options: ['Application', 'Infrastructure', 'Data', 'Network'] },
+        { name: 'compliance', type: 'select', required: true, description: 'Compliance standard to check', options: ['GDPR', 'SOC2', 'PCI DSS', 'HIPAA'] }
       ],
       examples: ['Run quick security scan', 'Perform GDPR compliance check', 'Conduct penetration testing']
     }
@@ -167,7 +167,7 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
   };
 
   const handleDeleteCommand = (commandId: string) => {
-    onCommandDelete?.(CommandId);
+    onCommandDelete?.(commandId);
   };
 
   const handleExecuteCommand = (command: AgentCommand) => {
@@ -218,7 +218,7 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredCommands.map((command) => (
           <Card key={command.id} className="hover:shadow-lg transition-all">
-            <Card.Header className="pb-3">
+            <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center justify-center w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-lg">
@@ -245,13 +245,13 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
                   </Button>
                 </div>
               </div>
-            </Card.Header>
-            <Card.Content className="space-y-4">
+            </CardHeader>
+            <CardContent className="space-y-4">
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
                 {command.description}
               </p>
               
-              {command.parameters.length > 0 && (
+              {command.parameters && command.parameters.length > 0 && (
                 <div>
                   <h4 className="font-medium text-slate-900 dark:text-white mb-2">Parameters</h4>
                   <div className="space-y-2">
@@ -288,7 +288,7 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
                 </div>
               )}
 
-              {command.examples.length > 0 && (
+              {command.examples && command.examples.length > 0 && (
                 <div>
                   <h4 className="font-medium text-slate-900 dark:text-white mb-2">Examples</h4>
                   <div className="space-y-2">
@@ -310,7 +310,7 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
                   Execute Command
                 </Button>
               </div>
-            </Card.Content>
+            </CardContent>
           </Card>
         ))}
       </div>
@@ -319,10 +319,10 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <Card className="w-full max-w-2xl mx-4">
-            <Card.Header>
+            <CardHeader>
               <h3 className="text-xl font-bold text-white">Create New Command</h3>
-            </Card.Header>
-            <Card.Content className="space-y-4">
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-slate-900 dark:text-white">Command Name</label>
                 <Input placeholder="Enter command name..." />
@@ -355,7 +355,7 @@ export function AgentCommands({ agentId, onCommandUpdate, onCommandCreate, onCom
                   Create Command
                 </Button>
               </div>
-            </Card.Content>
+            </CardContent>
           </Card>
         </div>
       )}

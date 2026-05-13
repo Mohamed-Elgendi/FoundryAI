@@ -20,7 +20,7 @@ import type { Agent, AgentCommand, AgentSession, CommandCenterState, TemplateGal
 interface AgentCommandCenterProps {
   className?: string;
   onAgentCreate?: (agent: Agent) => void;
-  onAgentUpdate?: (agent: Agent) => void;
+  onAgentUpdate?: (agentId: string, updates: Partial<Agent>) => void;
   onAgentDelete?: (agentId: string) => void;
   onCommandExecute?: (command: string, params?: string[]) => void;
   onTemplateUse?: (templateId: string) => void;
@@ -52,7 +52,7 @@ export function AgentCommandCenter({
           id: '1',
           name: 'Business Planning',
           description: 'Create comprehensive business strategies',
-          category: 'strategic',
+          category: 'analysis',
           enabled: true
         },
         {
@@ -85,7 +85,7 @@ export function AgentCommandCenter({
           id: '4',
           name: 'Code Generation',
           description: 'Generate and optimize code',
-          category: 'technical',
+          category: 'automation',
           enabled: true
         },
         {
@@ -111,14 +111,14 @@ export function AgentCommandCenter({
           id: '6',
           name: 'Content Creation',
           description: 'Generate marketing content',
-          category: 'creative',
+          category: 'creation',
           enabled: true
         },
         {
           id: '7',
           name: 'Design Generation',
           description: 'Create visual designs',
-          category: 'creative',
+          category: 'creation',
           enabled: true
         }
       ],
@@ -301,13 +301,7 @@ export function AgentCommandCenter({
 
         <TabsContent value="templates" className="flex-1 mt-0">
           <ScrollArea className="h-full">
-            <TemplateGallery
-              integration={templateGallery}
-              onTemplateSelect={(template) => console.log('Template selected:', template)}
-              onTemplateUse={handleTemplateUse}
-              onTemplateDownload={(templateId) => console.log('Template downloaded:', templateId)}
-              onTemplateFavorite={(templateId) => console.log('Template favorited:', templateId)}
-            />
+            <TemplateGallery />
           </ScrollArea>
         </TabsContent>
 
