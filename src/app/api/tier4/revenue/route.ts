@@ -9,7 +9,7 @@ import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-
 // GET /api/tier4/revenue/dashboard
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerSupabaseClient();
+    const supabase = await createRouteHandlerSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {

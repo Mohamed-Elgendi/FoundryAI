@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Wand2, Loader2 } from 'lucide-react';
-import { ProviderSelector } from '@/components/foundryai/ProviderSelector';
+import { ProviderSelector } from '@/components/features/ProviderSelector';
 import { AIProvider } from '@/layer-2-ai/router/ai-types';
 
 interface PlanInputProps {

@@ -8,7 +8,7 @@ import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-
 
 // GET /api/tier4/self-discovery - Get user's self-discovery data
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier4/self-discovery/dna - Save entrepreneurial DNA assessment
 export async function POSTDNA(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -112,7 +112,7 @@ export async function POSTDNA(request: NextRequest) {
 
 // POST /api/tier4/self-discovery/cognitive - Save cognitive advantages
 export async function POSTCognitive(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

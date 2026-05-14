@@ -6,11 +6,17 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Repository, QueryOptions, RepositoryError } from './types';
 
+export { QueryOptions };
+
+import { convertKeysToSnakeCase, convertKeysToCamelCase } from '@/lib/utils/case-converter';
+
+import { supabase } from '../supabase/client';
+
 export abstract class BaseRepository<T extends Record<string, any>> implements Repository<T> {
-  constructor(
-    protected tableName: string,
-    protected client: SupabaseClient
-  ) {}
+  protected abstract tableName: string;
+  protected client: SupabaseClient = supabase;
+
+  constructor() {}
 
   protected handleError(error: unknown, operation: string): never {
     const pgError = error as { code?: string; message?: string };
@@ -32,7 +38,7 @@ export abstract class BaseRepository<T extends Record<string, any>> implements R
     }
     
     throw new RepositoryError(
-      `Database error in ${this.tableName}: ${pgError?.message || 'Unknown error'}`,
+      `Database error in ${this.tableName} during ${operation}: ${pgError?.message || 'Unknown error'}`,
       'DATABASE',
       error
     );
@@ -49,7 +55,7 @@ export abstract class BaseRepository<T extends Record<string, any>> implements R
       this.handleError(error, 'findById');
     }
 
-    return data as T | null;
+    return data ? convertKeysToCamelCase(data) as T : null;
   }
 
   async findAll(options?: QueryOptions<T>): Promise<T[]> {
@@ -69,14 +75,15 @@ export abstract class BaseRepository<T extends Record<string, any>> implements R
       this.handleError(error, 'findAll');
     }
 
-    return (data as T[]) || [];
+    return (data as any[])?.map(item => convertKeysToCamelCase(item)) || [];
   }
 
-  async create(data: Omit<T, 'id' | 'created_at'>): Promise<T> {
+  async create(data: any): Promise<T> {
+    const snakeData = convertKeysToSnakeCase(data);
     const { data: result, error } = await this.client
       .from(this.tableName)
       .insert({
-        ...data,
+        ...snakeData,
         created_at: new Date().toISOString()
       })
       .select()
@@ -86,14 +93,15 @@ export abstract class BaseRepository<T extends Record<string, any>> implements R
       this.handleError(error, 'create');
     }
 
-    return result as T;
+    return convertKeysToCamelCase(result) as T;
   }
 
   async update(id: string, data: Partial<T>): Promise<T> {
+    const snakeData = convertKeysToSnakeCase(data);
     const { data: result, error } = await this.client
       .from(this.tableName)
       .update({
-        ...data,
+        ...snakeData,
         updated_at: new Date().toISOString()
       })
       .eq('id', id)
@@ -104,7 +112,7 @@ export abstract class BaseRepository<T extends Record<string, any>> implements R
       this.handleError(error, 'update');
     }
 
-    return result as T;
+    return convertKeysToCamelCase(result) as T;
   }
 
   async delete(id: string): Promise<void> {
@@ -116,5 +124,32 @@ export abstract class BaseRepository<T extends Record<string, any>> implements R
     if (error) {
       this.handleError(error, 'delete');
     }
+  }
+
+  async findOneByUserId(userId: string): Promise<T | null> {
+    const { data, error } = await this.client
+      .from(this.tableName)
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (error) {
+      this.handleError(error, 'findOneByUserId');
+    }
+
+    return data ? convertKeysToCamelCase(data) as T : null;
+  }
+
+  async findByUserId(userId: string): Promise<T[]> {
+    const { data, error } = await this.client
+      .from(this.tableName)
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) {
+      this.handleError(error, 'findByUserId');
+    }
+
+    return (data as any[])?.map(item => convertKeysToCamelCase(item)) || [];
   }
 }

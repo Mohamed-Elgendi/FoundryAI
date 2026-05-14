@@ -13,7 +13,7 @@ export async function GET(
   { params }: { params: Promise<{ name: string }> }
 ) {
   const { name } = await params;
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

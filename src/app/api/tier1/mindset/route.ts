@@ -9,7 +9,7 @@ import { tier1Repositories } from '@/layer-3-data/repositories/tier1-repositorie
 
 // GET /api/tier1/mindset - Get user's mindset pillars
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier1/mindset/exercise - Log mindset exercise
 export async function POST(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
 
 // PATCH /api/tier1/mindset/pillar - Update pillar target
 export async function PATCH(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

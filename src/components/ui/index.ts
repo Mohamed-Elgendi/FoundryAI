@@ -18,5 +18,5 @@ export { ScrollArea } from './scroll-area';
 export { Slider } from './slider';
 export { Confetti } from './confetti';
 export { ThemeToggle } from './ThemeToggle';
-export { ErrorBoundary } from './error-boundary';
+export { GlobalErrorBoundary, ComponentErrorBoundary, withErrorBoundary } from './error-boundary';
 export { SafeUI } from './safe-ui';

@@ -8,7 +8,7 @@ import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-
 
 // GET /api/tier4/productivity - Get productivity data
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier4/productivity/session - Create productivity session
 export async function POSTSession(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -118,7 +118,7 @@ export async function POSTSession(request: NextRequest) {
 
 // PATCH /api/tier4/productivity/session/:id - End/update session
 export async function PATCHSession(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -166,7 +166,7 @@ export async function PATCHSession(request: NextRequest) {
 
 // POST /api/tier4/productivity/chronotype - Save chronotype assessment
 export async function POSTChronotype(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

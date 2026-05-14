@@ -9,7 +9,7 @@ import { radarService, ideaExtractionService } from '@/layer-3-data/services/rad
 
 // GET /api/tier2/radar - Get radar dashboard data
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier2/radar/extract - Extract opportunities from vague idea
 export async function POST(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

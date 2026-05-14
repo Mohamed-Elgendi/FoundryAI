@@ -8,7 +8,7 @@ import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-
 
 // GET /api/tier6/revenue - Get user's revenue data
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier6/revenue/transaction - Record revenue transaction
 export async function POSTTransaction(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -134,7 +134,7 @@ export async function POSTTransaction(request: NextRequest) {
 
 // POST /api/tier6/revenue/goal - Create revenue goal
 export async function POSTGoal(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

@@ -104,9 +104,9 @@ export class LogicLayer {
   private buildRefinementPrompt(original: FoundryAIOutput, focusArea: string): string {
     return `Refine this business plan with focus on ${focusArea}:
 
-Original plan: ${original.toolIdea}
-Target: ${original.targetUser}
-Problem: ${original.problemStatement}
+Original plan: ${original.ideaName || original.toolIdea}
+Target: ${original.targetAudience?.description || original.targetUser}
+Problem: ${original.problemStatement?.fullStatement}
 
 Provide an enhanced version with more detail in the ${focusArea} section.`;
   }
@@ -182,13 +182,13 @@ Provide an enhanced version with more detail in the ${focusArea} section.`;
   }
   
   private convertToMarkdown(content: FoundryAIOutput): string {
-    return `# ${content.toolIdea}
+    return `# ${content.ideaName || content.toolIdea}
 
 ## Target User
-${content.targetUser}
+${content.targetAudience?.description || content.targetUser}
 
 ## Problem Statement
-${content.problemStatement}
+${content.problemStatement?.fullStatement}
 
 ## Market Research
 - TAM: ${content.marketResearch?.tam}

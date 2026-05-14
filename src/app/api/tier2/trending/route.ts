@@ -9,7 +9,7 @@ import { opportunityRepository } from '@/layer-3-data/services/radar-service';
 
 // GET /api/tier2/trending - Get trending opportunities
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

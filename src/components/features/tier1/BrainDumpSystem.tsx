@@ -11,7 +11,7 @@ import { Timer, Brain, Sparkles, Archive, Calendar, Trash2, Send, X } from 'luci
 
 interface BrainDump {
   id: string;
-  raw_content: string;
+  rawContent: string;
   categorization: {
     urgent: string[];
     scheduled: string[];
@@ -20,9 +20,9 @@ interface BrainDump {
     delegate: string[];
     release: string[];
   };
-  cognitive_load_before: number;
-  cognitive_load_after: number | null;
-  created_at: string;
+  cognitiveLoadBefore: number;
+  cognitiveLoadAfter: number | null;
+  createdAt: string;
 }
 
 interface CognitiveLoadReading {
@@ -72,7 +72,7 @@ const BrainDumpSystem: React.FC = () => {
       // Convert API response to component format
       const formattedDumps: BrainDump[] = (data.dumps || []).map(dump => ({
         id: dump.id,
-        raw_content: dump.rawContent,
+        rawContent: dump.rawContent,
         categorization: data.items?.[dump.id] ? {
           urgent: data.items[dump.id].filter((i: {category: string}) => i.category === 'urgent').map((i: {itemContent: string}) => i.itemContent),
           scheduled: data.items[dump.id].filter((i: {category: string}) => i.category === 'scheduled').map((i: {itemContent: string}) => i.itemContent),
@@ -81,9 +81,9 @@ const BrainDumpSystem: React.FC = () => {
           delegate: data.items[dump.id].filter((i: {category: string}) => i.category === 'delegate').map((i: {itemContent: string}) => i.itemContent),
           release: data.items[dump.id].filter((i: {category: string}) => i.category === 'release').map((i: {itemContent: string}) => i.itemContent),
         } : { urgent: [], scheduled: [], ideas: [], trash: [], delegate: [], release: [] },
-        cognitive_load_before: dump.cognitiveLoadBefore || 70,
-        cognitive_load_after: dump.cognitiveLoadAfter,
-        created_at: dump.createdAt,
+        cognitiveLoadBefore: dump.cognitiveLoadBefore || 70,
+        cognitiveLoadAfter: dump.cognitiveLoadAfter,
+        createdAt: dump.createdAt,
       }));
       
       setRecentDumps(formattedDumps);
@@ -269,18 +269,18 @@ const BrainDumpSystem: React.FC = () => {
                     {recentDumps.slice(0, 3).map((dump) => (
                       <div key={dump.id} className="text-sm p-2 bg-muted rounded">
                         <div className="flex justify-between">
-                          <span className="truncate flex-1">{dump.raw_content.slice(0, 50)}...</span>
+                          <span className="truncate flex-1">{dump.rawContent.slice(0, 50)}...</span>
                           <span className="text-muted-foreground text-xs">
-                            {new Date(dump.created_at).toLocaleDateString()}
+                            {new Date(dump.createdAt).toLocaleDateString()}
                           </span>
                         </div>
                         <div className="flex gap-2 mt-1">
                           <Badge variant="outline" className="text-xs">
-                            Before: {dump.cognitive_load_before}%
+                            Before: {dump.cognitiveLoadBefore}%
                           </Badge>
-                          {dump.cognitive_load_after && (
+                          {dump.cognitiveLoadAfter && (
                             <Badge variant="outline" className="text-xs text-green-600">
-                              After: {dump.cognitive_load_after}%
+                              After: {dump.cognitiveLoadAfter}%
                             </Badge>
                           )}
                         </div>

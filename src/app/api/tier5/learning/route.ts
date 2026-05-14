@@ -8,7 +8,7 @@ import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-
 
 // GET /api/tier5/learning - Get learning data
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier5/learning/path - Create learning path
 export async function POSTPath(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -126,7 +126,7 @@ export async function POSTPath(request: NextRequest) {
 
 // PATCH /api/tier5/learning/module - Update module progress
 export async function PATCHModule(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -179,7 +179,7 @@ export async function PATCHModule(request: NextRequest) {
 
 // POST /api/tier5/learning/card-review - Review spaced repetition card
 export async function POSTCardReview(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

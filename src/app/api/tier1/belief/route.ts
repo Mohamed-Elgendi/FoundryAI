@@ -15,7 +15,7 @@ import {
 
 // GET /api/tier1/belief - Get user's belief score
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier1/belief/evidence - Add belief evidence
 export async function POST(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

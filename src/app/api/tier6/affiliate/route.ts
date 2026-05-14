@@ -8,7 +8,7 @@ import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-
 
 // GET /api/tier6/affiliate - Get user's affiliate data
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier6/affiliate/register - Register as affiliate
 export async function POSTRegister(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -135,7 +135,7 @@ export async function POSTRegister(request: NextRequest) {
 
 // POST /api/tier6/affiliate/track-click - Track affiliate click
 export async function POSTTrackClick(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   try {
     const body = await request.json();
 

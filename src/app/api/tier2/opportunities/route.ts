@@ -9,7 +9,7 @@ import { opportunityRepository, radarService } from '@/layer-3-data/services/rad
 
 // GET /api/tier2/opportunities - List opportunities with filters
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

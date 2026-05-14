@@ -8,7 +8,7 @@ import { createRouteHandlerSupabaseClient } from '@/layer-1-security/auth/route-
 
 // GET /api/tier4/character-stats - Get user's character stats and gamification data
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier4/character-stats - Record new character stats
 export async function POST(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
 
 // POST /api/tier4/character-stats/achievement - Unlock achievement
 export async function POSTAchievement(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -177,7 +177,7 @@ export async function POSTAchievement(request: NextRequest) {
 
 // POST /api/tier4/character-stats/xp - Add experience points
 export async function POSTXp(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

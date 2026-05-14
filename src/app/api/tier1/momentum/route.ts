@@ -9,7 +9,7 @@ import { tier1Repositories } from '@/layer-3-data/repositories/tier1-repositorie
 
 // GET /api/tier1/momentum - Get momentum dimensions and flywheel
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier1/momentum/activity - Log momentum activity
 export async function POST(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
 
 // PATCH /api/tier1/momentum/dimension - Update dimension target
 export async function PATCH(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

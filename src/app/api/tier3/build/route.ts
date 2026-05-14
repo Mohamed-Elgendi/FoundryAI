@@ -86,7 +86,7 @@ const aiBuildService = {
 
 // GET /api/tier3/build - Get user's build projects
 export async function GET(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -134,7 +134,7 @@ export async function GET(request: NextRequest) {
 
 // POST /api/tier3/build - Create new build project
 export async function POST(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -199,7 +199,7 @@ export async function POST(request: NextRequest) {
 
 // POST /api/tier3/build/assist - Get AI assistance
 export async function POSTAssist(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -231,7 +231,7 @@ export async function POSTAssist(request: NextRequest) {
 
 // POST /api/tier3/build/resolve-error - Resolve build error
 export async function POSTResolveError(request: NextRequest) {
-  const supabase = createRouteHandlerSupabaseClient();
+  const supabase = await createRouteHandlerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

@@ -19,8 +19,10 @@ export interface Profile {
 }
 
 export class ProfileRepository extends BaseRepository<Profile> {
-  constructor(client: SupabaseClient) {
-    super('foundryai_profiles', client);
+  protected tableName = 'foundryai_profiles';
+
+  constructor() {
+    super();
   }
 
   async findByEmail(email: string): Promise<Profile | null> {
