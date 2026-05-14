@@ -1,49 +1,46 @@
-import Stripe from 'stripe';
+import Stripe from "stripe";
 
-const stripeKey = process.env.STRIPE_SECRET_KEY;
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error("STRIPE_SECRET_KEY is required");
+}
 
-export const stripe = stripeKey 
-  ? new Stripe(stripeKey, {
-      apiVersion: '2026-03-25.dahlia',
-      typescript: true,
-    })
-  : null;
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16" as Stripe.LATEST_API_VERSION,
+  typescript: true,
+});
 
-// Subscription tiers
-export const SUBSCRIPTION_TIERS = {
-  FREE: 'free',
-  PRO: 'pro',
-  ENTERPRISE: 'enterprise',
-} as const;
+export const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || "";
 
-// Price IDs (to be set in environment variables)
-export const STRIPE_PRICE_IDS = {
-  PRO_MONTHLY: process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID,
-  PRO_YEARLY: process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PRICE_ID,
-  ENTERPRISE_MONTHLY: process.env.NEXT_PUBLIC_STRIPE_ENTERPRISE_PRICE_ID,
-};
-
-// Feature limits per tier
-export const TIER_LIMITS = {
-  [SUBSCRIPTION_TIERS.FREE]: {
-    plansPerMonth: 5,
-    refinementsPerPlan: 2,
-    canExport: false,
-    canAccessRadar: true,
-    support: 'community',
+export const STRIPE_PRICING = {
+  starter: {
+    id: "price_starter", // Replace with actual Stripe price ID
+    name: "Starter",
+    amount: 1900, // $19.00 in cents
+    interval: "month" as const,
   },
-  [SUBSCRIPTION_TIERS.PRO]: {
-    plansPerMonth: 50,
-    refinementsPerPlan: 10,
-    canExport: true,
-    canAccessRadar: true,
-    support: 'email',
+  pro: {
+    id: "price_pro",
+    name: "Pro",
+    amount: 4900,
+    interval: "month" as const,
   },
-  [SUBSCRIPTION_TIERS.ENTERPRISE]: {
-    plansPerMonth: -1, // unlimited
-    refinementsPerPlan: -1, // unlimited
-    canExport: true,
-    canAccessRadar: true,
-    support: 'priority',
+  elite: {
+    id: "price_elite",
+    name: "Elite",
+    amount: 9900,
+    interval: "month" as const,
+  },
+  legend: {
+    id: "price_legend",
+    name: "Legend",
+    amount: 19900,
+    interval: "month" as const,
   },
 };
+
+export const CREDIT_PACKAGES = [
+  { id: "credits_100", name: "Starter Pack", credits: 100, price: 999 },
+  { id: "credits_500", name: "Pro Pack", credits: 500, price: 2999 },
+  { id: "credits_1000", name: "Elite Pack", credits: 1000, price: 4999 },
+  { id: "credits_5000", name: "Legend Pack", credits: 5000, price: 19999 },
+];

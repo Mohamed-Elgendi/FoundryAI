@@ -1,6 +1,3 @@
-// Layer 7: Design System - Tokens
-export const tokens = {
-  colors: {},
-  spacing: {},
-  typography: {},
-};
+import { designTokens } from "./design-tokens";
+
+export { designTokens };

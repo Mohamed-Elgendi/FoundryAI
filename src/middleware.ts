@@ -1,70 +1,73 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { NextResponse, type NextRequest } from 'next/server';
+/**
+ * Middleware
+ * 
+ * Handles authentication, redirects, and feature gating.
+ */
 
-// Protected routes that require authentication
-const PROTECTED_ROUTES = [
-  '/dashboard',
-  '/build',
-  '/launch',
-  '/revenue',
-  '/settings',
-  '/profile',
-  '/plan',
-  '/onboarding',
+import { createSupabaseMiddlewareClient } from "@/lib/supabase/middleware";
+import { type NextRequest } from "next/server";
+
+// Paths that don't require authentication
+const PUBLIC_PATHS = [
+  "/",
+  "/sign-in",
+  "/sign-up",
+  "/magic-link",
+  "/forgot-password",
+  "/landing",
+  "/api/webhooks/stripe",
 ];
 
-// Auth routes that should redirect if already logged in
-const AUTH_ROUTES = [
-  '/login',
-  '/signup',
-  '/forgot-password',
+// Paths that require authentication
+const PROTECTED_PATHS = [
+  "/teacher",
+  "/student",
+];
+
+// Paths that redirect authenticated users away
+const AUTH_REDIRECT_PATHS = [
+  "/sign-in",
+  "/sign-up",
 ];
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  const { supabase, response } = createSupabaseMiddlewareClient(request);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({ name, value, ...options });
-          response = NextResponse.next({ request: { headers: request.headers } });
-          response.cookies.set({ name, value, ...options });
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({ name, value: '', ...options });
-          response = NextResponse.next({ request: { headers: request.headers } });
-          response.cookies.set({ name, value: '', ...options });
-        },
-      },
-    }
-  );
+  // Refresh session if expired
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
 
-  const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route));
-  const isAuthRoute = AUTH_ROUTES.some(route => pathname.startsWith(route));
+  // Check if this is a public path
+  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
 
-  // Redirect unauthenticated users from protected routes
-  if (isProtectedRoute && !user) {
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(loginUrl);
+  // Check if this is a protected path
+  const isProtected = PROTECTED_PATHS.some((p) => pathname.startsWith(p));
+
+  // Check if this is an auth redirect path
+  const isAuthRedirect = AUTH_REDIRECT_PATHS.some((p) => pathname.startsWith(p));
+
+  // Redirect authenticated users away from auth pages
+  if (session && isAuthRedirect) {
+    // Check role and redirect to appropriate dashboard
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("role")
+      .eq("id", session.user.id)
+      .single();
+
+    const redirectPath = profile?.role === "teacher"
+      ? "/teacher/dashboard"
+      : "/student/dashboard";
+
+    return Response.redirect(new URL(redirectPath, request.url));
   }
 
-  // Redirect authenticated users away from auth routes
-  if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+  // Redirect unauthenticated users to sign-in
+  if (!session && isProtected) {
+    return Response.redirect(new URL("/sign-in", request.url));
   }
 
   return response;
@@ -72,6 +75,14 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - images (public images)
+     * - api (API routes) - except webhooks
+     */
+    "/((?!_next/static|_next/image|favicon.ico|images|api/webhooks).*)",
   ],
 };

@@ -1,0 +1,20 @@
+{
+  "sessions": [
+    {
+      "id": "c6fa44b4",
+      "created_at": "2026-05-14T00:13:13.848468740Z",
+      "updated_at": "2026-05-14T02:02:03.332169106Z",
+      "model": "qwen/qwen3.6-plus",
+      "summary": "can you read all the folders and files insinde this folder and get deep under...",
+      "message_count": 82
+    },
+    {
+      "id": "1b84bc40",
+      "created_at": "2026-05-14T02:03:07.163980279Z",
+      "updated_at": "2026-05-14T11:32:59.488752306Z",
+      "model": "gemini-2.5-flash",
+      "summary": "[From User] continue",
+      "message_count": 199
+    }
+  ]
+}
