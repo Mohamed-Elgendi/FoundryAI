@@ -17,44 +17,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          
+          node-version: '20'
+          cache: 'npm'
+
       - name: Install deps
         run: npm ci
-        
+
       - name: Run build
-        id: build
         run: npm run build
-        continue-on-error: true
-        
-      - name: Fix TypeScript errors
-        if: steps.build.outcome == 'failure'
-        run: |
-          echo "🔧 Fixing TypeScript errors..."
-          find src -name "*.ts" -o -name "*.tsx" | xargs -I {} sed -i '1i// @ts-nocheck\n'
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git commit -m "Add @ts-nocheck to fix TS errors"
-        run: git push origin main
-        
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-        
-      - name: Deploy to Vercel
-        if: steps.changes.outputs.has_changes == 'true'
-        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_AI_API_KEY: ${{ secrets.GOOGLE_AI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+
+      - name: Deploy to Vercel Production
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+
       - name: Deployment Summary
-        if: steps.changes.outputs.has_changes == 'true'
         run: |
-          echo "🚀 Deployment completed successfully!"
-          echo "📝 Commit: ${{ github.event.inputs.commit_message || 'Auto commit and deploy' }}"
-          echo "🔗 Vercel URL: https://vercel.com/${{ secrets.VERCEL_PROJECT_ID }}"
+          echo "Deployment completed successfully."
+          echo "Commit: ${{ github.event.inputs.commit_message || github.sha }}"

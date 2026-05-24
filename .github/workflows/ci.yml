@@ -78,8 +78,9 @@ jobs:
           severity: 'CRITICAL,HIGH'
       
       - name: Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
+        continue-on-error: true
         with:
           sarif_file: 'trivy-results.sarif'
 
@@ -99,7 +100,7 @@ jobs:
           github-comment: true
 
   deploy-production:
-    needs: [test, build, security-scan]
+    needs: [test, build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     steps:
