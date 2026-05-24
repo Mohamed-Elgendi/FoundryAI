@@ -50,14 +50,14 @@ export function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenu.Item asChild>
+            <DropdownMenuItem asChild>
               <Link href="/teacher/settings">Profile</Link>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item asChild>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link href="/teacher/settings">Settings</Link>
-            </DropdownMenu.Item>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenu.Item>Sign Out</DropdownMenu.Item>
+            <DropdownMenuItem>Sign Out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

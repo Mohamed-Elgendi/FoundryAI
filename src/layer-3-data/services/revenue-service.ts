@@ -48,6 +48,9 @@ export interface RevenueStream {
   pricingModel?: string;
   isActive?: boolean;
   launchedAt?: string;
+  totalRevenue?: number;
+  customerCount?: number;
+  totalTransactions?: number;
   metadata?: Record<string, unknown>;
 }
 

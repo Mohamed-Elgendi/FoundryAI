@@ -51,21 +51,22 @@ export function Tier1FoundationPanel() {
         const data = await tier1Service.getAllFoundationData();
         
         // Calculate foundation health based on actual data
+        const d = data as any;
         const systems = [
           { name: 'brain-dump', active: true },
-          { name: 'distractions', active: (data.focus?.score?.currentScore || 0) > 50 },
-          { name: 'emotion', active: (data.emotion?.checkins?.length || 0) > 0 },
-          { name: 'momentum', active: (data.momentum?.stats?.averageScore || 0) > 30 },
-          { name: 'belief', active: (data.belief?.evidence?.length || 0) > 0 },
-          { name: 'confidence', active: (data.confidence?.cq?.overallCq || 0) > 50 }
+          { name: 'distractions', active: (d.focus?.score?.currentScore || 0) > 50 },
+          { name: 'emotion', active: (d.emotion?.checkins?.length || 0) > 0 },
+          { name: 'momentum', active: (d.momentum?.stats?.averageScore || 0) > 30 },
+          { name: 'belief', active: (d.belief?.evidence?.length || 0) > 0 },
+          { name: 'confidence', active: (d.confidence?.cq?.overallCq || 0) > 50 }
         ];
 
         const activeCount = systems.filter(s => s.active).length;
         const health = Math.round(
-          ((data.focus?.score?.currentScore || 50) + 
-           (data.momentum?.stats?.averageScore || 50) + 
-           (data.confidence?.cq?.overallCq || 50) + 
-           (data.belief?.score?.overallScore || 50)) / 4
+          ((d.focus?.score?.currentScore || 50) + 
+           (d.momentum?.stats?.averageScore || 50) + 
+           (d.confidence?.cq?.overallCq || 50) + 
+           (d.belief?.score?.overallScore || 50)) / 4
         );
 
         setStatus({

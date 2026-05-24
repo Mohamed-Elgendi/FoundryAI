@@ -11,10 +11,10 @@
     {
       "id": "1b84bc40",
       "created_at": "2026-05-14T02:03:07.163980279Z",
-      "updated_at": "2026-05-14T23:27:29.277964270Z",
+      "updated_at": "2026-05-16T20:08:37.175817920Z",
       "model": "gemini-2.5-flash",
-      "summary": "[From User] continue",
-      "message_count": 225
+      "summary": "[Conversation compacted]\n{\"trigger\":\"auto\",\"pre_compact_tokens\":167916,\"messa...",
+      "message_count": 6
     }
   ]
 }

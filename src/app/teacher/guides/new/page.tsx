@@ -22,7 +22,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { generateCurriculum } from "@/lib/ai";
+import { generateCurriculum, CurriculumLesson } from "@/lib/ai";
 
 export default function NewGuidePage() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function NewGuidePage() {
     estimatedDuration: "",
     targetAudience: "",
   });
-  const [curriculum, setCurriculum] = useState<ReturnType<typeof generateCurriculum> | null>(null);
+  const [curriculum, setCurriculum] = useState<CurriculumLesson[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

@@ -50,7 +50,7 @@ export default function RevenueTracker() {
   const [streams, setStreams] = useState<RevenueStream[]>([]);
   const [goals, setGoals] = useState<RevenueGoal[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<Array<{ date: string; revenue: number; target: number }>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     mrr: 0,

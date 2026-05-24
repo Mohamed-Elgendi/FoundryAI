@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react"
 import { Check, ChevronDown } from "lucide-react"
@@ -88,4 +88,21 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
 )
 SelectTrigger.displayName = "SelectTrigger"
 
-export { Select, SelectContent, SelectItem, SelectTrigger }
+interface SelectValueProps {
+  placeholder?: string
+  className?: string
+}
+
+const SelectValue = React.forwardRef<HTMLSpanElement, SelectValueProps>(
+  ({ className, placeholder }, ref) => (
+    <span
+      ref={ref}
+      className={cn("text-muted-foreground", className)}
+    >
+      {placeholder || "Select an option"}
+    </span>
+  )
+)
+SelectValue.displayName = "SelectValue"
+
+export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue }

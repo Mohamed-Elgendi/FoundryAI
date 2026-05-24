@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     
     // Use selected provider or default for refinement
     const selectedProvider = provider || getDefaultProvider();
-    const aiResponse = await processWithAI({ prompt, provider: selectedProvider });
+    const aiResponse = await processWithAI({ prompt, preferredProvider: selectedProvider });
 
     if (aiResponse.error || !aiResponse.content) {
       return errors.aiError(

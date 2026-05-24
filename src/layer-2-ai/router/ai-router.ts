@@ -232,33 +232,33 @@ export async function processWithAI(request: AIRequest): Promise<AIResponse> {
   
   const startTime = Date.now();
   const providersToTry = fallbackProviders || getFallbackProviders(preferredProvider);
-  
+  let lastError: AIResponse | null = null;
+  let quotaExceeded = false;
+  let rateLimitError = false;
+
   // Try preferred provider first
   if (preferredProvider !== 'fallback') {
     const preferredResult = await tryProvider(preferredProvider, prompt, {
       maxOutputTokens,
-      temperature
+      temperature,
     });
-    
-    // If preferred provider quota exceeded, we'll try fallbacks automatically
+
+    if (preferredResult.quotaExceeded) quotaExceeded = true;
+    if (preferredResult.rateLimitError) rateLimitError = true;
+    lastError = preferredResult;
+
     if (preferredResult.quotaExceeded) {
       console.log(`[AI Router] ${preferredProvider} quota exceeded, trying fallbacks...`);
-      // Continue to fallback loop - don't return here
     } else if (!preferredResult.content && preferredResult.error) {
-      // For other errors, also try fallbacks
       console.log(`[AI Router] ${preferredProvider} failed: ${preferredResult.error}, trying fallbacks...`);
-    } else {
-      // If successful, return immediately
+    } else if (preferredResult.content) {
       return {
         ...preferredResult,
-        latencyMs: Date.now() - startTime
+        latencyMs: Date.now() - startTime,
       };
     }
   }
-  
-  // Try fallback providers
-  let lastError: AIResponse | null = null;
-  
+
   for (const provider of providersToTry) {
     if (signal?.aborted) {
       throw new Error('Request aborted');
@@ -281,6 +281,9 @@ export async function processWithAI(request: AIRequest): Promise<AIResponse> {
         };
       }
       
+      if (result.quotaExceeded) quotaExceeded = true;
+      if (result.rateLimitError) rateLimitError = true;
+
       if (!lastError || result.quotaExceeded || result.rateLimitError) {
         lastError = result;
       }
@@ -289,14 +292,19 @@ export async function processWithAI(request: AIRequest): Promise<AIResponse> {
       continue;
     }
   }
-  
-  // All providers failed
-  return lastError || {
+
+  const failureResponse: AIResponse = lastError || {
     content: '',
     provider: 'fallback',
     error: 'All AI providers failed. Please check your API keys or try again later.',
     suggestedAction: 'Add more API keys or select a different provider',
-    latencyMs: Date.now() - startTime
+  };
+
+  return {
+    ...failureResponse,
+    quotaExceeded: quotaExceeded || failureResponse.quotaExceeded,
+    rateLimitError: rateLimitError || failureResponse.rateLimitError,
+    latencyMs: Date.now() - startTime,
   };
 }
 

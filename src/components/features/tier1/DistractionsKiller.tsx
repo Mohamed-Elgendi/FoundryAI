@@ -114,14 +114,14 @@ const DistractionsKiller: React.FC = () => {
       setIsLoading(true);
       const data = await focusService.getFocusData();
       
-      if (data.stats) {
+      if ((data as any).stats) {
         setTodayStats({
-          sessionsCompleted: data.stats.sessionsCompleted || 0,
-          totalFocusTime: data.stats.totalFocusTime || 0,
-          distractionsBlocked: data.stats.distractionsBlocked || 0,
-          flowStatesAchieved: data.stats.flowStatesAchieved || 0,
+          sessionsCompleted: (data as any).stats.sessionsCompleted || 0,
+          totalFocusTime: (data as any).stats.totalFocusTime || 0,
+          distractionsBlocked: (data as any).stats.distractionsBlocked || 0,
+          flowStatesAchieved: (data as any).stats.flowStatesAchieved || 0,
         });
-        setFocusScore(data.score?.currentScore || 75);
+        setFocusScore((data as any).score?.currentScore || 75);
       }
     } catch (error) {
       console.error('Error loading focus stats:', error);
@@ -134,8 +134,8 @@ const DistractionsKiller: React.FC = () => {
     try {
       const data = await focusService.getFocusData();
       
-      if (data.settings?.currentSession) {
-        const session = data.settings.currentSession;
+      if ((data as any).settings?.currentSession) {
+        const session = (data as any).settings.currentSession;
         setCurrentSession({
           id: session.id,
           session_intention: session.sessionIntention,
@@ -170,7 +170,7 @@ const DistractionsKiller: React.FC = () => {
         plannedDurationMinutes: sessionDuration,
         defenseLayersActive: updatedLayers.map(l => l.id),
         cognitiveLoadBefore: 50
-      });
+      } as any);
 
       setIsSessionActive(true);
       setTimeRemaining(sessionDuration * 60);
@@ -188,7 +188,7 @@ const DistractionsKiller: React.FC = () => {
         actualDurationMinutes: Math.floor((Date.now() - new Date(currentSession.started_at).getTime()) / 60000),
         distractionsBlocked: todayStats.distractionsBlocked,
         flowStateAchieved: todayStats.distractionsBlocked > 5
-      });
+      } as any);
 
       setIsSessionActive(false);
       setCurrentSession(null);

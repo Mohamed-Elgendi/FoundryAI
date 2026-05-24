@@ -11,3 +11,5 @@ import { ANON_KEY } from "@/lib/constants";
 export function createSupabaseClient() {
   return createBrowserClient(DATABASE_URL, ANON_KEY);
 }
+
+export const createClient = createSupabaseClient;

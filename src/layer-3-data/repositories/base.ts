@@ -4,9 +4,10 @@
  */
 
 import { SupabaseClient } from '@supabase/supabase-js';
-import { Repository, QueryOptions, RepositoryError } from './types';
+import type { Repository, QueryOptions } from './types';
+import { RepositoryError } from './types';
 
-export { QueryOptions };
+export type { QueryOptions };
 
 import { convertKeysToSnakeCase, convertKeysToCamelCase } from '@/lib/utils/case-converter';
 

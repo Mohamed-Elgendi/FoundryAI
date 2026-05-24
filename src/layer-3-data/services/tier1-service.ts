@@ -30,7 +30,7 @@ async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> 
 
 export const beliefService = {
   async getBeliefData() {
-    return fetchAPI<{ score: unknown; evidence: unknown[] }>('/belief');
+    return fetchAPI<{ score: { overallScore: number; level: number; [key: string]: unknown }; evidence: unknown[] }>('/belief');
   },
 
   async addEvidence(evidence: {
@@ -107,7 +107,11 @@ export const confidenceService = {
 export const journalService = {
   async getJournalData(date?: string) {
     const query = date ? `?date=${date}` : '';
-    return fetchAPI<{ entries: unknown[]; streak: unknown; affirmations: unknown[] }>(`/journal${query}`);
+    return fetchAPI<{
+      entries: Array<{ createdAt: string; entryType: string; [key: string]: unknown }>;
+      streak: { currentStreak: number; totalEntries: number };
+      affirmations: unknown[];
+    }>(`/journal${query}`);
   },
 
   async createEntry(entry: {

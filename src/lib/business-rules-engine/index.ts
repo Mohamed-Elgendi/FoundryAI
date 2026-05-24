@@ -4,8 +4,7 @@
  * Re-exports all public APIs from the business rules engine.
  */
 
-export {
-  // Types
+export type {
   ValidationRule,
   ValidationResult,
   RuleSetResult,
@@ -14,8 +13,9 @@ export {
   CurriculumItem,
   AssignmentValidationInput,
   EnrollmentValidationInput,
+} from "./engine";
 
-  // Core functions
+export {
   executeRule,
   validateRule,
   executeRules,
@@ -24,16 +24,10 @@ export {
   validateAssignment,
   validateEnrollment,
   validateAll,
-
-  // Registry
   registerRule,
   unregisterRule,
   getRule,
-
-  // Utilities
   durationToMinutes,
-
-  // Default rule sets
   GUIDE_RULES,
   ASSIGNMENT_RULES,
   ENROLLMENT_RULES,

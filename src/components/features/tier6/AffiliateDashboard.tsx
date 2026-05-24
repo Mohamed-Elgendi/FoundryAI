@@ -30,8 +30,8 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
   const { affiliate, dashboard, links, payouts, loading, error, createLink, requestPayout } = useAffiliate(userId);
 
   const copyLink = () => {
-    if (affiliate?.referral_code) {
-      const link = `${process.env.NEXT_PUBLIC_APP_URL || 'https://foundryai-seven.vercel.app'}/signup?ref=${affiliate.referral_code}`;
+    if (affiliate?.referralCode) {
+      const link = `${process.env.NEXT_PUBLIC_APP_URL || 'https://foundryai-seven.vercel.app'}/signup?ref=${affiliate.referralCode}`;
       navigator.clipboard.writeText(link);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -48,11 +48,27 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
     return tiers[tier] || 'Bronze Partner';
   };
 
-  const getTierCommission = (rate: number) => {
-    return rate || 10;
+  const getTierCommission = (tier: string) => {
+    const rates: Record<string, number> = {
+      'bronze': 10,
+      'silver': 15,
+      'gold': 20,
+      'platinum': 25
+    };
+    return rates[tier] || 10;
   };
 
-  const stats = dashboard?.stats;
+  const getTierNumber = (tier: string) => {
+    const nums: Record<string, number> = {
+      'bronze': 1,
+      'silver': 2,
+      'gold': 3,
+      'platinum': 4
+    };
+    return nums[tier] || 1;
+  };
+
+  const stats = dashboard?.stats as any;
   const conversions = dashboard?.recentConversions || [];
   const chartData = dashboard?.monthlyEarnings?.map((m: any) => ({
     date: m.month,
@@ -86,7 +102,7 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
           Affiliate Program
         </h1>
         <p className="text-slate-600 max-w-2xl mx-auto">
-          Refer others to FoundryAI and earn {getTierCommission(affiliate?.commission_rate || 10)}% commission on their subscriptions.
+          Refer others to FoundryAI and earn {getTierCommission(affiliate?.tier || 'bronze')}% commission on their subscriptions.
         </p>
       </div>
 
@@ -98,7 +114,7 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
               <div className="flex-1">
                 <div className="text-sm text-violet-700 mb-1">Your Referral Link</div>
                 <div className="font-mono text-sm bg-white p-3 rounded border break-all">
-                  {stats.referralLink}
+                  {`${process.env.NEXT_PUBLIC_APP_URL || 'https://foundryai-seven.vercel.app'}/signup?ref=${affiliate?.referralCode || ''}`}
                 </div>
               </div>
               <div className="flex gap-2">
@@ -125,7 +141,7 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
                 <MousePointer className="w-4 h-4 text-slate-600" />
                 <span className="text-sm text-slate-600">Total Clicks</span>
               </div>
-              <div className="text-2xl font-bold">{stats.totalClicks}</div>
+              <div className="text-2xl font-bold">{stats.allTimeClicks}</div>
             </CardContent>
           </Card>
           <Card>
@@ -134,7 +150,7 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
                 <Users className="w-4 h-4 text-slate-600" />
                 <span className="text-sm text-slate-600">Conversions</span>
               </div>
-              <div className="text-2xl font-bold">{stats.totalConversions}</div>
+              <div className="text-2xl font-bold">{stats.allTimeConversions}</div>
             </CardContent>
           </Card>
           <Card>
@@ -152,7 +168,7 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
                 <DollarSign className="w-4 h-4 text-slate-600" />
                 <span className="text-sm text-slate-600">Total Earnings</span>
               </div>
-              <div className="text-2xl font-bold">${stats.totalEarnings}</div>
+              <div className="text-2xl font-bold">${stats.allTimeEarnings}</div>
             </CardContent>
           </Card>
         </div>
@@ -166,14 +182,14 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-amber-500" />
-                  Current Tier: {getTierName(stats.currentTier)}
+                  Current Tier: {getTierName(affiliate?.tier || 'bronze')}
                 </CardTitle>
                 <CardDescription>
-                  {getTierCommission(stats.currentTier)}% commission rate
+                  {getTierCommission(affiliate?.tier || 'bronze')}% commission rate
                 </CardDescription>
               </div>
               <Badge className="bg-amber-100 text-amber-800">
-                Tier {stats.currentTier}/4
+                Tier {getTierNumber(affiliate?.tier || 'bronze')}/4
               </Badge>
             </div>
           </CardHeader>
@@ -182,10 +198,12 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
               <div className="flex justify-between text-sm">
                 <span className="text-slate-600">Next Tier: {getTierName(stats.currentTier + 1)}</span>
                 <span className="text-slate-600">
-                  {stats.totalConversions}/25 referrals for next tier
+                  {stats.allTimeConversions}/25 referrals for next tier
                 </span>
               </div>
-              <Progress value={(stats.totalConversions / 25) * 100} className="h-3" />
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="bg-violet-600 h-3 rounded-full" style={{ width: `${(stats.allTimeConversions / 25) * 100}%` }} />
+              </div>
               <p className="text-sm text-slate-600">
                 Refer 25 people to unlock {getTierName(stats.currentTier + 1)} tier with {getTierCommission(stats.currentTier + 1)}% commission
               </p>
@@ -238,9 +256,9 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
                     className="flex items-center justify-between p-3 rounded-lg border"
                   >
                     <div>
-                      <div className="font-medium">{conversion.customerEmail}</div>
+                      <div className="font-medium">{conversion.customerId}</div>
                       <div className="text-sm text-slate-600">
-                        {new Date(conversion.convertedAt).toLocaleDateString()}
+                        {new Date(conversion.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                     <div className="text-right">
@@ -271,7 +289,7 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
                       <div className="text-sm text-slate-600">Pending</div>
-                      <div className="text-2xl font-bold text-amber-600">${stats.pendingEarnings}</div>
+                      <div className="text-2xl font-bold text-amber-600">${stats.pendingPayout}</div>
                     </div>
                     <div>
                       <div className="text-sm text-slate-600">Paid</div>
@@ -279,7 +297,7 @@ export default function AffiliateDashboard({ userId }: AffiliateDashboardProps) 
                     </div>
                     <div>
                       <div className="text-sm text-slate-600">Total</div>
-                      <div className="text-2xl font-bold">${stats.totalEarnings}</div>
+                      <div className="text-2xl font-bold">${stats.allTimeEarnings}</div>
                     </div>
                   </div>
                 </CardContent>

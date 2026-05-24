@@ -83,6 +83,7 @@ const BeliefArchitecture: React.FC = () => {
     type: string;
     description: string;
     date: string;
+    layer: number | string;
   }>>([]);
   const [newEvidence, setNewEvidence] = useState('');
   const [morningIntention, setMorningIntention] = useState('');
@@ -104,7 +105,7 @@ const BeliefArchitecture: React.FC = () => {
       
       // Count evidence by type
       const counts = { micro: 0, pattern: 0, capability: 0, identity: 0, legendary: 0 };
-      (data.evidence || []).forEach((e: {evidenceType: string}) => {
+      (data.evidence || []).forEach((e: any) => {
         if (e.evidenceType === 'micro_proof') counts.micro++;
         else if (e.evidenceType === 'pattern') counts.pattern++;
         else if (e.evidenceType === 'capability') counts.capability++;
@@ -113,11 +114,12 @@ const BeliefArchitecture: React.FC = () => {
       });
       setEvidenceCount(counts);
       
-      setRecentEvidence((data.evidence || []).slice(0, 10).map((e: {id: string; evidenceType: string; description: string; dateRecorded: string}) => ({
+      setRecentEvidence((data.evidence as any[] || []).slice(0, 10).map((e: any) => ({
         id: e.id,
         type: e.evidenceType,
         description: e.description,
         date: new Date(e.dateRecorded).toLocaleDateString(),
+        layer: e.layer || 1,
       })));
     } catch (error) {
       console.error('Error loading belief data:', error);

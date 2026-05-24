@@ -2,3 +2,1768 @@
 > my-app@0.1.0 test
 > jest --passWithNoTests
 
+jest-haste-map: Haste module naming collision: my-app
+  The following files share their name; please adjust your hasteImpl:
+    * <rootDir>/package.json
+    * <rootDir>/.next/standalone/package.json
+
+FAIL tests/unit/services/gamification-service.test.ts
+  ● Console
+
+    console.error
+      Error checking badges: TypeError: supabase.from(...).select(...).not is not a function
+          at GamificationService.not [as checkAndAwardBadges] (/home/mo/CascadeProjects/FoundryAI/src/layer-3-data/services/gamification-service.ts:125:10)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at GamificationService.awardPoints (/home/mo/CascadeProjects/FoundryAI/src/layer-3-data/services/gamification-service.ts:55:7)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/unit/services/gamification-service.test.ts:34:22)
+
+      145 |       return earnedBadges;
+      146 |     } catch (error) {
+    > 147 |       console.error('Error checking badges:', error);
+          |               ^
+      148 |       return earnedBadges;
+      149 |     }
+      150 |   }
+
+      at GamificationService.error [as checkAndAwardBadges] (src/layer-3-data/services/gamification-service.ts:147:15)
+      at GamificationService.awardPoints (src/layer-3-data/services/gamification-service.ts:55:7)
+      at Object.<anonymous> (tests/unit/services/gamification-service.test.ts:34:22)
+
+    console.error
+      Error awarding badge: TypeError: supabase.from(...).insert is not a function
+          at GamificationService.insert [as awardBadge] (/home/mo/CascadeProjects/FoundryAI/src/layer-3-data/services/gamification-service.ts:157:10)
+          at Object.awardBadge (/home/mo/CascadeProjects/FoundryAI/tests/unit/services/gamification-service.test.ts:65:36)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      170 |       return data;
+      171 |     } catch (error) {
+    > 172 |       console.error('Error awarding badge:', error);
+          |               ^
+      173 |       return null;
+      174 |     }
+      175 |   }
+
+      at GamificationService.error [as awardBadge] (src/layer-3-data/services/gamification-service.ts:172:15)
+      at Object.awardBadge (tests/unit/services/gamification-service.test.ts:65:36)
+
+  ● GamificationService › awardPoints › should award points to user
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 50
+    Received: 100
+
+      35 |       
+      36 |       expect(result).toBeDefined();
+    > 37 |       expect(result.points).toBe(50);
+         |                             ^
+      38 |       expect(result.userId).toBe('user-123');
+      39 |     });
+      40 |   });
+
+      at Object.toBe (tests/unit/services/gamification-service.test.ts:37:29)
+
+  ● GamificationService › getUserPoints › should get user points
+
+    TypeError: Cannot read properties of null (reading 'total_points')
+
+      45 |       
+      46 |       expect(result).toBeDefined();
+    > 47 |       expect(result.total_points).toBe(100);
+         |                     ^
+      48 |     });
+      49 |   });
+      50 |
+
+      at Object.total_points (tests/unit/services/gamification-service.test.ts:47:21)
+
+  ● GamificationService › awardBadge › should award badge to user
+
+    TypeError: Cannot read properties of null (reading 'badge_id')
+
+      66 |       
+      67 |       expect(result).toBeDefined();
+    > 68 |       expect(result.badge_id).toBe('badge-123');
+         |                     ^
+      69 |     });
+      70 |   });
+      71 | });
+
+      at Object.badge_id (tests/unit/services/gamification-service.test.ts:68:21)
+
+FAIL tests/integration/api/routes.test.ts
+  ● Console
+
+    console.error
+      [Generate API] Error: request.json is not a function TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/generate/route.ts:9:51)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:93:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      64 |
+      65 |   } catch (error: any) {
+    > 66 |     console.error('[Generate API] Error:', error?.message, error?.stack);
+         |             ^
+      67 |     return errors.internal(error?.message || 'Internal server error');
+      68 |   }
+      69 | }
+
+      at error (src/app/api/generate/route.ts:66:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:93:42)
+
+    console.error
+      [Generate API] Error: request.json is not a function TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/generate/route.ts:9:51)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:111:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      64 |
+      65 |   } catch (error: any) {
+    > 66 |     console.error('[Generate API] Error:', error?.message, error?.stack);
+         |             ^
+      67 |     return errors.internal(error?.message || 'Internal server error');
+      68 |   }
+      69 | }
+
+      at error (src/app/api/generate/route.ts:66:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:111:42)
+
+    console.error
+      [Generate API] Error: request.json is not a function TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/generate/route.ts:9:51)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:134:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      64 |
+      65 |   } catch (error: any) {
+    > 66 |     console.error('[Generate API] Error:', error?.message, error?.stack);
+         |             ^
+      67 |     return errors.internal(error?.message || 'Internal server error');
+      68 |   }
+      69 | }
+
+      at error (src/app/api/generate/route.ts:66:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:134:42)
+
+    console.error
+      [Generate API] Error: request.json is not a function TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/generate/route.ts:9:51)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:159:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      64 |
+      65 |   } catch (error: any) {
+    > 66 |     console.error('[Generate API] Error:', error?.message, error?.stack);
+         |             ^
+      67 |     return errors.internal(error?.message || 'Internal server error');
+      68 |   }
+      69 | }
+
+      at error (src/app/api/generate/route.ts:66:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:159:42)
+
+    console.error
+      [Generate API] Error: request.json is not a function TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/generate/route.ts:9:51)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:183:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      64 |
+      65 |   } catch (error: any) {
+    > 66 |     console.error('[Generate API] Error:', error?.message, error?.stack);
+         |             ^
+      67 |     return errors.internal(error?.message || 'Internal server error');
+      68 |   }
+      69 | }
+
+      at error (src/app/api/generate/route.ts:66:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:183:42)
+
+    console.error
+      [Generate API] Error: request.json is not a function TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/generate/route.ts:9:51)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:206:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      64 |
+      65 |   } catch (error: any) {
+    > 66 |     console.error('[Generate API] Error:', error?.message, error?.stack);
+         |             ^
+      67 |     return errors.internal(error?.message || 'Internal server error');
+      68 |   }
+      69 | }
+
+      at error (src/app/api/generate/route.ts:66:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:206:42)
+
+    console.error
+      [Generate API] Error: request.json is not a function TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/generate/route.ts:9:51)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:232:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      64 |
+      65 |   } catch (error: any) {
+    > 66 |     console.error('[Generate API] Error:', error?.message, error?.stack);
+         |             ^
+      67 |     return errors.internal(error?.message || 'Internal server error');
+      68 |   }
+      69 | }
+
+      at error (src/app/api/generate/route.ts:66:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:232:42)
+
+    console.error
+      [Generate API] Error: request.json is not a function TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/generate/route.ts:9:51)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:246:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      64 |
+      65 |   } catch (error: any) {
+    > 66 |     console.error('[Generate API] Error:', error?.message, error?.stack);
+         |             ^
+      67 |     return errors.internal(error?.message || 'Internal server error');
+      68 |   }
+      69 | }
+
+      at error (src/app/api/generate/route.ts:66:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:246:42)
+
+    console.error
+      Refinement API error: TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/refine/route.ts:9:107)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:312:40)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      55 |
+      56 |   } catch (error: any) {
+    > 57 |     console.error('Refinement API error:', error);
+         |             ^
+      58 |     return errors.internal(error?.message || 'Internal server error');
+      59 |   }
+      60 | }
+
+      at error (src/app/api/refine/route.ts:57:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:312:40)
+
+    console.error
+      Refinement API error: TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/refine/route.ts:9:107)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:330:40)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      55 |
+      56 |   } catch (error: any) {
+    > 57 |     console.error('Refinement API error:', error);
+         |             ^
+      58 |     return errors.internal(error?.message || 'Internal server error');
+      59 |   }
+      60 | }
+
+      at error (src/app/api/refine/route.ts:57:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:330:40)
+
+    console.error
+      Provider status error: TypeError: (0 , _airouter.getProviderStatus) is not a function
+          at GET (/home/mo/CascadeProjects/FoundryAI/src/app/api/providers/route.ts:7:40)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:337:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      15 |     });
+      16 |   } catch (error: any) {
+    > 17 |     console.error('Provider status error:', error);
+         |             ^
+      18 |     return NextResponse.json(
+      19 |       { error: 'Failed to get provider status' },
+      20 |       { status: 500 }
+
+      at error (src/app/api/providers/route.ts:17:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:337:42)
+
+    console.error
+      Provider status error: TypeError: (0 , _airouter.getProviderStatus) is not a function
+          at GET (/home/mo/CascadeProjects/FoundryAI/src/app/api/providers/route.ts:7:40)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:347:42)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      15 |     });
+      16 |   } catch (error: any) {
+    > 17 |     console.error('Provider status error:', error);
+         |             ^
+      18 |     return NextResponse.json(
+      19 |       { error: 'Failed to get provider status' },
+      20 |       { status: 500 }
+
+      at error (src/app/api/providers/route.ts:17:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:347:42)
+
+    console.error
+      Feedback API error: TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/feedback/route.ts:7:60)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:372:44)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      43 |     return NextResponse.json({ success: true });
+      44 |   } catch (error) {
+    > 45 |     console.error('Feedback API error:', error);
+         |             ^
+      46 |     return NextResponse.json(
+      47 |       { error: 'Internal server error' },
+      48 |       { status: 500 }
+
+      at error (src/app/api/feedback/route.ts:45:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:372:44)
+
+    console.error
+      Feedback API error: TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/feedback/route.ts:7:60)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:388:44)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      43 |     return NextResponse.json({ success: true });
+      44 |   } catch (error) {
+    > 45 |     console.error('Feedback API error:', error);
+         |             ^
+      46 |     return NextResponse.json(
+      47 |       { error: 'Internal server error' },
+      48 |       { status: 500 }
+
+      at error (src/app/api/feedback/route.ts:45:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:388:44)
+
+    console.error
+      Feedback API error: TypeError: request.json is not a function
+          at json (/home/mo/CascadeProjects/FoundryAI/src/app/api/feedback/route.ts:7:60)
+          at Object.<anonymous> (/home/mo/CascadeProjects/FoundryAI/tests/integration/api/routes.test.ts:403:44)
+          at Promise.finally.completed (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)
+          at _callCircusTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)
+          at processTicksAndRejections (node:internal/process/task_queues:103:5)
+          at _runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:947:3)
+          at /home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:849:7
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:862:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at _runTestsForDescribeBlock (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:857:11)
+          at run (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:761:3)
+          at runAndTransformResultsToJestFormat (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)
+          at jestAdapter (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-circus/build/runner.js:101:19)
+          at runTestInternal (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:275:16)
+          at runTest (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:343:7)
+          at Object.worker (/home/mo/CascadeProjects/FoundryAI/node_modules/jest-runner/build/testWorker.js:497:12)
+
+      43 |     return NextResponse.json({ success: true });
+      44 |   } catch (error) {
+    > 45 |     console.error('Feedback API error:', error);
+         |             ^
+      46 |     return NextResponse.json(
+      47 |       { error: 'Internal server error' },
+      48 |       { status: 500 }
+
+      at error (src/app/api/feedback/route.ts:45:13)
+      at Object.<anonymous> (tests/integration/api/routes.test.ts:403:44)
+
+  ● API Routes - Integration Tests › POST /api/generate › should successfully generate a plan
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      94 |       const data = await response.json();
+      95 |
+    > 96 |       expect(response.status).toBe(200);
+         |                               ^
+      97 |       expect(data.success).toBe(true);
+      98 |       expect(data.output).toEqual(mockOutput);
+      99 |       expect(data.provider).toBe('groq-llama-3-3');
+
+      at Object.toBe (tests/integration/api/routes.test.ts:96:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should return 400 for invalid input
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: undefined
+
+      112 |       const data = await response.json();
+      113 |
+    > 114 |       expect(response.status).toBe(400);
+          |                               ^
+      115 |       expect(data.error).toBeDefined();
+      116 |     });
+      117 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:114:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle AI service errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 502
+    Received: undefined
+
+      135 |       const data = await response.json();
+      136 |
+    > 137 |       expect(response.status).toBe(502);
+          |                               ^
+      138 |       expect(data.error).toBeDefined();
+      139 |       expect(data.suggestedAction).toBe('Please try again later');
+      140 |     });
+
+      at Object.toBe (tests/integration/api/routes.test.ts:137:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle malformed AI response
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: undefined
+
+      160 |       const data = await response.json();
+      161 |
+    > 162 |       expect(response.status).toBe(500);
+          |                               ^
+      163 |       expect(data.error).toContain('parse');
+      164 |     });
+      165 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:162:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle rate limit errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 502
+    Received: undefined
+
+      184 |       const data = await response.json();
+      185 |
+    > 186 |       expect(response.status).toBe(502);
+          |                               ^
+      187 |       expect(data.rateLimitError).toBe(true);
+      188 |     });
+      189 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:186:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle quota exceeded errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 502
+    Received: undefined
+
+      207 |       const data = await response.json();
+      208 |
+    > 209 |       expect(response.status).toBe(502);
+          |                               ^
+      210 |       expect(data.quotaExceeded).toBe(true);
+      211 |     });
+      212 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:209:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should use fallback provider when preferred fails
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      233 |       const data = await response.json();
+      234 |
+    > 235 |       expect(response.status).toBe(200);
+          |                               ^
+      236 |       expect(data.fallbackUsed).toBe(true);
+      237 |     });
+      238 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:235:31)
+
+  ● API Routes - Integration Tests › POST /api/generate › should handle JSON parsing errors gracefully
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 500
+    Received: undefined
+
+      245 |
+      246 |       const response = await generatePlan(request);
+    > 247 |       expect(response.status).toBe(500);
+          |                               ^
+      248 |     });
+      249 |   });
+      250 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:247:31)
+
+  ● API Routes - Integration Tests › POST /api/refine › should successfully refine a plan
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      313 |       const data = await response.json();
+      314 |
+    > 315 |       expect(response.status).toBe(200);
+          |                               ^
+      316 |       expect(data.success).toBe(true);
+      317 |       expect(data.output).toEqual(mockRefinedOutput);
+      318 |     });
+
+      at Object.toBe (tests/integration/api/routes.test.ts:315:31)
+
+  ● API Routes - Integration Tests › POST /api/refine › should return 400 for missing required fields
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: undefined
+
+      329 |
+      330 |       const response = await refinePlan(request);
+    > 331 |       expect(response.status).toBe(400);
+          |                               ^
+      332 |     });
+      333 |   });
+      334 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:331:31)
+
+  ● API Routes - Integration Tests › GET /api/providers › should return available providers
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      338 |       const data = await response.json();
+      339 |
+    > 340 |       expect(response.status).toBe(200);
+          |                               ^
+      341 |       expect(data.providers).toBeDefined();
+      342 |       expect(Array.isArray(data.providers)).toBe(true);
+      343 |       expect(data.defaultProvider).toBeDefined();
+
+      at Object.toBe (tests/integration/api/routes.test.ts:340:31)
+
+  ● API Routes - Integration Tests › GET /api/providers › should include provider metadata
+
+    TypeError: Cannot read properties of undefined (reading 'length')
+
+      348 |       const data = await response.json();
+      349 |
+    > 350 |       if (data.providers.length > 0) {
+          |                          ^
+      351 |         const provider = data.providers[0];
+      352 |         expect(provider).toHaveProperty('id');
+      353 |         expect(provider).toHaveProperty('name');
+
+      at Object.length (tests/integration/api/routes.test.ts:350:26)
+
+  ● API Routes - Integration Tests › POST /api/feedback › should successfully submit feedback
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: undefined
+
+      373 |       const data = await response.json();
+      374 |
+    > 375 |       expect(response.status).toBe(200);
+          |                               ^
+      376 |       expect(data.success).toBe(true);
+      377 |     });
+      378 |
+
+      at Object.toBe (tests/integration/api/routes.test.ts:375:31)
+
+  ● API Routes - Integration Tests › POST /api/feedback › should handle missing required fields
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: undefined
+
+      387 |
+      388 |       const response = await submitFeedback(request);
+    > 389 |       expect(response.status).toBe(400);
+          |                               ^
+      390 |     });
+      391 |
+      392 |     it('should validate rating range', async () => {
+
+      at Object.toBe (tests/integration/api/routes.test.ts:389:31)
+
+  ● API Routes - Integration Tests › POST /api/feedback › should validate rating range
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: undefined
+
+      402 |
+      403 |       const response = await submitFeedback(request);
+    > 404 |       expect(response.status).toBe(400);
+          |                               ^
+      405 |     });
+      406 |   });
+      407 | });
+
+      at Object.toBe (tests/integration/api/routes.test.ts:404:31)
+
+FAIL tests/unit/services/billing-service.test.ts
+  ● BillingService › calculateUsageCost › should calculate usage cost correctly
+
+    TypeError: service.calculateUsageCost is not a function
+
+      49 |       };
+      50 |
+    > 51 |       const cost = service.calculateUsageCost(usage);
+         |                            ^
+      52 |       
+      53 |       expect(cost).toBeGreaterThan(0);
+      54 |       expect(typeof cost).toBe('number');
+
+      at Object.calculateUsageCost (tests/unit/services/billing-service.test.ts:51:28)
+
+  ● BillingService › deductCredits › should deduct credits from user account
+
+    TypeError: service.deductCredits is not a function
+
+      58 |   describe('deductCredits', () => {
+      59 |     it('should deduct credits from user account', async () => {
+    > 60 |       const result = await service.deductCredits('user-123', 50, 'Plan generation');
+         |                                    ^
+      61 |       
+      62 |       expect(result).toBeDefined();
+      63 |       expect(result.credits).toBe(50); // 100 - 50
+
+      at Object.deductCredits (tests/unit/services/billing-service.test.ts:60:36)
+
+FAIL tests/unit/layer-2-ai/ai-router.test.ts (6.361 s)
+  ● Console
+
+    console.log
+      [AI Router] Trying provider: claude-3-5-haiku
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [claude-3-5-haiku] Error: Cannot destructure property 'text' of '(intermediate value)' as it is undefined.
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:87:22)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [groq-llama-3-3] Error: Cannot destructure property 'text' of '(intermediate value)' as it is undefined.
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:87:22)
+
+    console.log
+      [AI Router] Trying provider: gemini-2-flash
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [gemini-2-flash] Error: Cannot destructure property 'text' of '(intermediate value)' as it is undefined.
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:87:22)
+
+    console.log
+      [AI Router] Trying provider: mistral-small
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [mistral-small] Error: Cannot destructure property 'text' of '(intermediate value)' as it is undefined.
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:87:22)
+
+    console.log
+      [AI Router] Trying provider: openrouter-claude
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [openrouter-claude] Error: fetch is not defined
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:87:22)
+
+    console.log
+      [AI Router] groq-llama-3-3 failed: groq API key not configured, trying fallbacks...
+
+      at log (src/layer-2-ai/router/ai-router.ts:249:15)
+
+    console.log
+      [AI Router] Trying provider: claude-3-5-haiku
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [claude-3-5-haiku] Error: Cannot destructure property 'text' of '(intermediate value)' as it is undefined.
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:99:22)
+
+    console.log
+      [AI Router] Trying provider: gemini-2-flash
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [gemini-2-flash] Error: Cannot destructure property 'text' of '(intermediate value)' as it is undefined.
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:99:22)
+
+    console.log
+      [AI Router] Trying provider: mistral-small
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [mistral-small] Error: Cannot destructure property 'text' of '(intermediate value)' as it is undefined.
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:99:22)
+
+    console.log
+      [AI Router] Trying provider: openrouter-claude
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [openrouter-claude] Error: fetch is not defined
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:99:22)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [groq-llama-3-3] Error: Cannot destructure property 'text' of '(intermediate value)' as it is undefined.
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:238:29)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:126:7)
+
+    console.log
+      [AI Router] groq-llama-3-3 failed: Cannot destructure property 'text' of '(intermediate value)' as it is undefined., trying fallbacks...
+
+      at log (src/layer-2-ai/router/ai-router.ts:249:15)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [groq-llama-3-3] Error: Rate limit exceeded
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:238:29)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:144:22)
+
+    console.log
+      [AI Router] groq-llama-3-3 failed: Rate limit exceeded, trying fallbacks...
+
+      at log (src/layer-2-ai/router/ai-router.ts:249:15)
+
+    console.log
+      [AI Router] Trying provider: claude-3-5-haiku
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [groq-llama-3-3] Error: API Error
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:238:29)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:157:22)
+
+    console.log
+      [AI Router] groq-llama-3-3 failed: API Error, trying fallbacks...
+
+      at log (src/layer-2-ai/router/ai-router.ts:249:15)
+
+    console.log
+      [AI Router] Trying provider: claude-3-5-haiku
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [claude-3-5-haiku] Error: API Error
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:157:22)
+
+    console.log
+      [AI Router] Trying provider: gemini-2-flash
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [gemini-2-flash] Error: API Error
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:157:22)
+
+    console.log
+      [AI Router] Trying provider: mistral-small
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [mistral-small] Error: API Error
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:157:22)
+
+    console.log
+      [AI Router] Trying provider: openrouter-claude
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [openrouter-claude] Error: fetch is not defined
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:157:22)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [groq-llama-3-3] Error: quota exceeded
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:238:29)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:175:22)
+
+    console.log
+      [AI Router] groq-llama-3-3 quota exceeded, trying fallbacks...
+
+      at log (src/layer-2-ai/router/ai-router.ts:245:15)
+
+    console.log
+      [AI Router] Trying provider: claude-3-5-haiku
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [groq-llama-3-3] Error: Rate limit exceeded
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:238:29)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:243:22)
+
+    console.log
+      [AI Router] groq-llama-3-3 failed: Rate limit exceeded, trying fallbacks...
+
+      at log (src/layer-2-ai/router/ai-router.ts:249:15)
+
+    console.log
+      [AI Router] Trying provider: claude-3-5-haiku
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [claude-3-5-haiku] Error: API Error
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:243:22)
+
+    console.log
+      [AI Router] Trying provider: gemini-2-flash
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [gemini-2-flash] Error: API Error
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:243:22)
+
+    console.log
+      [AI Router] Trying provider: mistral-small
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [mistral-small] Error: API Error
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:243:22)
+
+    console.log
+      [AI Router] Trying provider: openrouter-claude
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [openrouter-claude] Error: fetch is not defined
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:243:22)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [groq-llama-3-3] Error: insufficient_quota
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:238:29)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:257:22)
+
+    console.log
+      [AI Router] groq-llama-3-3 quota exceeded, trying fallbacks...
+
+      at log (src/layer-2-ai/router/ai-router.ts:245:15)
+
+    console.log
+      [AI Router] Trying provider: claude-3-5-haiku
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [claude-3-5-haiku] Error: insufficient_quota
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:257:22)
+
+    console.log
+      [AI Router] Trying provider: gemini-2-flash
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [gemini-2-flash] Error: insufficient_quota
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:257:22)
+
+    console.log
+      [AI Router] Trying provider: mistral-small
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [mistral-small] Error: insufficient_quota
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:257:22)
+
+    console.log
+      [AI Router] Trying provider: openrouter-claude
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [openrouter-claude] Error: fetch is not defined
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:257:22)
+
+    console.log
+      [AI Router] Trying provider: groq-llama-3-3
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [groq-llama-3-3] Error: billing quota exceeded
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:238:29)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:271:22)
+
+    console.log
+      [AI Router] groq-llama-3-3 quota exceeded, trying fallbacks...
+
+      at log (src/layer-2-ai/router/ai-router.ts:245:15)
+
+    console.log
+      [AI Router] Trying provider: claude-3-5-haiku
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [claude-3-5-haiku] Error: billing quota exceeded
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:271:22)
+
+    console.log
+      [AI Router] Trying provider: gemini-2-flash
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [gemini-2-flash] Error: billing quota exceeded
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:271:22)
+
+    console.log
+      [AI Router] Trying provider: mistral-small
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [mistral-small] Error: billing quota exceeded
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:271:22)
+
+    console.log
+      [AI Router] Trying provider: openrouter-claude
+
+      at log (src/layer-2-ai/router/ai-router.ts:330:13)
+
+    console.error
+      [openrouter-claude] Error: fetch is not defined
+
+      382 |     
+      383 |   } catch (error: any) {
+    > 384 |     console.error(`[${provider}] Error:`, error.message);
+          |             ^
+      385 |     
+      386 |     const errorMessage = error?.message || '';
+      387 |     const isQuotaError = errorMessage.includes('quota') || 
+
+      at error (src/layer-2-ai/router/ai-router.ts:384:13)
+      at processWithAI (src/layer-2-ai/router/ai-router.ts:271:22)
+      at Object.<anonymous> (tests/unit/layer-2-ai/ai-router.test.ts:271:22)
+
+  ● AI Router › processWithAI › should return fallback response when using fallback provider
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      90 |       expect(result.content).toBeDefined();
+      91 |       expect(result.provider).toBeDefined();
+    > 92 |       expect(result.latencyMs).toBeDefined();
+         |                                ^
+      93 |       expect(typeof result.latencyMs).toBe('number');
+      94 |     });
+      95 |
+
+      at Object.toBeDefined (tests/unit/layer-2-ai/ai-router.test.ts:92:32)
+
+  ● AI Router › processWithAI › should handle missing API key gracefully
+
+    expect(received).toContain(expected) // indexOf
+
+    Matcher error: received value must not be null nor undefined
+
+    Received has value: undefined
+
+      103 |
+      104 |       expect(result).toBeDefined();
+    > 105 |       expect(result.error).toContain('API key not configured');
+          |                            ^
+      106 |     });
+      107 |
+      108 |     it('should successfully process with available provider', async () => {
+
+      at Object.toContain (tests/unit/layer-2-ai/ai-router.test.ts:105:28)
+
+  ● AI Router › processWithAI › should return error when all providers fail
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      161 |
+      162 |       expect(result).toBeDefined();
+    > 163 |       expect(result.error).toBeDefined();
+          |                            ^
+      164 |     });
+      165 |
+      166 |     it('should handle quota exceeded errors', async () => {
+
+      at Object.toBeDefined (tests/unit/layer-2-ai/ai-router.test.ts:163:28)
+
+  ● AI Router › Error Classification › should detect rate limit errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: undefined
+
+      246 |       });
+      247 |
+    > 248 |       expect(result.rateLimitError).toBe(true);
+          |                                     ^
+      249 |     });
+      250 |
+      251 |     it('should detect quota exceeded errors', async () => {
+
+      at Object.toBe (tests/unit/layer-2-ai/ai-router.test.ts:248:37)
+
+  ● AI Router › Error Classification › should detect quota exceeded errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: undefined
+
+      260 |       });
+      261 |
+    > 262 |       expect(result.quotaExceeded).toBe(true);
+          |                                    ^
+      263 |     });
+      264 |
+      265 |     it('should detect billing errors', async () => {
+
+      at Object.toBe (tests/unit/layer-2-ai/ai-router.test.ts:262:36)
+
+  ● AI Router › Error Classification › should detect billing errors
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: undefined
+
+      274 |       });
+      275 |
+    > 276 |       expect(result.quotaExceeded).toBe(true);
+          |                                    ^
+      277 |     });
+      278 |   });
+      279 | });
+
+      at Object.toBe (tests/unit/layer-2-ai/ai-router.test.ts:276:36)
+
+FAIL tests/integration/components/tier1-components.test.tsx
+  ● Test suite failed to run
+
+    Cannot find module '../../../src/components/tier1/BrainDumpSystem' from 'tests/integration/components/tier1-components.test.tsx'
+
+      24 | describe('Tier 1 Components', () => {
+      25 |   describe('BrainDumpSystem', () => {
+    > 26 |     it('should render brain dump interface', () => {
+         |                          ^
+      27 |       render(
+      28 |         <ThemeProvider>
+      29 |           <BrainDumpSystem />
+
+      at Resolver._throwModNotFoundError (node_modules/jest-resolve/build/index.js:863:11)
+      at Object.<anonymous> (tests/integration/components/tier1-components.test.tsx:26:26)
+
+FAIL tests/unit/auth/auth-provider.test.tsx
+  ● AuthProvider › should provide auth context
+
+    @supabase/ssr: Your project's URL and API key are required to create a Supabase client!
+
+    Check your Supabase project's API settings to find these values
+
+    https://supabase.com/dashboard/project/_/settings/api
+
+      29 |   const [isLoading, setIsLoading] = useState(true);
+      30 |
+    > 31 |   const supabase = createBrowserClient(
+         |                                       ^
+      32 |     process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      33 |     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      34 |   );
+
+      at createBrowserClient (node_modules/@supabase/ssr/src/createBrowserClient.ts:111:11)
+      at AuthProvider (src/layer-1-security/auth/auth-provider.tsx:31:39)
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25904:20)
+      at renderWithHooks (node_modules/react-dom/cjs/react-dom-client.development.js:7662:22)
+      at updateFunctionComponent (node_modules/react-dom/cjs/react-dom-client.development.js:10166:19)
+      at beginWork (node_modules/react-dom/cjs/react-dom-client.development.js:11778:18)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at performUnitOfWork (node_modules/react-dom/cjs/react-dom-client.development.js:17641:22)
+      at workLoopSync (node_modules/react-dom/cjs/react-dom-client.development.js:17469:41)
+      at renderRootSync (node_modules/react-dom/cjs/react-dom-client.development.js:17450:11)
+      at performWorkOnRoot (node_modules/react-dom/cjs/react-dom-client.development.js:16583:35)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-dom/cjs/react-dom-client.development.js:18957:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:46:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:291:10)
+      at Object.<anonymous> (tests/unit/auth/auth-provider.test.tsx:22:11)
+
+  ● AuthProvider › should initialize with user not authenticated
+
+    @supabase/ssr: Your project's URL and API key are required to create a Supabase client!
+
+    Check your Supabase project's API settings to find these values
+
+    https://supabase.com/dashboard/project/_/settings/api
+
+      29 |   const [isLoading, setIsLoading] = useState(true);
+      30 |
+    > 31 |   const supabase = createBrowserClient(
+         |                                       ^
+      32 |     process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      33 |     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      34 |   );
+
+      at createBrowserClient (node_modules/@supabase/ssr/src/createBrowserClient.ts:111:11)
+      at AuthProvider (src/layer-1-security/auth/auth-provider.tsx:31:39)
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25904:20)
+      at renderWithHooks (node_modules/react-dom/cjs/react-dom-client.development.js:7662:22)
+      at updateFunctionComponent (node_modules/react-dom/cjs/react-dom-client.development.js:10166:19)
+      at beginWork (node_modules/react-dom/cjs/react-dom-client.development.js:11778:18)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at performUnitOfWork (node_modules/react-dom/cjs/react-dom-client.development.js:17641:22)
+      at workLoopSync (node_modules/react-dom/cjs/react-dom-client.development.js:17469:41)
+      at renderRootSync (node_modules/react-dom/cjs/react-dom-client.development.js:17450:11)
+      at performWorkOnRoot (node_modules/react-dom/cjs/react-dom-client.development.js:16583:35)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-dom/cjs/react-dom-client.development.js:18957:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:46:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:189:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:291:10)
+      at Object.<anonymous> (tests/unit/auth/auth-provider.test.tsx:34:11)
+
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+Test Suites: 6 failed, 6 total
+Tests:       28 failed, 12 passed, 40 total
+Snapshots:   0 total
+Time:        27.037 s
+Ran all test suites.

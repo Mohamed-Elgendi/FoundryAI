@@ -54,7 +54,15 @@ export function IdeaExtractor({ onClose, onSelectOpportunity }: IdeaExtractorPro
         budget,
       });
 
-      setExtractedIdeas(result.opportunities || []);
+      setExtractedIdeas((result as any[]).map((r: any) => ({
+        title: r.concept || r.archetype || 'Opportunity',
+        description: r.description || '',
+        archetypeFit: r.archetype ? [r.archetype] : [],
+        difficulty: 'medium' as const,
+        timeToFirstRevenue: 'Unknown',
+        requiredSkills: [],
+        nextSteps: r.firstSteps || [],
+      })));
       setHasExtracted(true);
     } catch (err) {
       console.error('Extraction failed:', err);

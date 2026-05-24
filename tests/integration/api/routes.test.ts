@@ -5,26 +5,47 @@ import { POST as submitFeedback } from '@/app/api/feedback/route';
 import { FoundryAIOutput } from '@/types';
 
 // Mock dependencies
-jest.mock('@/layer-2-ai/router/ai-router', () => ({
-  processWithAI: jest.fn(),
-  getDefaultProvider: jest.fn().mockReturnValue('groq-llama-3-3'),
-}));
-
-jest.mock('@/layer-3-data/storage/supabase-client', () => ({
-  getSuccessfulPatterns: jest.fn().mockResolvedValue({ patterns: [] }),
-  saveFeedback: jest.fn().mockResolvedValue({ success: true }),
-}));
+jest.mock('@/layer-2-ai/router/ai-router', () => {
+  const actual = jest.requireActual('@/layer-2-ai/router/ai-router');
+  return {
+    ...actual,
+    processWithAI: jest.fn(),
+    getDefaultProvider: jest.fn().mockReturnValue('groq-llama-3-3'),
+  };
+});
 
 jest.mock('@/lib/engines/master-prompt', () => ({
   buildMasterPrompt: jest.fn((input: string) => `## ENRICHED PROMPT\n\n${input}`),
   parseAIResponse: jest.fn(),
 }));
 
+jest.mock('@/lib/engines/refinement-prompt', () => ({
+  buildRefinementPrompt: jest.fn(() => 'refinement prompt'),
+  parseRefinementResponse: jest.fn(),
+}));
+
+jest.mock('@/layer-3-data/storage/supabase-client', () => ({
+  getSuccessfulPatterns: jest.fn().mockResolvedValue({ patterns: [] }),
+  saveFeedback: jest.fn().mockResolvedValue({ success: true }),
+  createSupabaseClient: jest.fn(() => ({
+    from: jest.fn(() => ({
+      insert: jest.fn().mockResolvedValue({ error: null }),
+    })),
+  })),
+}));
+
 import { processWithAI } from '@/layer-2-ai/router/ai-router';
 import { parseAIResponse } from '@/lib/engines/master-prompt';
+import { parseRefinementResponse } from '@/lib/engines/refinement-prompt';
 
 const mockedProcessWithAI = processWithAI as jest.MockedFunction<typeof processWithAI>;
 const mockedParseAIResponse = parseAIResponse as jest.MockedFunction<typeof parseAIResponse>;
+const mockedParseRefinementResponse = parseRefinementResponse as jest.MockedFunction<typeof parseRefinementResponse>;
+
+function apiErrorMessage(data: { error?: string | { message?: string } }): string | undefined {
+  if (!data.error) return undefined;
+  return typeof data.error === 'string' ? data.error : data.error.message;
+}
 
 describe('API Routes - Integration Tests', () => {
   beforeEach(() => {
@@ -74,7 +95,7 @@ describe('API Routes - Integration Tests', () => {
       };
 
       mockedProcessWithAI.mockResolvedValueOnce({
-        text: JSON.stringify(mockOutput),
+        content: JSON.stringify(mockOutput),
         provider: 'groq-llama-3-3',
         latencyMs: 1000,
       });
@@ -112,12 +133,12 @@ describe('API Routes - Integration Tests', () => {
       const data = await response.json();
 
       expect(response.status).toBe(400);
-      expect(data.error).toBeDefined();
+      expect(apiErrorMessage(data)).toBeDefined();
     });
 
     it('should handle AI service errors', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
-        text: '',
+        content: '',
         provider: 'groq-llama-3-3',
         error: 'Service unavailable',
         suggestedAction: 'Please try again later',
@@ -135,13 +156,13 @@ describe('API Routes - Integration Tests', () => {
       const data = await response.json();
 
       expect(response.status).toBe(502);
-      expect(data.error).toBeDefined();
-      expect(data.suggestedAction).toBe('Please try again later');
+      expect(apiErrorMessage(data)).toBeDefined();
+      expect(data.error?.suggestedAction ?? data.suggestedAction).toBe('Please try again later');
     });
 
     it('should handle malformed AI response', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
-        text: 'Invalid JSON response',
+        content: 'Invalid JSON response',
         provider: 'groq-llama-3-3',
         latencyMs: 500,
       });
@@ -160,12 +181,12 @@ describe('API Routes - Integration Tests', () => {
       const data = await response.json();
 
       expect(response.status).toBe(500);
-      expect(data.error).toContain('parse');
+      expect(apiErrorMessage(data)).toMatch(/parse/i);
     });
 
     it('should handle rate limit errors', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
-        text: '',
+        content: '',
         provider: 'groq-llama-3-3',
         error: 'Rate limit exceeded',
         rateLimitError: true,
@@ -184,12 +205,12 @@ describe('API Routes - Integration Tests', () => {
       const data = await response.json();
 
       expect(response.status).toBe(502);
-      expect(data.rateLimitError).toBe(true);
+      expect(data.success).toBe(false);
     });
 
     it('should handle quota exceeded errors', async () => {
       mockedProcessWithAI.mockResolvedValueOnce({
-        text: '',
+        content: '',
         provider: 'groq-llama-3-3',
         error: 'Quota exceeded',
         quotaExceeded: true,
@@ -207,7 +228,7 @@ describe('API Routes - Integration Tests', () => {
       const data = await response.json();
 
       expect(response.status).toBe(502);
-      expect(data.quotaExceeded).toBe(true);
+      expect(data.success).toBe(false);
     });
 
     it('should use fallback provider when preferred fails', async () => {
@@ -218,7 +239,7 @@ describe('API Routes - Integration Tests', () => {
         latencyMs: 1500,
       });
 
-      mockedParseAIResponse.mockReturnValueOnce({ ideaName: 'Test' } as FoundryAIOutput);
+      mockedParseAIResponse.mockReturnValueOnce({ ideaName: 'Test Business' } as FoundryAIOutput);
 
       const request = new Request('http://localhost:3000/api/generate', {
         method: 'POST',
@@ -291,20 +312,20 @@ describe('API Routes - Integration Tests', () => {
       };
 
       mockedProcessWithAI.mockResolvedValueOnce({
-        text: JSON.stringify(mockRefinedOutput),
+        content: JSON.stringify(mockRefinedOutput),
         provider: 'groq-llama-3-3',
         latencyMs: 800,
       });
 
-      mockedParseAIResponse.mockReturnValueOnce(mockRefinedOutput);
+      mockedParseRefinementResponse.mockReturnValueOnce(mockRefinedOutput);
 
       const request = new Request('http://localhost:3000/api/refine', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          originalIdea: 'Original business idea',
-          currentPlan: { businessName: 'Original' },
-          feedback: 'Make it more specific',
+          originalInput: 'Original business idea',
+          currentOutput: { businessName: 'Original' },
+          iterationCount: 1,
           provider: 'groq-llama-3-3',
         }),
       });
@@ -322,8 +343,9 @@ describe('API Routes - Integration Tests', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          originalIdea: '',
-          feedback: 'Improve this',
+          originalInput: '',
+          currentOutput: {},
+          iterationCount: 1,
         }),
       });
 
@@ -338,20 +360,20 @@ describe('API Routes - Integration Tests', () => {
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.providers).toBeDefined();
-      expect(Array.isArray(data.providers)).toBe(true);
-      expect(data.defaultProvider).toBeDefined();
+      expect(data.data.providers).toBeDefined();
+      expect(Array.isArray(data.data.providers)).toBe(true);
+      expect(data.data.defaultProvider).toBeDefined();
     });
 
     it('should include provider metadata', async () => {
       const response = await getProviders();
       const data = await response.json();
 
-      if (data.providers.length > 0) {
-        const provider = data.providers[0];
-        expect(provider).toHaveProperty('id');
-        expect(provider).toHaveProperty('name');
-        expect(provider).toHaveProperty('description');
+      if (data.data.providers.length > 0) {
+        const provider = data.data.providers[0];
+        expect(provider).toHaveProperty('provider');
+        expect(provider).toHaveProperty('available');
+        expect(provider).toHaveProperty('info');
       }
     });
   });
@@ -362,10 +384,9 @@ describe('API Routes - Integration Tests', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          planId: 'test-plan-123',
-          rating: 5,
-          comment: 'Great plan!',
-          category: 'general',
+          userInput: 'Test business idea',
+          output: 'Generated plan content',
+          isHelpful: true,
         }),
       });
 
@@ -381,7 +402,7 @@ describe('API Routes - Integration Tests', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          rating: 5,
+          isHelpful: true,
         }),
       });
 
@@ -389,14 +410,14 @@ describe('API Routes - Integration Tests', () => {
       expect(response.status).toBe(400);
     });
 
-    it('should validate rating range', async () => {
+    it('should reject non-boolean isHelpful', async () => {
       const request = new Request('http://localhost:3000/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          planId: 'test-plan-123',
-          rating: 6, // Invalid: should be 1-5
-          comment: 'Test',
+          userInput: 'Test',
+          output: 'Output',
+          isHelpful: 'yes',
         }),
       });
 

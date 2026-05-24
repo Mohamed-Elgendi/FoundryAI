@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 import { stripe, STRIPE_WEBHOOK_SECRET } from "@/lib/stripe/stripe";
-import { createClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const signature = request.headers.get("stripe-signature")!;
 
-  let event: stripe.Event;
+  let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(body, signature, STRIPE_WEBHOOK_SECRET);
@@ -15,12 +17,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Webhook verification failed" }, { status: 400 });
   }
 
-  const supabase = createClient();
+  const supabase = await createSupabaseServerClient(await cookies());
 
   try {
     switch (event.type) {
       case "checkout.session.completed": {
-        const session = event.data.object as stripe.Checkout.Session;
+        const session = event.data.object as Stripe.Checkout.Session;
         const userId = session?.metadata?.userId;
         const priceId = session?.line_items?.data[0]?.price?.id;
 
@@ -51,8 +53,12 @@ export async function POST(request: NextRequest) {
       }
 
       case "invoice.payment_succeeded": {
-        const invoice = event.data.object as stripe.Invoice;
-        const subscriptionId = invoice.subscription as string;
+        const invoice = event.data.object as Stripe.Invoice & { subscription?: string | Stripe.Subscription | null };
+        const subscriptionId = typeof (invoice as any).subscription === "string"
+          ? (invoice as any).subscription
+          : (invoice as any).subscription?.id || null;
+
+        if (!subscriptionId) break;
 
         // Get user by subscription
         const { data: profile } = await supabase
@@ -75,8 +81,12 @@ export async function POST(request: NextRequest) {
       }
 
       case "invoice.payment_failed": {
-        const invoice = event.data.object as stripe.Invoice;
-        const subscriptionId = invoice.subscription as string;
+        const invoice = event.data.object as Stripe.Invoice & { subscription?: string | Stripe.Subscription | null };
+        const subscriptionId = typeof (invoice as any).subscription === "string"
+          ? (invoice as any).subscription
+          : (invoice as any).subscription?.id || null;
+
+        if (!subscriptionId) break;
 
         const { data: profile } = await supabase
           .from("profiles")
@@ -97,7 +107,7 @@ export async function POST(request: NextRequest) {
       }
 
       case "customer.subscription.updated": {
-        const subscription = event.data.object as stripe.Subscription;
+        const subscription = event.data.object as Stripe.Subscription;
         const priceId = subscription.items.data[0]?.price?.id;
 
         const { data: profile } = await supabase
@@ -119,7 +129,7 @@ export async function POST(request: NextRequest) {
       }
 
       case "customer.subscription.deleted": {
-        const subscription = event.data.object as stripe.Subscription;
+        const subscription = event.data.object as Stripe.Subscription;
 
         const { data: profile } = await supabase
           .from("profiles")
@@ -141,7 +151,7 @@ export async function POST(request: NextRequest) {
       }
 
       case "payment_intent.succeeded": {
-        const paymentIntent = event.data.object as stripe.PaymentIntent;
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
         // Handle one-time payments (credit packs)
         const userId = paymentIntent?.metadata?.userId;
         const credits = parseInt(paymentIntent?.metadata?.credits || "0");

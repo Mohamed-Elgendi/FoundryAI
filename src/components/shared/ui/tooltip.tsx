@@ -30,7 +30,7 @@ export interface TooltipProps {
 
 export function Tooltip({ content, children, side = "top", delayDuration = 300, className }: TooltipProps) {
   const [visible, setVisible] = React.useState(false);
-  const timerRef = React.useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = React.useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const show = () => {
     timerRef.current = setTimeout(() => setVisible(true), delayDuration);
@@ -67,5 +67,3 @@ export function Tooltip({ content, children, side = "top", delayDuration = 300, 
     </div>
   );
 }
-
-export { TooltipProvider as Tooltip };

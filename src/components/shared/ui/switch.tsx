@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface SwitchProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onChange"> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onChange" | "size"> {
   checked: boolean;
   onCheckedChange?: (checked: boolean) => void;
   label?: string;

@@ -124,7 +124,7 @@ const MomentumBuilder: React.FC = () => {
       
       // Combine static config with dynamic data
       const mergedDimensions = MOMENTUM_DIMENSIONS.map(dim => {
-        const apiDim = data.dimensions?.find((d: {dimensionName: string}) => d.dimensionName === dim.id);
+        const apiDim = (data.dimensions as any[])?.find((d: any) => d.dimensionName === dim.id);
         return {
           ...dim,
           currentStage: apiDim?.currentStage || 0,
@@ -136,10 +136,10 @@ const MomentumBuilder: React.FC = () => {
       
       if (data.flywheel) {
         setFlywheel({
-          flywheelSpeed: data.flywheel.flywheelSpeed || 0,
-          dimensionsActive: data.flywheel.dimensionsInSync || 0,
-          compoundingMultiplier: 1 + (data.flywheel.compoundGrowthRate || 0),
-          streakDays: data.stats?.currentStreak || 0,
+          flywheelSpeed: (data.flywheel as any).flywheelSpeed || 0,
+          dimensionsActive: (data.flywheel as any).dimensionsInSync || 0,
+          compoundingMultiplier: 1 + ((data.flywheel as any).compoundGrowthRate || 0),
+          streakDays: (data as any).stats?.currentStreak || 0,
           dailyRitualCompleted: false,
         });
       }

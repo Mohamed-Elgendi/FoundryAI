@@ -162,7 +162,7 @@ const IdeaExtractionEngine: React.FC = () => {
     if (!user) return;
 
     // Save as a new opportunity in the radar
-    await supabase.from('foundryai_opportunities').insert({
+    await (supabase.from('foundryai_opportunities') as any).insert({
       user_id: user.id,
       title: extractedIdea.refinedConcept,
       description: extractedIdea.solutionApproach,

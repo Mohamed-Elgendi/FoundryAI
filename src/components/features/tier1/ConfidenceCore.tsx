@@ -56,18 +56,18 @@ const ConfidenceCore: React.FC = () => {
       const data = await confidenceService.getConfidenceData();
       
       if (data.cq) {
-        setOverallCQ(data.cq.overallCq || 60);
+        setOverallCQ((data.cq as any).overallCq || 60);
         setDomainScores({
-          technical: data.cq.technicalCq || 40,
-          sales: data.cq.salesCq || 40,
-          business: data.cq.strategyCq || 40,
-          creative: data.cq.creativeCq || 50,
-          communication: data.cq.communicationCq || 45,
-          leadership: data.cq.leadershipCq || 35,
+          technical: (data.cq as any).technicalCq || 40,
+          sales: (data.cq as any).salesCq || 40,
+          business: (data.cq as any).strategyCq || 40,
+          creative: (data.cq as any).creativeCq || 50,
+          communication: (data.cq as any).communicationCq || 45,
+          leadership: (data.cq as any).leadershipCq || 35,
         });
       }
       
-      setRecentEvidence((data.evidence || []).slice(0, 5).map((e: {description: string}) => e.description));
+      setRecentEvidence((data.evidence as any[] || []).slice(0, 5).map((e: any) => e.description));
     } catch (error) {
       console.error('Error loading confidence data:', error);
     } finally {

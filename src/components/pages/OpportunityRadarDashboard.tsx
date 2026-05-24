@@ -5,7 +5,7 @@ import { useRadarDashboard, useIdeaExtraction } from '@/hooks/useRadarAndBuild';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Radar, 
   TrendingUp, 
@@ -75,7 +75,7 @@ export function OpportunityRadarDashboard() {
     );
   }
 
-  const opportunities: Opportunity[] = (data?.opportunities || []).map((opp: Record<string, unknown>) => ({
+  const opportunities: Opportunity[] = ((data?.opportunities as Record<string, unknown>[]) || []).map((opp) => ({
     id: opp.id as string,
     title: opp.title as string,
     description: opp.description as string,

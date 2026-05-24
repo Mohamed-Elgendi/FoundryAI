@@ -20,11 +20,11 @@ import {
 } from 'lucide-react';
 
 // Import dashboard components
-import Tier1DashboardSummary from '@/components/dashboard/Tier1DashboardSummary';
-import OpportunityRadarDashboard from '@/components/dashboard/OpportunityRadarDashboard';
-import IdeaExtractor from '@/components/dashboard/IdeaExtractor';
-import FourteenDayLaunch from '@/components/dashboard/FourteenDayLaunch';
-import RevenueDashboard from '@/components/dashboard/RevenueDashboard';
+import Tier1DashboardSummary from '@/components/pages/Tier1DashboardSummary';
+import OpportunityRadarDashboard from '@/components/pages/OpportunityRadarDashboard';
+import { IdeaExtractor } from '@/components/pages/IdeaExtractor';
+import FourteenDayLaunchProtocol from '@/components/pages/FourteenDayLaunch';
+import RevenueDashboard from '@/components/pages/RevenueDashboard';
 
 interface MainDashboardProps {
   userName?: string;
@@ -326,7 +326,7 @@ export function MainDashboard({ userName = 'Founder', businessArchetype = 'Digit
           </TabsContent>
 
           <TabsContent value="launch">
-            <FourteenDayLaunch />
+            <FourteenDayLaunchProtocol />
           </TabsContent>
 
           <TabsContent value="revenue">

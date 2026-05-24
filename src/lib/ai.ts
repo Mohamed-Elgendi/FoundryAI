@@ -16,7 +16,7 @@ interface CurriculumParams {
   numberOfLessons?: number;
 }
 
-interface CurriculumLesson {
+export interface CurriculumLesson {
   id: string;
   title: string;
   content: string;

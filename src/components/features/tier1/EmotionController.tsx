@@ -174,7 +174,7 @@ const EmotionController: React.FC = () => {
       setIsLoading(true);
       const data = await emotionService.getEmotionData();
       setFlowSessions(data.stats?.flowSessionsCount || 0);
-      setTotalTransitions(data.checkins?.filter((c: {wasSuccessful: boolean}) => c.wasSuccessful).length || 0);
+      setTotalTransitions((data.checkins as any[])?.filter((c: any) => c.wasSuccessful).length || 0);
     } catch (error) {
       console.error('Error loading emotion stats:', error);
     } finally {

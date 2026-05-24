@@ -66,20 +66,20 @@ const BrainDumpSystem: React.FC = () => {
       const data = await brainDumpService.getBrainDumpData();
       
       if (data.cognitiveLoad) {
-        setCognitiveLoad(data.cognitiveLoad.load_percentage || 70);
+        setCognitiveLoad((data.cognitiveLoad as any).load_percentage || 70);
       }
       
       // Convert API response to component format
-      const formattedDumps: BrainDump[] = (data.dumps || []).map(dump => ({
+      const formattedDumps: BrainDump[] = (data.dumps || []).map((dump: any) => ({
         id: dump.id,
         rawContent: dump.rawContent,
-        categorization: data.items?.[dump.id] ? {
-          urgent: data.items[dump.id].filter((i: {category: string}) => i.category === 'urgent').map((i: {itemContent: string}) => i.itemContent),
-          scheduled: data.items[dump.id].filter((i: {category: string}) => i.category === 'scheduled').map((i: {itemContent: string}) => i.itemContent),
-          ideas: data.items[dump.id].filter((i: {category: string}) => i.category === 'idea').map((i: {itemContent: string}) => i.itemContent),
-          trash: data.items[dump.id].filter((i: {category: string}) => i.category === 'trash').map((i: {itemContent: string}) => i.itemContent),
-          delegate: data.items[dump.id].filter((i: {category: string}) => i.category === 'delegate').map((i: {itemContent: string}) => i.itemContent),
-          release: data.items[dump.id].filter((i: {category: string}) => i.category === 'release').map((i: {itemContent: string}) => i.itemContent),
+        categorization: (data as any).items?.[dump.id] ? {
+          urgent: ((data as any).items[dump.id] as any[]).filter((i: any) => i.category === 'urgent').map((i: any) => i.itemContent),
+          scheduled: ((data as any).items[dump.id] as any[]).filter((i: any) => i.category === 'scheduled').map((i: any) => i.itemContent),
+          ideas: ((data as any).items[dump.id] as any[]).filter((i: any) => i.category === 'idea').map((i: any) => i.itemContent),
+          trash: ((data as any).items[dump.id] as any[]).filter((i: any) => i.category === 'trash').map((i: any) => i.itemContent),
+          delegate: ((data as any).items[dump.id] as any[]).filter((i: any) => i.category === 'delegate').map((i: any) => i.itemContent),
+          release: ((data as any).items[dump.id] as any[]).filter((i: any) => i.category === 'release').map((i: any) => i.itemContent),
         } : { urgent: [], scheduled: [], ideas: [], trash: [], delegate: [], release: [] },
         cognitiveLoadBefore: dump.cognitiveLoadBefore || 70,
         cognitiveLoadAfter: dump.cognitiveLoadAfter,

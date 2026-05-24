@@ -99,6 +99,7 @@ describe('AI Router', () => {
       const result = await processWithAI({
         prompt: 'Test',
         preferredProvider: 'groq-llama-3-3',
+        fallbackProviders: ['groq-llama-3-3'],
       });
 
       expect(result).toBeDefined();
@@ -157,6 +158,7 @@ describe('AI Router', () => {
       const result = await processWithAI({
         prompt: 'Test',
         preferredProvider: 'groq-llama-3-3',
+        fallbackProviders: ['groq-llama-3-3'],
       });
 
       expect(result).toBeDefined();
@@ -243,6 +245,7 @@ describe('AI Router', () => {
       const result = await processWithAI({
         prompt: 'Test',
         preferredProvider: 'groq-llama-3-3',
+        fallbackProviders: ['groq-llama-3-3'],
       });
 
       expect(result.rateLimitError).toBe(true);
@@ -257,6 +260,7 @@ describe('AI Router', () => {
       const result = await processWithAI({
         prompt: 'Test',
         preferredProvider: 'groq-llama-3-3',
+        fallbackProviders: ['groq-llama-3-3'],
       });
 
       expect(result.quotaExceeded).toBe(true);
@@ -271,6 +275,7 @@ describe('AI Router', () => {
       const result = await processWithAI({
         prompt: 'Test',
         preferredProvider: 'groq-llama-3-3',
+        fallbackProviders: ['groq-llama-3-3'],
       });
 
       expect(result.quotaExceeded).toBe(true);

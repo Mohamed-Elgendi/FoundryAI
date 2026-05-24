@@ -81,7 +81,7 @@ export class EventBus {
     const handlers = this.handlers.get(eventType);
     if (handlers) {
       const promises = Array.from(handlers.values()).map((h) =>
-        h(event).catch((err) => console.error(`Handler error for ${eventType}:`, err))
+        Promise.resolve(h(event)).catch((err: Error) => console.error(`Handler error for ${eventType}:`, err))
       );
       await Promise.allSettled(promises);
     }

@@ -18,7 +18,8 @@ import {
   Calendar,
   Timer,
   Focus,
-  BarChart3
+  BarChart3,
+  Sparkles
 } from 'lucide-react';
 
 interface ChronotypeData {

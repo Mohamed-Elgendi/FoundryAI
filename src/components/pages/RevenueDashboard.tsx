@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRevenueDashboard, useRevenueTransactions, useRevenueGoals, useRevenueAnalytics } from '@/hooks/useRevenue';
+import { useRevenueDashboard, useRevenueTransactions, useRevenueGoals, useRevenueAnalytics, useRevenueStreams } from '@/hooks/useRevenue';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

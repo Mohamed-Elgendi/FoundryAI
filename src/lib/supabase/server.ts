@@ -29,3 +29,17 @@ export async function createSupabaseServerClient(cookieStore: Awaited<ReturnType
     },
   });
 }
+
+/** Create a Supabase client without cookies (for webhooks/server contexts) */
+export async function createClient() {
+  return createServerClient(DATABASE_URL, ANON_KEY, {
+    cookies: {
+      getAll() {
+        return [];
+      },
+      setAll() {
+        // No-op for webhook context
+      },
+    },
+  });
+}

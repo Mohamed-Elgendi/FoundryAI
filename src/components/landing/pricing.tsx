@@ -61,7 +61,7 @@ export function Pricing() {
                   <span className="text-4xl font-bold">
                     {plan.price === 0 ? "$0" : `$${(plan.price / 100).toFixed(0)}`}
                   </span>
-                  {plan.interval && (
+                  {('interval' in plan && plan.interval) && (
                     <span className="text-muted-foreground">/{plan.interval}</span>
                   )}
                 </div>
@@ -69,7 +69,7 @@ export function Pricing() {
 
               <CardContent className="flex-1">
                 <ul className="space-y-2">
-                  {(plan.features as string[]).map((feature) => (
+                  {[...plan.features].map((feature) => (
                     <li key={feature} className="flex items-center gap-2 text-sm">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

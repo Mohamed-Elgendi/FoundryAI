@@ -5,13 +5,13 @@
 
 import { PostgrestError } from '@supabase/supabase-js';
 
-export interface QueryOptions<T> {
+export type QueryOptions<T> = {
   filter?: Partial<T>;
   orderBy?: keyof T;
   orderDirection?: 'asc' | 'desc';
   limit?: number;
   offset?: number;
-}
+};
 
 export class RepositoryError extends Error {
   constructor(

@@ -2,3 +2,160 @@
 > my-app@0.1.0 build
 > next build
 
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local, .env.production
+- Experiments (use with caution):
+  ✓ optimizeCss
+  · optimizePackageImports
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 103s
+  Running TypeScript ...
+  Finished TypeScript in 2.9min ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/123) ...
+  Generating static pages using 3 workers (30/123) 
+  Generating static pages using 3 workers (61/123) 
+  Generating static pages using 3 workers (92/123) 
+✓ Generating static pages using 3 workers (123/123) in 5.7s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/archetype
+├ ƒ /api/belief
+├ ƒ /api/brain-dump
+├ ƒ /api/brain-dump/categorize
+├ ƒ /api/confidence
+├ ƒ /api/distraction
+├ ƒ /api/emotion
+├ ƒ /api/feedback
+├ ƒ /api/focus
+├ ƒ /api/generate
+├ ƒ /api/journal
+├ ƒ /api/momentum
+├ ƒ /api/opportunities/select
+├ ƒ /api/opportunity
+├ ƒ /api/providers
+├ ƒ /api/radar/rankings
+├ ƒ /api/radar/top
+├ ƒ /api/refine
+├ ƒ /api/revenue
+├ ƒ /api/stripe/checkout
+├ ƒ /api/stripe/portal
+├ ƒ /api/stripe/webhook
+├ ƒ /api/tier1/belief
+├ ƒ /api/tier1/brain-dump
+├ ƒ /api/tier1/confidence
+├ ƒ /api/tier1/emotion
+├ ƒ /api/tier1/focus
+├ ƒ /api/tier1/foundation
+├ ƒ /api/tier1/journal
+├ ƒ /api/tier1/mindset
+├ ƒ /api/tier1/momentum
+├ ƒ /api/tier2/archetypes/[name]
+├ ƒ /api/tier2/extract-idea
+├ ƒ /api/tier2/opportunities
+├ ƒ /api/tier2/opportunities/[id]
+├ ƒ /api/tier2/radar
+├ ƒ /api/tier2/trending
+├ ƒ /api/tier3/build
+├ ƒ /api/tier4/character-stats
+├ ƒ /api/tier4/productivity
+├ ƒ /api/tier4/revenue
+├ ƒ /api/tier4/revenue/analytics
+├ ƒ /api/tier4/revenue/goals
+├ ƒ /api/tier4/revenue/streams
+├ ƒ /api/tier4/revenue/transactions
+├ ƒ /api/tier4/self-discovery
+├ ƒ /api/tier5/curriculum
+├ ƒ /api/tier5/curriculum/progress
+├ ƒ /api/tier5/gamification
+├ ƒ /api/tier5/gamification/badges
+├ ƒ /api/tier5/gamification/leaderboard
+├ ƒ /api/tier5/gamification/points
+├ ƒ /api/tier5/gamification/streaks
+├ ƒ /api/tier5/learning
+├ ƒ /api/tier6/affiliate
+├ ƒ /api/tier6/credits
+├ ƒ /api/tier6/credits/transactions
+├ ƒ /api/tier6/credits/usage
+├ ƒ /api/tier6/membership
+├ ƒ /api/tier6/revenue
+├ ƒ /api/webhooks/stripe
+├ ƒ /api/workflow
+├ ƒ /auth/callback
+├ ○ /auth/error
+├ ○ /build
+├ ○ /dashboard
+├ ○ /dashboard/agents
+├ ○ /dashboard/settings/account
+├ ○ /dashboard/settings/appearance
+├ ○ /dashboard/settings/billing
+├ ○ /dashboard/settings/notifications
+├ ○ /dashboard/settings/profile
+├ ○ /dashboard/tier1
+├ ○ /dashboard/tier1/belief
+├ ○ /dashboard/tier1/brain-dump
+├ ○ /dashboard/tier1/confidence
+├ ○ /dashboard/tier1/emotion
+├ ○ /dashboard/tier1/focus
+├ ○ /dashboard/tier1/journal
+├ ○ /dashboard/tier1/mindset
+├ ○ /dashboard/tier1/momentum
+├ ○ /dashboard/tier2
+├ ○ /dashboard/tier2/ideas
+├ ○ /dashboard/tier2/opportunities
+├ ○ /dashboard/tier3
+├ ○ /dashboard/tier4/character-stats
+├ ○ /dashboard/tier4/productivity
+├ ○ /dashboard/tier4/self-discovery
+├ ○ /dashboard/tier5/gamification
+├ ○ /dashboard/tier5/learning
+├ ○ /dashboard/tier5/review
+├ ○ /dashboard/tier5/skills
+├ ○ /dashboard/tier6/affiliate
+├ ○ /dashboard/tier6/coins
+├ ○ /dashboard/tier6/credits
+├ ○ /dashboard/tier6/membership
+├ ○ /dashboard/tier6/revenue
+├ ○ /forgot-password
+├ ○ /login
+├ ○ /magic-link
+├ ○ /onboarding
+├ ○ /plan
+├ ○ /plans
+├ ○ /pricing
+├ ○ /privacy
+├ ○ /radar
+├ ○ /revenue
+├ ○ /settings
+├ ○ /signup
+├ ○ /student/analytics
+├ ○ /student/assignments
+├ ƒ /student/assignments/[id]
+├ ○ /student/courses
+├ ƒ /student/courses/[id]
+├ ○ /student/dashboard
+├ ○ /student/guides
+├ ƒ /student/guides/[id]
+├ ○ /teacher/courses
+├ ƒ /teacher/courses/[id]
+├ ƒ /teacher/courses/[id]/assignments
+├ ƒ /teacher/courses/[id]/curriculum
+├ ○ /teacher/dashboard
+├ ○ /teacher/guides
+├ ƒ /teacher/guides/[id]
+├ ○ /teacher/guides/new
+├ ○ /teacher/settings
+├ ○ /terms
+└ ○ /test
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

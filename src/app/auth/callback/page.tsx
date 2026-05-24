@@ -16,11 +16,11 @@ export default async function AuthCallbackPage({
 }) {
   const params = await searchParams;
   const cookieStore = await cookies();
-  const supabase = createSupabaseServerClient(cookieStore);
+  const supabase = await createSupabaseServerClient(cookieStore);
 
   // Check for auth error in URL
   const url = typeof window !== "undefined" ? window.location.href : "";
-  const error = url.includes("#access_token=").length === 0 ? undefined : null;
+  const error = !url.includes("#access_token=") ? undefined : null;
 
   // Redirect based on auth type
   if (params.type === "invite") {

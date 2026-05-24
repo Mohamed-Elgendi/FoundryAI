@@ -23,7 +23,8 @@ import {
   BarChart3,
   MessageSquare,
   Search,
-  Filter
+  Filter,
+  Clock
 } from 'lucide-react';
 
 // Tool database with archetype matching

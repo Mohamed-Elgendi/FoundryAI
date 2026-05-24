@@ -4,8 +4,7 @@
  * Re-exports all public APIs from the workflow engine.
  */
 
-export {
-  // Types
+export type {
   WorkflowStatus,
   StepStatus,
   WorkflowStep,
@@ -13,8 +12,9 @@ export {
   WorkflowStepResult,
   WorkflowDefinition,
   WorkflowInstance,
+} from "./engine";
 
-  // Core functions
+export {
   getWorkflowEngine,
   createWorkflow,
   executeWorkflow,

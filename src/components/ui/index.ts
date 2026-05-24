@@ -19,4 +19,4 @@ export { Slider } from './slider';
 export { Confetti } from './confetti';
 export { ThemeToggle } from './ThemeToggle';
 export { GlobalErrorBoundary, ComponentErrorBoundary, withErrorBoundary } from './error-boundary';
-export { SafeUI } from './safe-ui';
+export { SafeLoading, SafeError, SafeInfo, EmptyState, SafeImage, SafeAsyncRender, OfflineBanner } from './safe-ui';

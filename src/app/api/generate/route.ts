@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const prompt = buildMasterPrompt(userInput) + patternHints;
     console.log('[Generate API] Prompt length:', prompt.length);
     
-    const aiResponse = await processWithAI({ prompt, provider: selectedProvider });
+    const aiResponse = await processWithAI({ prompt, preferredProvider: selectedProvider });
     console.log('[Generate API] AI response:', { 
       hasContent: !!aiResponse.content, 
       hasError: !!aiResponse.error,

@@ -60,8 +60,8 @@ export default function SuccessMindsetForge() {
       const data = await mindsetService.getMindsetData();
       
       // Map API data to local pillar structure
-      const mappedPillars = pillars.map(p => {
-        const apiPillar = data.pillars?.find((ap: {pillarName: string}) => 
+      const mappedPillars = pillars.map((p) => {
+        const apiPillar = (data.pillars as any[])?.find((ap: any) =>
           ap.pillarName.toLowerCase().includes(p.id.toLowerCase())
         );
         return {
@@ -72,8 +72,8 @@ export default function SuccessMindsetForge() {
       });
       
       setPillarsData(mappedPillars);
-      if (data.progress?.currentWeek) {
-        setCurrentWeek(data.progress.currentWeek);
+      if ((data as any).progress?.currentWeek) {
+        setCurrentWeek((data as any).progress.currentWeek);
       }
     } catch (error) {
       console.error('Error loading mindset data:', error);

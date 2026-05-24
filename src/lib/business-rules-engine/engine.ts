@@ -196,7 +196,7 @@ export const GUIDE_RULES: ValidationRule<GuideValidationInput>[] = [
     severity: "error",
     category: "guide",
     validate: (input) => ({
-      valid: input.title && input.title.trim().length > 0,
+      valid: !!(input.title && input.title.trim().length > 0),
       message: ERRORS.guide.title_empty,
       ruleId: "guide.title_required",
       severity: "error",
@@ -222,7 +222,7 @@ export const GUIDE_RULES: ValidationRule<GuideValidationInput>[] = [
     severity: "error",
     category: "guide",
     validate: (input) => ({
-      valid: input.description && input.description.trim().length > 0,
+      valid: !!(input.description && input.description.trim().length > 0),
       message: ERRORS.guide.description_empty,
       ruleId: "guide.description_required",
       severity: "error",
@@ -246,7 +246,7 @@ export const GUIDE_RULES: ValidationRule<GuideValidationInput>[] = [
     severity: "error",
     category: "guide",
     validate: (input) => ({
-      valid: input.subject && input.subject.trim().length > 0,
+      valid: !!(input.subject && input.subject.trim().length > 0),
       message: ERRORS.guide.subject_empty,
       ruleId: "guide.subject_required",
       severity: "error",
@@ -300,7 +300,7 @@ export const ASSIGNMENT_RULES: ValidationRule<AssignmentValidationInput>[] = [
     severity: "error",
     category: "assignment",
     validate: (input) => ({
-      valid: input.title && input.title.trim().length > 0,
+      valid: !!(input.title && input.title.trim().length > 0),
       message: ERRORS.assignment.title_empty,
       ruleId: "assignment.title_required",
       severity: "error",
@@ -312,7 +312,7 @@ export const ASSIGNMENT_RULES: ValidationRule<AssignmentValidationInput>[] = [
     severity: "error",
     category: "assignment",
     validate: (input) => ({
-      valid: input.description && input.description.trim().length > 0,
+      valid: !!(input.description && input.description.trim().length > 0),
       message: ERRORS.assignment.description_empty,
       ruleId: "assignment.description_required",
       severity: "error",
@@ -324,7 +324,7 @@ export const ASSIGNMENT_RULES: ValidationRule<AssignmentValidationInput>[] = [
     severity: "error",
     category: "assignment",
     validate: (input) => ({
-      valid: input.guideId && input.guideId.trim().length > 0,
+      valid: !!(input.guideId && input.guideId.trim().length > 0),
       message: ERRORS.assignment.guide_id_empty,
       ruleId: "assignment.guide_id_required",
       severity: "error",
@@ -336,7 +336,7 @@ export const ASSIGNMENT_RULES: ValidationRule<AssignmentValidationInput>[] = [
     severity: "error",
     category: "assignment",
     validate: (input) => ({
-      valid: input.instructions && input.instructions.trim().length > 0,
+      valid: !!(input.instructions && input.instructions.trim().length > 0),
       message: ERRORS.assignment.instructions_empty,
       ruleId: "assignment.instructions_required",
       severity: "error",
@@ -413,7 +413,7 @@ export const ENROLLMENT_RULES: ValidationRule<EnrollmentValidationInput>[] = [
     severity: "error",
     category: "enrollment",
     validate: (input) => ({
-      valid: input.guideId && input.guideId.trim().length > 0,
+      valid: !!(input.guideId && input.guideId.trim().length > 0),
       message: ERRORS.enrollment.guide_id_empty,
       ruleId: "enrollment.guide_id_required",
       severity: "error",
@@ -425,7 +425,7 @@ export const ENROLLMENT_RULES: ValidationRule<EnrollmentValidationInput>[] = [
     severity: "error",
     category: "enrollment",
     validate: (input) => ({
-      valid: input.userId && input.userId.trim().length > 0,
+      valid: !!(input.userId && input.userId.trim().length > 0),
       message: ERRORS.enrollment.user_id_empty,
       ruleId: "enrollment.user_id_required",
       severity: "error",

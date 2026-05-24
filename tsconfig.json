@@ -37,5 +37,12 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "FoundryAi-Landing-page-design", "radar-service"]
+  "exclude": [
+    "node_modules",
+    "FoundryAi-Landing-page-design",
+    "radar-service",
+    "jest.setup.ts",
+    "jest.config.ts",
+    "tests"
+  ]
 }

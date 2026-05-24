@@ -4,6 +4,8 @@
  * Browse and enroll in guides.
  */
 
+'use client';
+
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -69,7 +71,7 @@ export default function StudentGuidesPage() {
               difficulty={guide.difficulty}
               estimatedDuration={guide.estimatedDuration}
               enrolledCount={guide.enrolledCount}
-              onEnroll={() => {}}
+              onEnroll={() => undefined}
             />
           ))}
         </div>
