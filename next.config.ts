@@ -72,16 +72,6 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  // Turbopack configuration for performance
-  turbopack: {
-    rules: {
-      // Optimize bundle splitting
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
-  },
 };
 
 export default nextConfig;
